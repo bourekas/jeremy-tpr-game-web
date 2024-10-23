@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import WordCard from "@/app/components/word-card/word-card";
 
