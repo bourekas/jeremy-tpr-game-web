@@ -1,3 +1,5 @@
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
+
 export const metadata = {
   title: "TPR Game",
   description: "TPR Game by Jeremy Steinberg",
@@ -6,7 +8,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <AppRouterCacheProvider>{children}</AppRouterCacheProvider>
+      </body>
     </html>
   );
 }
