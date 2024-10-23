@@ -11,6 +11,7 @@ const config = {
     name: "@storybook/nextjs",
     options: {},
   },
+  staticDirs: ["./assets"],
 };
 
 export default config;
