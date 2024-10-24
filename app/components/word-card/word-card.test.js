@@ -25,16 +25,16 @@ it("has image", () => {
   expect(image).toHaveAttribute("src", Default.args.imageSrc);
 });
 
-it("has replay button", async () => {
+it("has pronounce button", async () => {
   const user = userEvent.setup();
   render(<Default />);
 
-  const button = screen.getByRole("button", { name: "Replay" });
+  const button = screen.getByRole("button", { name: "Pronounce word" });
   expect(button).toBeInTheDocument();
 
-  expect(screen.queryByText("Replay")).not.toBeInTheDocument();
+  expect(screen.queryByText("Pronounce word")).not.toBeInTheDocument();
   await user.hover(button);
-  const tooltip = await screen.findByText("Replay");
+  const tooltip = await screen.findByText("Pronounce word");
   expect(tooltip).toBeInTheDocument();
 });
 
@@ -43,12 +43,12 @@ it("has next button", async () => {
   const onClickNextMock = jest.fn();
   render(<Default onClickNext={onClickNextMock} />);
 
-  const button = screen.getByRole("button", { name: "Next word" });
+  const button = screen.getByRole("button", { name: "Go to the next word" });
   expect(button).toBeInTheDocument();
 
-  expect(screen.queryByText("Next word")).not.toBeInTheDocument();
+  expect(screen.queryByText("Go to the next word")).not.toBeInTheDocument();
   await user.hover(button);
-  const tooltip = await screen.findByText("Next word");
+  const tooltip = await screen.findByText("Go to the next word");
   expect(tooltip).toBeInTheDocument();
 
   await user.click(button);
