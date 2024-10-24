@@ -37,3 +37,20 @@ it("has replay button", async () => {
   const tooltip = await screen.findByText("Replay");
   expect(tooltip).toBeInTheDocument();
 });
+
+it("has next button", async () => {
+  const user = userEvent.setup();
+  const onClickNextMock = jest.fn();
+  render(<Default onClickNext={onClickNextMock} />);
+
+  const button = screen.getByRole("button", { name: "Next word" });
+  expect(button).toBeInTheDocument();
+
+  expect(screen.queryByText("Next word")).not.toBeInTheDocument();
+  await user.hover(button);
+  const tooltip = await screen.findByText("Next word");
+  expect(tooltip).toBeInTheDocument();
+
+  await user.click(button);
+  expect(onClickNextMock).toHaveBeenCalledOnce();
+});

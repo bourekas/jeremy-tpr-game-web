@@ -8,7 +8,16 @@ import CardActions from "@mui/material/CardActions";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import ReplayIcon from "@mui/icons-material/Replay";
+import SkipNextIcon from "@mui/icons-material/SkipNext";
 import Tooltip from "@mui/material/Tooltip";
+
+function ActionButton({ name, onClick, children }) {
+  return (
+    <Tooltip title={name}>
+      <IconButton onClick={onClick}>{children}</IconButton>
+    </Tooltip>
+  );
+}
 
 function pronounceWord(audioSrc) {
   const audio = new Audio(audioSrc);
@@ -21,7 +30,7 @@ function usePronounceWord(audioSrc) {
   }, [audioSrc]);
 }
 
-export default function WordCard({ text, imageSrc, audioSrc }) {
+export default function WordCard({ text, imageSrc, audioSrc, onClickNext }) {
   usePronounceWord(audioSrc);
 
   return (
@@ -36,11 +45,12 @@ export default function WordCard({ text, imageSrc, audioSrc }) {
         <Typography variant="h2">{text}</Typography>
       </CardContent>
       <CardActions sx={{ display: "flex", justifyContent: "center" }}>
-        <Tooltip title="Replay">
-          <IconButton onClick={() => pronounceWord(audioSrc)}>
-            <ReplayIcon />
-          </IconButton>
-        </Tooltip>
+        <ActionButton name="Replay" onClick={() => pronounceWord(audioSrc)}>
+          <ReplayIcon />
+        </ActionButton>
+        <ActionButton name="Next word" onClick={onClickNext}>
+          <SkipNextIcon />
+        </ActionButton>
       </CardActions>
     </Card>
   );
