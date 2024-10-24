@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import { userEvent } from "@testing-library/user-event";
 import { composeStories } from "@storybook/react";
 import * as stories from "./word-card.stories";
 import { expect } from "@storybook/test";
@@ -25,7 +26,14 @@ it("has image", () => {
 });
 
 it("has replay button", async () => {
+  const user = userEvent.setup();
   render(<Default />);
+
   const button = screen.getByRole("button", { name: "Replay" });
   expect(button).toBeInTheDocument();
+
+  expect(screen.queryByText("Replay")).not.toBeInTheDocument();
+  await user.hover(button);
+  const tooltip = await screen.findByText("Replay");
+  expect(tooltip).toBeInTheDocument();
 });
