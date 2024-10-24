@@ -4,7 +4,10 @@ import { useEffect } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
+import CardActions from "@mui/material/CardActions";
 import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
+import ReplayIcon from "@mui/icons-material/Replay";
 
 function pronounceWord(audioSrc) {
   const audio = new Audio(audioSrc);
@@ -31,6 +34,11 @@ export default function WordCard({ text, imageSrc, audioSrc }) {
       <CardContent>
         <Typography variant="h2">{text}</Typography>
       </CardContent>
+      <CardActions sx={{ display: "flex", justifyContent: "center" }}>
+        <IconButton aria-label="Replay" onClick={() => pronounceWord(audioSrc)}>
+          <ReplayIcon />
+        </IconButton>
+      </CardActions>
     </Card>
   );
 }
