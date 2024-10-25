@@ -1,28 +1,39 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import WordCard from "@/app/components/word-card/word-card";
 
-function randomCard(cards) {
-  const randomIndex = Math.floor(Math.random() * cards.length);
-  return cards[randomIndex];
-}
+function useCardRotation(cards, intervalSeconds) {
+  const [cardIndex, setCardIndex] = useState(0);
+  const card = cards[cardIndex];
+  const intervalRef = useRef();
 
-function useRandomCard(cards, intervalSeconds) {
-  const [card, setCard] = useState(() => randomCard(cards));
+  const setNextCardIndex = () => setCardIndex((i) => (i + 1) % cards.length);
+  const clearRotationInterval = () => clearInterval(intervalRef.current);
+  const setRotationInterval = () =>
+    (intervalRef.current = setInterval(
+      setNextCardIndex,
+      intervalSeconds * 1000,
+    ));
 
   useEffect(() => {
-    const intervalId = setInterval(
-      () => setCard(randomCard(cards)),
-      intervalSeconds * 1000,
-    );
-    return () => clearInterval(intervalId);
+    clearRotationInterval();
+    setRotationInterval();
+
+    return clearRotationInterval;
   }, [cards, intervalSeconds]);
 
-  return card;
+  const handleClickNext = () => {
+    clearRotationInterval();
+    setNextCardIndex();
+    setRotationInterval();
+  };
+
+  return { card, handleClickNext };
 }
 
 export default function WordCardRotator({ cards, intervalSeconds }) {
-  const currentCard = useRandomCard(cards, intervalSeconds);
-  return <WordCard {...currentCard} />;
+  const { card, handleClickNext } = useCardRotation(cards, intervalSeconds);
+
+  return <WordCard {...card} onClickNext={handleClickNext} />;
 }
