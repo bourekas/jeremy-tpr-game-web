@@ -40,13 +40,16 @@ const cards = [
 export default function TprGame() {
   const [gameSetup, setGameSetup] = useState();
 
-  const handleStart = (setup) => {
-    setGameSetup(setup);
-  };
+  const handleClickBackToSetup = () => setGameSetup(undefined);
+  const handleStart = (setup) => setGameSetup(setup);
 
   if (gameSetup) {
     return (
-      <WordCardRotator cards={cards} intervalSeconds={gameSetup.displayTime} />
+      <WordCardRotator
+        cards={cards}
+        intervalSeconds={gameSetup.displayTime}
+        onClickBackToSetup={handleClickBackToSetup}
+      />
     );
   }
 
