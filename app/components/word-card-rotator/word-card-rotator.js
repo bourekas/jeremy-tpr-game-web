@@ -6,7 +6,8 @@ import { shuffle } from "./shuffle";
 
 function useCardRotation(cards, intervalSeconds) {
   const [cardIndex, setCardIndex] = useState(0);
-  const shuffledCards = shuffle(cards);
+  const [shuffledCards, setShuffledCards] = useState(shuffle(cards));
+  console.log(JSON.stringify(shuffledCards));
   const card = shuffledCards[cardIndex];
   const intervalRef = useRef();
 
