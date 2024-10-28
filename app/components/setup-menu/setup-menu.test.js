@@ -31,6 +31,6 @@ it("has a start button", async () => {
   await user.click(button);
   expect(onStartMock).toHaveBeenCalledTimes(1);
   expect(onStartMock).toHaveBeenCalledWith({
-    displayTime: Default.args.defaultDisplayTime,
+    displayTime: Default.args.displayTime,
   });
 });

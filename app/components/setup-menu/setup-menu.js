@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -13,9 +12,13 @@ for (let i = 1; i <= 10; i++) {
   displayTimeSliderMarks.push({ value: i, label: i });
 }
 
-export default function SetupMenu({ defaultDisplayTime, onStart }) {
-  const [displayTime, setDisplayTime] = useState(defaultDisplayTime);
-  const handleDisplayTimeChange = (event, newTime) => setDisplayTime(newTime);
+export default function SetupMenu({
+  displayTime,
+  onDisplayTimeChange,
+  onStart,
+}) {
+  const handleDisplayTimeChange = (event, newTime) =>
+    onDisplayTimeChange(newTime);
 
   return (
     <Paper elevation={3} sx={{ padding: 3 }}>

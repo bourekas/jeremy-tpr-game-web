@@ -39,7 +39,9 @@ const cards = [
 
 export default function TprGame() {
   const [gameSetup, setGameSetup] = useState();
+  const [displayTime, setDisplayTime] = useState(5);
 
+  const handleDisplayTimeChange = (newTime) => setDisplayTime(newTime);
   const handleClickBackToSetup = () => setGameSetup(undefined);
   const handleStart = (setup) => setGameSetup(setup);
 
@@ -53,5 +55,11 @@ export default function TprGame() {
     );
   }
 
-  return <SetupMenu defaultDisplayTime={5} onStart={handleStart} />;
+  return (
+    <SetupMenu
+      displayTime={displayTime}
+      onDisplayTimeChange={handleDisplayTimeChange}
+      onStart={handleStart}
+    />
+  );
 }
