@@ -54,3 +54,19 @@ it("has next button", async () => {
   await user.click(button);
   expect(onClickNextMock).toHaveBeenCalledOnce();
 });
+
+it("has back to setting button", async () => {
+  const user = userEvent.setup();
+  const onClickBackToSetupMock = jest.fn();
+  render(<Default onClickBackToSetup={onClickBackToSetupMock} />);
+
+  const button = screen.getByRole("button", { name: "Back to setup menu" });
+  expect(button).toBeInTheDocument();
+
+  expect(screen.queryByText("Back to setup menu")).not.toBeInTheDocument();
+  await user.hover(button);
+  expect(screen.getByText("Back to setup menu")).toBeInTheDocument();
+
+  await user.click(button);
+  expect(onClickBackToSetupMock).toHaveBeenCalledTimes(1);
+});
