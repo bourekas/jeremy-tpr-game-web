@@ -9,7 +9,7 @@ import CardActions from "@mui/material/CardActions";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import VolumeUpIcon from "@mui/icons-material/VolumeUp";
+import ReplayIcon from "@mui/icons-material/Replay";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 import Tooltip from "@mui/material/Tooltip";
 
@@ -21,14 +21,14 @@ function ActionButton({ name, onClick, children }) {
   );
 }
 
-function pronounceWord(audioSrc) {
+function playAudio(audioSrc) {
   const audio = new Audio(audioSrc);
   audio.play();
 }
 
-function usePronounceWord(audioSrc) {
+function usePlayAudio(audioSrc) {
   useEffect(() => {
-    pronounceWord(audioSrc);
+    playAudio(audioSrc);
   }, [audioSrc]);
 }
 
@@ -39,7 +39,8 @@ export default function WordCard({
   onClickBackToSetup,
   onClickNext,
 }) {
-  usePronounceWord(audioSrc);
+  usePlayAudio(audioSrc);
+  const handleClickReplayAudio = () => playAudio(audioSrc);
 
   return (
     <Card component="article" sx={{ textAlign: "center", padding: 1 }}>
@@ -60,11 +61,8 @@ export default function WordCard({
         <Typography variant="h2">{text}</Typography>
       </CardContent>
       <CardActions sx={{ display: "flex", justifyContent: "center" }}>
-        <ActionButton
-          name="Pronounce word"
-          onClick={() => pronounceWord(audioSrc)}
-        >
-          <VolumeUpIcon />
+        <ActionButton name="Replay audio" onClick={handleClickReplayAudio}>
+          <ReplayIcon />
         </ActionButton>
         <ActionButton name="Go to the next word" onClick={onClickNext}>
           <SkipNextIcon />

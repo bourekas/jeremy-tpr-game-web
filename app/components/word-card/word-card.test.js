@@ -25,16 +25,16 @@ it("has image", () => {
   expect(image).toHaveAttribute("src", Default.args.imageSrc);
 });
 
-it("has pronounce button", async () => {
+it("has replay audio button", async () => {
   const user = userEvent.setup();
   render(<Default />);
 
-  const button = screen.getByRole("button", { name: "Pronounce word" });
+  const button = screen.getByRole("button", { name: "Replay audio" });
   expect(button).toBeInTheDocument();
 
-  expect(screen.queryByText("Pronounce word")).not.toBeInTheDocument();
+  expect(screen.queryByText("Replay audio")).not.toBeInTheDocument();
   await user.hover(button);
-  const tooltip = await screen.findByText("Pronounce word");
+  const tooltip = await screen.findByText("Replay audio");
   expect(tooltip).toBeInTheDocument();
 });
 
