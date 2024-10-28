@@ -7,7 +7,6 @@ import { shuffle } from "./shuffle";
 function useCardRotation(cards, intervalSeconds) {
   const [cardIndex, setCardIndex] = useState(0);
   const [shuffledCards, setShuffledCards] = useState(shuffle(cards));
-  console.log(JSON.stringify(shuffledCards));
   const card = shuffledCards[cardIndex];
   const intervalRef = useRef();
 
@@ -36,8 +35,18 @@ function useCardRotation(cards, intervalSeconds) {
   return { card, handleClickNext };
 }
 
-export default function WordCardRotator({ cards, intervalSeconds }) {
+export default function WordCardRotator({
+  cards,
+  intervalSeconds,
+  onClickBackToSetup,
+}) {
   const { card, handleClickNext } = useCardRotation(cards, intervalSeconds);
 
-  return <WordCard {...card} onClickNext={handleClickNext} />;
+  return (
+    <WordCard
+      {...card}
+      onClickNext={handleClickNext}
+      onClickBackToSetup={onClickBackToSetup}
+    />
+  );
 }
