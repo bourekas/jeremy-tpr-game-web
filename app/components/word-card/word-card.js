@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -21,15 +21,51 @@ function ActionButton({ name, onClick, children }) {
   );
 }
 
-function playAudio(audioSrc) {
-  const audio = new Audio(audioSrc);
-  audio.play();
+function useLoadImage(imageSrc) {
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const img = new Image();
+    img.src = imageSrc;
+    setIsLoading(true);
+    img.onload = () => setIsLoading(false);
+
+    return () => setIsLoading(false);
+  }, [imageSrc]);
+
+  return isLoading;
 }
 
-function usePlayAudio(audioSrc) {
+function useLoadAudio(audioSrc) {
+  const [audio, setAudio] = useState();
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
-    playAudio(audioSrc);
+    const audio = new Audio(audioSrc);
+    setAudio(audio);
+    setIsLoading(true);
+    audio.oncanplaythrough = () => setIsLoading(false);
+
+    return () => setIsLoading(false);
   }, [audioSrc]);
+
+  return { isLoading, audio };
+}
+
+function useLoadMedia(imageSrc, audioSrc) {
+  const isImageLoading = useLoadImage(imageSrc);
+  const { isAudioLoading, audio } = useLoadAudio(audioSrc);
+  const isLoading = isImageLoading || isAudioLoading;
+
+  return { isLoading, audio };
+}
+
+function usePlayAudio(audio) {
+  useEffect(() => {
+    audio?.play();
+
+    return () => audio?.pause();
+  }, [audio]);
 }
 
 export default function WordCard({
@@ -39,8 +75,9 @@ export default function WordCard({
   onClickBackToSetup,
   onClickNext,
 }) {
-  usePlayAudio(audioSrc);
-  const handleClickReplayAudio = () => playAudio(audioSrc);
+  const { isLoading, audio } = useLoadMedia(imageSrc, audioSrc);
+  usePlayAudio(audio);
+  const handleClickReplayAudio = () => audio?.play();
 
   return (
     <Card component="article" sx={{ textAlign: "center", padding: 1 }}>
