@@ -12,6 +12,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ReplayIcon from "@mui/icons-material/Replay";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 import Tooltip from "@mui/material/Tooltip";
+import NextImage from "next/image";
 
 function ActionButton({ name, onClick, children }) {
   return (
@@ -88,12 +89,15 @@ export default function WordCard({
           </IconButton>
         </Tooltip>
       </Box>
-      <CardMedia
-        component="img"
-        image={imageSrc}
-        alt={text}
-        sx={{ objectFit: "contain", maxHeight: "300px" }}
-      ></CardMedia>
+      <CardMedia sx={{ position: "relative", height: 300 }}>
+        <NextImage
+          src={imageSrc}
+          alt={text}
+          style={{ objectFit: "contain" }}
+          fill
+          priority
+        />
+      </CardMedia>
       <CardContent>
         <Typography variant="h2">{text}</Typography>
       </CardContent>

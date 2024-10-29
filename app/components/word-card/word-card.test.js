@@ -22,7 +22,6 @@ it("has image", () => {
   render(<Default />);
   const image = screen.getByRole("img", { name: Default.args.text });
   expect(image).toBeInTheDocument();
-  expect(image).toHaveAttribute("src", Default.args.imageSrc);
 });
 
 it("has replay audio button", async () => {
