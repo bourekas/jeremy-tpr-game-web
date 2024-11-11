@@ -1,5 +1,9 @@
 import "../app/globals.css";
 
+import { ThemeProvider, CssBaseline } from "@mui/material";
+import { withThemeFromJSXProvider } from "@storybook/addon-themes";
+import { theme } from "../app/theme";
+
 /** @type { import('@storybook/react').Preview } */
 const preview = {
   parameters: {
@@ -10,6 +14,17 @@ const preview = {
       },
     },
   },
+
+  decorators: [
+    withThemeFromJSXProvider({
+      GlobalStyles: CssBaseline,
+      Provider: ThemeProvider,
+      themes: {
+        default: theme,
+      },
+      defaultTheme: "default",
+    }),
+  ],
 };
 
 export default preview;
