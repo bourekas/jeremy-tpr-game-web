@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -12,18 +13,15 @@ for (let i = 1; i <= 10; i++) {
   displayTimeSliderMarks.push({ value: i, label: i });
 }
 
-export default function SetupMenu({
-  displayTime,
-  onDisplayTimeChange,
-  onStart,
-}) {
-  const handleDisplayTimeChange = (event, newTime) =>
-    onDisplayTimeChange(newTime);
+export default function SetupMenu({ setup = {}, headingLevel = 1, onStart }) {
+  const [displayTime, setDisplayTime] = useState(setup.displayTime || 5);
+
+  const handleDisplayTimeChange = (event, newTime) => setDisplayTime(newTime);
 
   return (
     <Paper elevation={3} sx={{ padding: 3 }}>
       <Box sx={{ textAlign: "center" }}>
-        <Typography component="h1" variant="h4">
+        <Typography component={`h${headingLevel}`} variant="h4">
           TPR Game Setup
         </Typography>
       </Box>

@@ -1,36 +1,44 @@
-import { composeStories } from "@storybook/react";
 import { render, screen } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
-import * as stories from "./setup-menu.stories";
+import SetupMenu from "./setup-menu";
+import { expect } from "@storybook/test";
 
-const { Default } = composeStories(stories);
+describe("TPR Game Setup heading", () => {
+  const getGameSetupHeading = (level) =>
+    screen.getByRole("heading", { name: "TPR Game Setup", level });
 
-it("has a heading", () => {
-  render(<Default />);
-  const heading = screen.getByRole("heading", {
-    name: "TPR Game Setup",
-    level: 1,
+  it("renders with level 1 heading by default", () => {
+    render(<SetupMenu />);
+
+    expect(getGameSetupHeading(1)).toBeInTheDocument();
   });
-  expect(heading).toBeInTheDocument();
+
+  it("renders with specified heading level", () => {
+    const level = 3;
+    render(<SetupMenu headingLevel={level} />);
+
+    expect(getGameSetupHeading(level)).toBeInTheDocument();
+  });
 });
 
-it("has a display time slider", () => {
-  render(<Default />);
+it("updates the display time interval when slider value changes", () => {
+  const user = userEvent.setup();
+  render(<SetupMenu />);
+
   const slider = screen.getByRole("slider", { name: "Display time" });
   expect(slider).toBeInTheDocument();
 });
 
-it("has a start button", async () => {
+it("calls the start callback with setup values when the start button is clicked", async () => {
   const user = userEvent.setup();
-  const onStartMock = jest.fn();
-  render(<Default onStart={onStartMock} />);
+  const setup = { displayTime: 10 };
+  const mockOnStart = jest.fn();
+
+  render(<SetupMenu setup={setup} onStart={mockOnStart} />);
 
   const button = screen.getByRole("button", { name: "Start" });
   expect(button).toBeInTheDocument();
 
   await user.click(button);
-  expect(onStartMock).toHaveBeenCalledTimes(1);
-  expect(onStartMock).toHaveBeenCalledWith({
-    displayTime: Default.args.displayTime,
-  });
+  expect(mockOnStart).toHaveBeenCalledWith(setup);
 });
