@@ -4,7 +4,7 @@ export default {
   component: WordCard,
 };
 
-export const Default = {
+export const ToTouch = {
   args: {
     text: "לָגַעַת",
     imageSrc: "/word-card/first.jpg",
@@ -12,7 +12,7 @@ export const Default = {
   },
 };
 
-export const Second = {
+export const ToCall = {
   args: {
     text: "לְהִתְקַשֵּׁר",
     imageSrc: "/word-card/second.jpg",

@@ -1,32 +1,28 @@
 import { render, screen } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
-import { composeStories } from "@storybook/react";
-import * as stories from "./word-card.stories";
-import { expect } from "@storybook/test";
-
-const { Default } = composeStories(stories);
+import WordCard from "./word-card";
 
 it("has card", () => {
-  render(<Default />);
+  render(<WordCard />);
   const card = screen.getByRole("article");
   expect(card).toBeInTheDocument();
 });
 
 it("has text", () => {
-  render(<Default />);
-  const content = screen.getByText(Default.args.text);
+  render(<WordCard text="hello" />);
+  const content = screen.getByText("hello");
   expect(content).toBeInTheDocument();
 });
 
 it("has image", () => {
-  render(<Default />);
-  const image = screen.getByRole("img", { name: Default.args.text });
+  render(<WordCard imageSrc="/word-card/first.jpg" />);
+  const image = screen.getByRole("img");
   expect(image).toBeInTheDocument();
 });
 
 it("has replay audio button", async () => {
   const user = userEvent.setup();
-  render(<Default />);
+  render(<WordCard />);
 
   const button = screen.getByRole("button", { name: "Replay audio" });
   expect(button).toBeInTheDocument();
@@ -40,7 +36,7 @@ it("has replay audio button", async () => {
 it("has next button", async () => {
   const user = userEvent.setup();
   const onClickNextMock = jest.fn();
-  render(<Default onClickNext={onClickNextMock} />);
+  render(<WordCard onClickNext={onClickNextMock} />);
 
   const button = screen.getByRole("button", { name: "Go to the next word" });
   expect(button).toBeInTheDocument();
@@ -51,13 +47,13 @@ it("has next button", async () => {
   expect(tooltip).toBeInTheDocument();
 
   await user.click(button);
-  expect(onClickNextMock).toHaveBeenCalledOnce();
+  expect(onClickNextMock).toHaveBeenCalledTimes(1);
 });
 
 it("has back to setting button", async () => {
   const user = userEvent.setup();
   const onClickBackToSetupMock = jest.fn();
-  render(<Default onClickBackToSetup={onClickBackToSetupMock} />);
+  render(<WordCard onClickBackToSetup={onClickBackToSetupMock} />);
 
   const button = screen.getByRole("button", { name: "Back to setup menu" });
   expect(button).toBeInTheDocument();
