@@ -42,28 +42,21 @@ function SetupHeading({ headingLevel }) {
   );
 }
 
-const displayTimeSliderMarks = [];
-
-for (let i = 1; i <= 10; i++) {
-  displayTimeSliderMarks.push({ value: i, label: i });
-}
-
 function DisplayTimeOption({ displayTime, onDisplayTimeChange }) {
   const handleDisplayTimeChange = (_, newTime) => onDisplayTimeChange(newTime);
 
   return (
     <>
-      <Typography id="word-display-time" variant="subtitle1" gutterBottom>
+      <Typography variant="subtitle1" gutterBottom>
         Display time for each word: {displayTime} second(s)
       </Typography>
       <Slider
         aria-label="Display time"
-        aria-describedby="word-display-time"
-        min={0}
+        min={1}
         max={10}
-        step={null}
-        marks={displayTimeSliderMarks}
         value={displayTime}
+        valueLabelDisplay="auto"
+        marks
         onChange={handleDisplayTimeChange}
       />
     </>

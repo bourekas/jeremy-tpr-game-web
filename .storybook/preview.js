@@ -1,8 +1,8 @@
-import "../app/globals.css";
-
-import { ThemeProvider, CssBaseline } from "@mui/material";
+import { ThemeProvider } from "@mui/material";
+import CssBaseline from "@mui/material/CssBaseline";
 import { withThemeFromJSXProvider } from "@storybook/addon-themes";
 import { theme } from "../app/theme";
+import "../app/globals.css";
 
 /** @type { import('@storybook/react').Preview } */
 const preview = {

@@ -6,6 +6,6 @@ export default {
 
 export const Default = {
   args: {
-    displayTime: 5,
+    onStart: (setup) => console.log(setup),
   },
 };
