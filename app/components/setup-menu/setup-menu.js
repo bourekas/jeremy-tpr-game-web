@@ -13,9 +13,12 @@ for (let i = 1; i <= 10; i++) {
   displayTimeSliderMarks.push({ value: i, label: i });
 }
 
-export default function SetupMenu({ setup = {}, headingLevel = 1, onStart }) {
-  const [displayTime, setDisplayTime] = useState(setup.displayTime || 5);
-
+export default function SetupMenu({
+  initialDisplayTime = 5,
+  headingLevel = 1,
+  onStart,
+}) {
+  const [displayTime, setDisplayTime] = useState(initialDisplayTime);
   const handleDisplayTimeChange = (event, newTime) => setDisplayTime(newTime);
 
   return (
