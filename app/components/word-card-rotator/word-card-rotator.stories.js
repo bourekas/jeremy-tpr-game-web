@@ -1,5 +1,5 @@
 import WordCardRotator from "./word-card-rotator";
-import { ToTouch, ToCall } from "../word-card/word-card.stories";
+import { ToTouch } from "../word-card/word-card.stories";
 
 export default {
   component: WordCardRotator,
@@ -7,7 +7,7 @@ export default {
 
 export const Default = {
   args: {
-    cards: [ToTouch.args, ToCall.args],
+    cards: [ToTouch.args],
     intervalSeconds: 3,
   },
 };

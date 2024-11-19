@@ -1,114 +1,110 @@
-"use client";
-
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import CardActions from "@mui/material/CardActions";
-import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import Tooltip from "@mui/material/Tooltip";
+import Image from "next/image";
+import Paper from "@mui/material/Paper";
+import Typogrophy from "@mui/material/Typography";
 import ReplayIcon from "@mui/icons-material/Replay";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
-import Tooltip from "@mui/material/Tooltip";
-import NextImage from "next/image";
+
+export default function WordCard({
+  word,
+  imageSrc,
+  audio,
+  onBackToSetup,
+  onNextWord,
+}) {
+  const handleReplayAudio = useAudio(audio);
+
+  return (
+    <Paper elevation={3} sx={{ px: { xs: 0, sm: 1 }, py: { xs: 0.5, sm: 1 } }}>
+      <Box sx={{ mb: { xs: 0.5, sm: 1 } }}>
+        <BackToSetupButton onBackToSetup={onBackToSetup} />
+      </Box>
+      <Box
+        sx={{
+          position: "relative",
+          width: "100%",
+          height: "auto",
+          objectFit: "contain",
+          maxWidth: "525px",
+          marginX: "auto",
+          mb: 1,
+          aspectRatio: "7 / 4",
+        }}
+      >
+        <TprImage word={word} src={imageSrc} />
+      </Box>
+      <WordText>{word}</WordText>
+      <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
+        <ReplayAudioButton onReplayAudio={handleReplayAudio} />
+        <NextWordButton onNextWord={onNextWord} />
+      </Box>
+    </Paper>
+  );
+}
+
+function useAudio(audio) {
+  const playAudio = () => audio?.play();
+
+  useEffect(() => {
+    playAudio();
+
+    return () => audio?.pause();
+  }, [audio]);
+
+  return playAudio;
+}
+
+function TprImage({ word, src }) {
+  return (
+    <Image
+      src={src || "placeholder.svg"}
+      alt={`Total Physical Response for the word '${word}'`}
+      fill
+      priority
+    />
+  );
+}
+
+function WordText({ children }) {
+  return (
+    <Typogrophy component="h1" variant="h3" sx={{ textAlign: "center", mb: 1 }}>
+      {children}
+    </Typogrophy>
+  );
+}
+
+function BackToSetupButton({ onBackToSetup }) {
+  return (
+    <ActionButton name="Back to setup menu" onClick={onBackToSetup}>
+      <ArrowBackIcon />
+    </ActionButton>
+  );
+}
+
+function ReplayAudioButton({ onReplayAudio }) {
+  return (
+    <ActionButton name="Replay audio" onClick={onReplayAudio}>
+      <ReplayIcon />
+    </ActionButton>
+  );
+}
+
+function NextWordButton({ name, onNextWord }) {
+  return (
+    <ActionButton name="Go to next word" onClick={onNextWord}>
+      <SkipNextIcon />
+    </ActionButton>
+  );
+}
 
 function ActionButton({ name, onClick, children }) {
   return (
     <Tooltip title={name}>
       <IconButton onClick={onClick}>{children}</IconButton>
     </Tooltip>
-  );
-}
-
-function useLoadImage(imageSrc) {
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    const img = new Image();
-    img.src = imageSrc;
-    setIsLoading(true);
-    img.onload = () => setIsLoading(false);
-
-    return () => setIsLoading(false);
-  }, [imageSrc]);
-
-  return isLoading;
-}
-
-function useLoadAudio(audioSrc) {
-  const [audio, setAudio] = useState();
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    const audio = new Audio(audioSrc);
-    setAudio(audio);
-    setIsLoading(true);
-    audio.oncanplaythrough = () => setIsLoading(false);
-
-    return () => setIsLoading(false);
-  }, [audioSrc]);
-
-  return { isLoading, audio };
-}
-
-function useLoadMedia(imageSrc, audioSrc) {
-  const isImageLoading = useLoadImage(imageSrc);
-  const { isAudioLoading, audio } = useLoadAudio(audioSrc);
-  const isLoading = isImageLoading || isAudioLoading;
-
-  return { isLoading, audio };
-}
-
-function usePlayAudio(audio) {
-  useEffect(() => {
-    audio?.play();
-
-    return () => audio?.pause();
-  }, [audio]);
-}
-
-export default function WordCard({
-  text,
-  imageSrc,
-  audioSrc,
-  onClickBackToSetup,
-  onClickNext,
-}) {
-  const { isLoading, audio } = useLoadMedia(imageSrc, audioSrc);
-  usePlayAudio(audio);
-  const handleClickReplayAudio = () => audio?.play();
-
-  return (
-    <Card component="article" sx={{ textAlign: "center", padding: 1 }}>
-      <Box sx={{ display: "flex" }}>
-        <Tooltip title="Back to setup menu">
-          <IconButton onClick={onClickBackToSetup}>
-            <ArrowBackIcon />
-          </IconButton>
-        </Tooltip>
-      </Box>
-      <CardMedia sx={{ position: "relative", height: 300 }}>
-        <NextImage
-          src={imageSrc}
-          alt={text}
-          style={{ objectFit: "contain" }}
-          fill
-          priority
-        />
-      </CardMedia>
-      <CardContent>
-        <Typography variant="h2">{text}</Typography>
-      </CardContent>
-      <CardActions sx={{ display: "flex", justifyContent: "center" }}>
-        <ActionButton name="Replay audio" onClick={handleClickReplayAudio}>
-          <ReplayIcon />
-        </ActionButton>
-        <ActionButton name="Go to the next word" onClick={onClickNext}>
-          <SkipNextIcon />
-        </ActionButton>
-      </CardActions>
-    </Card>
   );
 }

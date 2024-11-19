@@ -4,18 +4,24 @@ export default {
   component: WordCard,
 };
 
-export const ToTouch = {
+export const Medialess = {
   args: {
-    text: "לָגַעַת",
-    imageSrc: "/word-card/first.jpg",
-    audioSrc: "/word-card/first.mp3",
+    word: "לָגַעַת",
   },
 };
 
-export const ToCall = {
+export const ToTouch = {
   args: {
-    text: "לְהִתְקַשֵּׁר",
-    imageSrc: "/word-card/second.jpg",
-    audioSrc: "/word-card/second.mp3",
+    word: "לָגַעַת",
+    imageSrc: "word-card/to-touch.jpg",
+    audio: new Audio("word-card/to-touch.mp3"),
+  },
+};
+
+export const toCall = {
+  args: {
+    word: "לְהִתְקַשֵּׁר",
+    imageSrc: "word-card/to-call.jpg",
+    audio: new Audio("word-card/to-call.mp3"),
   },
 };
