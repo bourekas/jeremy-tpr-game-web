@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import DefaultSetupMenu from "../setup-menu/setup-menu";
 import DefaultWordCard from "../word-card/word-card";
 import defaultUseWordPlayer from "./use-word-player";
@@ -10,9 +11,9 @@ export default function TprGame({
   WordCard = DefaultWordCard,
   useWordPlayer = defaultUseWordPlayer,
 }) {
-  const { word, play, reset, next } = useWordPlayer(words);
+  const [displayTime, setDisplayTime] = useState(5);
+  const { word, play, reset, next } = useWordPlayer(words, displayTime);
   const audio = word?.audioSrc && new Audio(word.audioSrc);
-  const handleStart = ({ displayTime }) => play(displayTime);
 
   return word ? (
     <WordCard
@@ -23,6 +24,10 @@ export default function TprGame({
       onNextWord={next}
     />
   ) : (
-    <SetupMenu onStart={handleStart} />
+    <SetupMenu
+      displayTime={displayTime}
+      onDisplayTimeChange={setDisplayTime}
+      onStart={play}
+    />
   );
 }

@@ -19,14 +19,14 @@ describe("TPR Game Setup heading", () => {
 
 describe("display time option", () => {
   it("renders slider with the initial display time value", () => {
-    render(<SetupMenu initialDisplayTime={3} />);
+    render(<SetupMenu displayTime={3} />);
     const slider = getDisplayTimeSlider();
 
     expect(slider).toHaveValue("3");
   });
 
   it("does not increment slider value above max value", () => {
-    render(<SetupMenu initialDisplayTime={10} />);
+    render(<SetupMenu displayTime={10} />);
     const slider = getDisplayTimeSlider();
 
     incrementDisplayTimeSlider(slider);
@@ -35,7 +35,7 @@ describe("display time option", () => {
   });
 
   it("does not decrement slider value below min value", () => {
-    render(<SetupMenu initialDisplayTime={1} />);
+    render(<SetupMenu displayTime={1} />);
     const slider = getDisplayTimeSlider();
 
     decrementDisplayTimeSlider(slider);
@@ -44,35 +44,30 @@ describe("display time option", () => {
   });
 
   it("renders the latest display time value text", async () => {
-    render(<SetupMenu initialDisplayTime={5} />);
+    const onDisplayTimeChange = jest.fn();
+    render(
+      <SetupMenu displayTime={5} onDisplayTimeChange={onDisplayTimeChange} />,
+    );
 
     expect(
       screen.getByText("Display time for each word: 5 second(s)"),
     ).toBeInTheDocument();
 
     incrementDisplayTimeSlider();
-
-    expect(screen.queryByText(/5 second\(s\)/)).not.toBeInTheDocument();
-    expect(screen.getByText(/6 second\(s\)/)).toBeInTheDocument();
+    expect(onDisplayTimeChange).toHaveBeenCalledWith(6);
   });
 });
 
-it("calls start callback with latest display time value when start button is clicked", async () => {
+it("calls start callback when start button is clicked", async () => {
   const user = userEvent.setup();
-  const mockOnStart = jest.fn();
+  const onStart = jest.fn();
 
-  render(<SetupMenu initialDisplayTime={5} onStart={mockOnStart} />);
+  render(<SetupMenu displayTime={5} onStart={onStart} />);
 
   const startButton = screen.getByRole("button", { name: "Start" });
-
   await user.click(startButton);
 
-  expect(mockOnStart).toHaveBeenLastCalledWith({ displayTime: 5 });
-
-  incrementDisplayTimeSlider();
-  await user.click(startButton);
-
-  expect(mockOnStart).toHaveBeenLastCalledWith({ displayTime: 6 });
+  expect(onStart).toHaveBeenCalled();
 });
 
 function incrementDisplayTimeSlider(slider) {

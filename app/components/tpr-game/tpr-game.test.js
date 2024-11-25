@@ -1,3 +1,4 @@
+import { act } from "react";
 import { render, screen } from "@testing-library/react";
 import TprGame from "./tpr-game";
 
@@ -15,22 +16,28 @@ const initializedWord = {
 
 it("renders setup-menu component when initially loaded", () => {
   const SetupMenu = jest.fn().mockReturnValue(<div data-testid="setup-menu" />);
+  const useWordPlayer = jest.fn().mockReturnValue({ play: jest.fn() });
 
-  renderTprGame({ SetupMenu });
+  renderTprGame({ SetupMenu, useWordPlayer });
 
   expect(screen.getByTestId("setup-menu")).toBeInTheDocument();
+  expect(SetupMenu.mock.lastCall[0]).toEqual({
+    displayTime: expect.any(Number),
+    onDisplayTimeChange: expect.any(Function),
+    onStart: expect.any(Function),
+  });
 });
 
-it("calls word-Player hook with the words prop", () => {
+it("calls word-player hook with the words prop", () => {
   const words = [sourceWord];
   const useWordPlayer = jest.fn().mockReturnValue({ word: sourceWord });
 
   renderTprGame({ words, useWordPlayer });
 
-  expect(useWordPlayer).toHaveBeenCalledWith(words);
+  expect(useWordPlayer).toHaveBeenCalledWith(words, expect.any(Number));
 });
 
-it("calls the play function when play callback is called by setup-menu component", () => {
+it("calls the play function when start callback is called by setup-menu component", () => {
   const SetupMenu = jest.fn();
   const play = jest.fn();
   const useWordPlayer = jest.fn().mockReturnValue({ play });
@@ -39,7 +46,7 @@ it("calls the play function when play callback is called by setup-menu component
 
   // simulate setup-menu component calling the start callback
   const { onStart } = SetupMenu.mock.lastCall[0];
-  onStart({ displayTime: 5 });
+  act(() => onStart());
 
   expect(play).toHaveBeenCalledTimes(1);
 });
@@ -66,7 +73,7 @@ it("calls the reset function when back-to-setup callback is called by word-card 
 
   // simulate word-card component calling the back-to-setup callback
   const { onBackToSetup } = WordCard.mock.lastCall[0];
-  onBackToSetup();
+  act(() => onBackToSetup());
 
   expect(reset).toHaveBeenCalledTimes(1);
 });
@@ -80,7 +87,7 @@ it("calls the next function when next-word callback is called by word-card compo
 
   // simulate word-card component calling the next-word callback
   const { onNextWord } = WordCard.mock.lastCall[0];
-  onNextWord();
+  act(() => onNextWord());
 
   expect(next).toHaveBeenCalledTimes(1);
 });

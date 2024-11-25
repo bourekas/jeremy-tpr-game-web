@@ -1,13 +1,16 @@
 import { useState, useRef } from "react";
 
-export default function useWordPlayer(words = [], initialWordIndex = -1) {
+export default function useWordPlayer(
+  words = [],
+  displayTime = 5,
+  initialWordIndex = -1,
+) {
   const [wordIndex, setWordIndex] = useState(initialWordIndex);
   const word = words[wordIndex];
   const timeoutIdRef = useRef();
-  const displayTimeRef = useRef(5);
+  const displayTimeRef = useRef(displayTime);
 
-  const play = (displayTime) => {
-    displayTimeRef.current = displayTime;
+  const play = () => {
     nextWord(wordIndex);
   };
 

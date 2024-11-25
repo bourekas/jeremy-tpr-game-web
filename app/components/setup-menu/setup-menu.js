@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -8,14 +7,11 @@ import Slider from "@mui/material/Slider";
 import Button from "@mui/material/Button";
 
 export default function SetupMenu({
-  initialDisplayTime = 5,
+  displayTime = 5,
   headingLevel = 1,
+  onDisplayTimeChange,
   onStart,
 }) {
-  const [displayTime, setDisplayTime] = useState(initialDisplayTime);
-  const handleDisplayTimeChange = (newTime) => setDisplayTime(newTime);
-  const handleStart = () => onStart({ displayTime });
-
   return (
     <Paper elevation={3} sx={{ padding: 3 }}>
       <Box sx={{ textAlign: "center" }}>
@@ -24,11 +20,11 @@ export default function SetupMenu({
       <Box sx={{ mb: 2 }}>
         <DisplayTimeOption
           displayTime={displayTime}
-          onDisplayTimeChange={handleDisplayTimeChange}
+          onDisplayTimeChange={onDisplayTimeChange}
         />
       </Box>
       <Box sx={{ display: "flex", justifyContent: "center" }}>
-        <StartButton onStart={handleStart} />
+        <StartButton onStart={onStart} />
       </Box>
     </Paper>
   );

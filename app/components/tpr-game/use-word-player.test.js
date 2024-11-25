@@ -12,30 +12,30 @@ const words = [
 jest.useFakeTimers();
 
 it("initializes with a falsy word by default", () => {
-  const { result } = renderHook(() => useWordPlayer(words));
+  const { result } = renderHook(() => useWordPlayer(words, 3));
 
   expect(result.current.word).toBeFalsy();
 });
 
 it("initializes with the specified word when initial word index is provided", () => {
-  const { result } = renderHook(() => useWordPlayer(words, 1));
+  const { result } = renderHook(() => useWordPlayer(words, 3, 1));
 
   expect(result.current.word).toBe(words[1]);
 });
 
 it("switches immediately to the first word when calling play", () => {
-  const { result } = renderHook(() => useWordPlayer(words));
+  const { result } = renderHook(() => useWordPlayer(words, 3));
 
-  act(() => result.current.play(3));
+  act(() => result.current.play());
 
   expect(result.current.word).toBe(words[0]);
 });
 
 it("does not switch to the next word before the specified time when calling play", () => {
-  const { result } = renderHook(() => useWordPlayer(words));
+  const { result } = renderHook(() => useWordPlayer(words, 3));
 
   act(() => {
-    result.current.play(3);
+    result.current.play();
     jest.advanceTimersByTime(2999);
   });
 
@@ -43,10 +43,10 @@ it("does not switch to the next word before the specified time when calling play
 });
 
 it("switches to the next word at the specified time when calling play", () => {
-  const { result } = renderHook(() => useWordPlayer(words));
+  const { result } = renderHook(() => useWordPlayer(words, 3));
 
   act(() => {
-    result.current.play(3);
+    result.current.play();
     jest.advanceTimersByTime(3000);
   });
 
@@ -54,11 +54,11 @@ it("switches to the next word at the specified time when calling play", () => {
 });
 
 it("switches to a falsy word and terminates after traversing all words when calling play", () => {
-  const { result } = renderHook(() => useWordPlayer([words[0]]));
+  const { result } = renderHook(() => useWordPlayer([words[0]], 3));
 
   // switches to the terminated state
   act(() => {
-    result.current.play(3);
+    result.current.play();
     jest.advanceTimersByTime(3000);
   });
   expect(result.current.word).toBeFalsy();
@@ -69,16 +69,16 @@ it("switches to a falsy word and terminates after traversing all words when call
 });
 
 it("plays back from the start when calling play again after first play terminates", () => {
-  const { result } = renderHook(() => useWordPlayer([words[0]]));
+  const { result } = renderHook(() => useWordPlayer([words[0]], 3));
 
   // switches to the terminated state
   act(() => {
-    result.current.play(3);
+    result.current.play();
     jest.advanceTimersByTime(3000);
   });
 
   // play is called a second time and plays from the start
-  act(() => result.current.play(3));
+  act(() => result.current.play());
   expect(result.current.word).toBe(words[0]);
 });
 
@@ -101,7 +101,7 @@ it("goes to the next word when calling next callback", () => {
 });
 
 it("resets to the initial state when calling reset callback", () => {
-  const { result } = renderHook(() => useWordPlayer(words, 1));
+  const { result } = renderHook(() => useWordPlayer(words, 3, 1));
 
   // back to the initial state
   act(() => result.current.reset());
@@ -113,10 +113,10 @@ it("resets to the initial state when calling reset callback", () => {
 });
 
 it("reschedules the next word when calling next callback", () => {
-  const { result } = renderHook(() => useWordPlayer(words));
+  const { result } = renderHook(() => useWordPlayer(words, 3));
 
   act(() => {
-    result.current.play(3);
+    result.current.play();
     jest.advanceTimersByTime(2999);
     // manually going to the next word just before scheduling is due
     result.current.next();
@@ -135,11 +135,11 @@ it("reschedules the next word when calling next callback", () => {
 });
 
 it("unschedules the next word when calling reset callback", () => {
-  const { result } = renderHook(() => useWordPlayer(words));
+  const { result } = renderHook(() => useWordPlayer(words, 3));
 
   act(() => {
     // calling play and immediately resetting to cancel the scheduling of the next word
-    result.current.play(3);
+    result.current.play();
     result.current.reset();
     jest.advanceTimersByTime(3000);
   });
