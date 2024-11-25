@@ -11,10 +11,16 @@ const words = [
 // All tests use fake timers and isolated state, no need for cleanup
 jest.useFakeTimers();
 
-it("returns a falsy word when initially loaded", () => {
+it("initializes with a falsy word by default", () => {
   const { result } = renderHook(() => useWordPlayer(words));
 
   expect(result.current.word).toBeFalsy();
+});
+
+it("initializes with the specified word when initial word index is provided", () => {
+  const { result } = renderHook(() => useWordPlayer(words, 1));
+
+  expect(result.current.word).toBe(words[1]);
 });
 
 it("schedules words at the specified time when calling play callback", () => {
@@ -64,7 +70,7 @@ it("reschedules the next word when calling next callback", () => {
     result.current.next();
   });
 
-  // advancing by one word because of calling next, rescheduling the next word
+  // advancing by one word because of calling next
   expect(result.current.word).toBe(words[1]);
 
   // still at the same word due to rescheduling
@@ -77,11 +83,7 @@ it("reschedules the next word when calling next callback", () => {
 });
 
 it("resets to the initial state when calling reset callback", () => {
-  const { result } = renderHook(() => useWordPlayer(words));
-
-  // changing from the initial state
-  act(() => result.current.next());
-  expect(result.current.word).toBe(words[0]);
+  const { result } = renderHook(() => useWordPlayer(words, 1));
 
   // back to the initial state
   act(() => result.current.reset());
