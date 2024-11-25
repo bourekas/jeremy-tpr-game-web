@@ -6,13 +6,13 @@ export default {
 
 export const GameLoad = {
   args: {
-    useWordRotation: () => ({}),
+    useWordPlayer: () => ({}),
   },
 };
 
 export const GameStart = {
   args: {
-    useWordRotation: () => ({
+    useWordPlayer: () => ({
       word: {
         word: "לָגַעַת",
         imageSrc: "word-card/to-touch.jpg",

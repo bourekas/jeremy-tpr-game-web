@@ -2,19 +2,26 @@
 
 import DefaultSetupMenu from "../setup-menu/setup-menu";
 import DefaultWordCard from "../word-card/word-card";
-import defaultUseWordRotation from "./use-word-rotation";
+import defaultUseWordPlayer from "./use-word-player";
 
 export default function TprGame({
   words,
   SetupMenu = DefaultSetupMenu,
   WordCard = DefaultWordCard,
-  useWordRotation = defaultUseWordRotation,
+  useWordPlayer = defaultUseWordPlayer,
 }) {
-  const { word, start, stop, next } = useWordRotation(words);
-  const handleStart = ({ displayTime }) => start(displayTime);
+  const { word, play, stop, next } = useWordPlayer(words);
+  const audio = word?.audioSrc && new Audio(word.audioSrc);
+  const handleStart = ({ displayTime }) => play(displayTime);
 
   return word ? (
-    <WordCard {...word} onBackToSetup={stop} onNextWord={next} />
+    <WordCard
+      word={word.word}
+      imageSrc={word?.imageSrc}
+      audio={audio}
+      onBackToSetup={stop}
+      onNextWord={next}
+    />
   ) : (
     <SetupMenu onStart={handleStart} />
   );
