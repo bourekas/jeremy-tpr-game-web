@@ -2,7 +2,7 @@ import { act } from "react";
 import { renderHook } from "@testing-library/react";
 import useWordPlayer from "./use-word-player";
 
-// Mock words for the tests
+// Default mock words for the tests
 const words = [
   { word: "לגעת", imageSrc: "לגעת.jpg", audioSrc: "לגעת.mp3" },
   { word: "להתקשר", imageSrc: "להתקשר.jpg", audioSrc: "להתקשר.mp3" },
@@ -23,41 +23,93 @@ it("initializes with the specified word when initial word index is provided", ()
   expect(result.current.word).toBe(words[1]);
 });
 
-it("schedules words at the specified time when calling play callback", () => {
+it("switches immediately to the first word when calling play", () => {
   const { result } = renderHook(() => useWordPlayer(words));
 
   act(() => result.current.play(3));
-  expect(result.current.word).toBe(words[0]);
 
-  act(() => jest.advanceTimersByTime(2999));
   expect(result.current.word).toBe(words[0]);
+});
 
-  act(() => jest.advanceTimersByTime(1));
+it("does not switch to the next word before the specified time when calling play", () => {
+  const { result } = renderHook(() => useWordPlayer(words));
+
+  act(() => {
+    result.current.play(3);
+    jest.advanceTimersByTime(2999);
+  });
+
+  expect(result.current.word).toBe(words[0]);
+});
+
+it("switches to the next word at the specified time when calling play", () => {
+  const { result } = renderHook(() => useWordPlayer(words));
+
+  act(() => {
+    result.current.play(3);
+    jest.advanceTimersByTime(3000);
+  });
+
   expect(result.current.word).toBe(words[1]);
+});
 
+it("switches to a falsy word and terminates after traversing all words when calling play", () => {
+  const { result } = renderHook(() => useWordPlayer([words[0]]));
+
+  // switches to the terminated state
+  act(() => {
+    result.current.play(3);
+    jest.advanceTimersByTime(3000);
+  });
+  expect(result.current.word).toBeFalsy();
+
+  // remains at the terminated state
   act(() => jest.advanceTimersByTime(3000));
   expect(result.current.word).toBeFalsy();
+});
+
+it("plays back from the start when calling play again after first play terminates", () => {
+  const { result } = renderHook(() => useWordPlayer([words[0]]));
+
+  // switches to the terminated state
+  act(() => {
+    result.current.play(3);
+    jest.advanceTimersByTime(3000);
+  });
+
+  // play is called a second time and plays from the start
+  act(() => result.current.play(3));
+  expect(result.current.word).toBe(words[0]);
 });
 
 it("goes to the next word when calling next callback", () => {
   const { result } = renderHook(() => useWordPlayer(words));
 
-  // initial state
-  expect(result.current.word).toBeFalsy();
-
   act(() => result.current.next());
   expect(result.current.word).toBe(words[0]);
 
   act(() => result.current.next());
   expect(result.current.word).toBe(words[1]);
 
-  // finished all words, now at the end
+  // finished traversing all words, goes back to the terminated state
   act(() => result.current.next());
   expect(result.current.word).toBeFalsy();
 
-  // subsequent calls do nothing
+  // continues back from the start
   act(() => result.current.next());
+  expect(result.current.word).toBe(words[0]);
+});
+
+it("resets to the initial state when calling reset callback", () => {
+  const { result } = renderHook(() => useWordPlayer(words, 1));
+
+  // back to the initial state
+  act(() => result.current.reset());
   expect(result.current.word).toBeFalsy();
+
+  // working as expected from the initial state
+  act(() => result.current.next());
+  expect(result.current.word).toBe(words[0]);
 });
 
 it("reschedules the next word when calling next callback", () => {
@@ -80,18 +132,6 @@ it("reschedules the next word when calling next callback", () => {
   // the rescheduling is working as expected
   act(() => jest.advanceTimersByTime(1));
   expect(result.current.word).toBeFalsy();
-});
-
-it("resets to the initial state when calling reset callback", () => {
-  const { result } = renderHook(() => useWordPlayer(words, 1));
-
-  // back to the initial state
-  act(() => result.current.reset());
-  expect(result.current.word).toBeFalsy();
-
-  // working as expected from the initial state
-  act(() => result.current.next());
-  expect(result.current.word).toBe(words[0]);
 });
 
 it("unschedules the next word when calling reset callback", () => {

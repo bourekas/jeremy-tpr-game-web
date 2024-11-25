@@ -8,7 +8,7 @@ export default function useWordPlayer(words = [], initialWordIndex = -1) {
 
   const play = (displayTime) => {
     displayTimeRef.current = displayTime;
-    nextWord();
+    nextWord(wordIndex);
   };
 
   const reset = () => {
@@ -18,17 +18,22 @@ export default function useWordPlayer(words = [], initialWordIndex = -1) {
 
   const next = () => {
     unscheduleNextWord();
-    nextWord();
+    nextWord(wordIndex);
   };
 
-  const nextWord = () => {
+  const nextWord = (wordIndex) => {
     setNextWordIndex();
-    scheduleNextWord();
+
+    if (wordIndex + 1 < words.length) {
+      scheduleNextWord(wordIndex + 1);
+    }
   };
 
-  const scheduleNextWord = () => {
-    if (ended()) return;
-    timeoutIdRef.current = setTimeout(nextWord, displayTimeRef.current * 1000);
+  const scheduleNextWord = (wordIndex) => {
+    timeoutIdRef.current = setTimeout(
+      () => nextWord(wordIndex),
+      displayTimeRef.current * 1000,
+    );
   };
 
   const unscheduleNextWord = () => {
@@ -36,13 +41,10 @@ export default function useWordPlayer(words = [], initialWordIndex = -1) {
   };
 
   const setNextWordIndex = () => {
-    if (ended()) return;
-
-    setWordIndex((i) => i + 1);
-  };
-
-  const ended = () => {
-    return wordIndex >= words.length;
+    setWordIndex((i) => {
+      const nextIndex = i + 1;
+      return nextIndex < words.length ? nextIndex : -1;
+    });
   };
 
   return { word, play, reset, next };

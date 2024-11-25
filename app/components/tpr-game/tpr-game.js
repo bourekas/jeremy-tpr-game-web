@@ -10,7 +10,7 @@ export default function TprGame({
   WordCard = DefaultWordCard,
   useWordPlayer = defaultUseWordPlayer,
 }) {
-  const { word, play, stop, next } = useWordPlayer(words);
+  const { word, play, reset, next } = useWordPlayer(words);
   const audio = word?.audioSrc && new Audio(word.audioSrc);
   const handleStart = ({ displayTime }) => play(displayTime);
 
@@ -19,7 +19,7 @@ export default function TprGame({
       word={word.word}
       imageSrc={word?.imageSrc}
       audio={audio}
-      onBackToSetup={stop}
+      onBackToSetup={reset}
       onNextWord={next}
     />
   ) : (
