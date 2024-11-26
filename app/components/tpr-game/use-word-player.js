@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 export default function useWordPlayer(
   words = [],
@@ -8,46 +8,33 @@ export default function useWordPlayer(
   const [wordIndex, setWordIndex] = useState(initialWordIndex);
   const word = words[wordIndex];
   const timeoutIdRef = useRef();
-  const displayTimeRef = useRef(displayTime);
+
+  useEffect(() => {
+    if (wordIndex < 0 || wordIndex >= words.length) return;
+
+    timeoutIdRef.current = setTimeout(setNextWordIndex, displayTime * 1000);
+  }, [wordIndex]);
 
   const play = () => {
-    nextWord(wordIndex);
+    next();
   };
 
   const reset = () => {
-    unscheduleNextWord();
+    cancelNextWord();
     setWordIndex(-1);
   };
 
   const next = () => {
-    unscheduleNextWord();
-    nextWord(wordIndex);
-  };
-
-  const nextWord = (wordIndex) => {
+    cancelNextWord();
     setNextWordIndex();
-
-    if (wordIndex + 1 < words.length) {
-      scheduleNextWord(wordIndex + 1);
-    }
   };
 
-  const scheduleNextWord = (wordIndex) => {
-    timeoutIdRef.current = setTimeout(
-      () => nextWord(wordIndex),
-      displayTimeRef.current * 1000,
-    );
-  };
-
-  const unscheduleNextWord = () => {
+  const cancelNextWord = () => {
     clearTimeout(timeoutIdRef.current);
   };
 
   const setNextWordIndex = () => {
-    setWordIndex((i) => {
-      const nextIndex = i + 1;
-      return nextIndex < words.length ? nextIndex : -1;
-    });
+    setWordIndex((i) => (i === words.length ? 0 : i + 1));
   };
 
   return { word, play, reset, next };

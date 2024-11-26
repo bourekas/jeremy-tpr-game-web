@@ -45,10 +45,8 @@ it("does not switch to the next word before the specified time when calling play
 it("switches to the next word at the specified time when calling play", () => {
   const { result } = renderHook(() => useWordPlayer(words, 3));
 
-  act(() => {
-    result.current.play();
-    jest.advanceTimersByTime(3000);
-  });
+  act(() => result.current.play());
+  act(() => jest.advanceTimersByTime(3000));
 
   expect(result.current.word).toBe(words[1]);
 });
@@ -57,10 +55,8 @@ it("switches to a falsy word and terminates after traversing all words when call
   const { result } = renderHook(() => useWordPlayer([words[0]], 3));
 
   // switches to the terminated state
-  act(() => {
-    result.current.play();
-    jest.advanceTimersByTime(3000);
-  });
+  act(() => result.current.play());
+  act(() => jest.advanceTimersByTime(3000));
   expect(result.current.word).toBeFalsy();
 
   // remains at the terminated state
@@ -72,10 +68,8 @@ it("plays back from the start when calling play again after first play terminate
   const { result } = renderHook(() => useWordPlayer([words[0]], 3));
 
   // switches to the terminated state
-  act(() => {
-    result.current.play();
-    jest.advanceTimersByTime(3000);
-  });
+  act(() => result.current.play());
+  act(() => jest.advanceTimersByTime(3000));
 
   // play is called a second time and plays from the start
   act(() => result.current.play());
@@ -145,5 +139,17 @@ it("unschedules the next word when calling reset callback", () => {
   });
 
   // still at the initial state
+  expect(result.current.word).toBeFalsy();
+});
+
+it("stops playing when finished playing one cycle", () => {
+  const { result } = renderHook(() => useWordPlayer([words[0]], 3));
+
+  act(() => {
+    result.current.play();
+    result.current.next();
+    jest.advanceTimersByTime(3000);
+  });
+
   expect(result.current.word).toBeFalsy();
 });
