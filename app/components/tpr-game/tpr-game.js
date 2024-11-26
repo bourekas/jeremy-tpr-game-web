@@ -17,6 +17,7 @@ export default function TprGame({
 
   return word ? (
     <WordCard
+      key={word.word}
       word={word.word}
       imageSrc={word?.imageSrc}
       audio={audio}
