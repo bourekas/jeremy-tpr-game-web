@@ -14,7 +14,9 @@ export default function useWordPlayer(
     if (!isPlaying || wordIndex === -1) return;
 
     timeoutIdRef.current = setTimeout(setNextWordIndex, displayTime * 1000);
-  }, [wordIndex]);
+
+    return cancelNextWord;
+  }, [wordIndex, isPlaying, displayTime]);
 
   const play = () => {
     cancelNextWord();

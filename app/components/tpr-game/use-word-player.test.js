@@ -82,6 +82,16 @@ it("does not switch to next word immediately when calling play from the middle",
   expect(result.current.word).toBe(words[0]);
 });
 
+it("continues playing from the middle when calling play", () => {
+  const { result } = renderHook(() => useWordPlayer(words, 3, 0));
+
+  expect(result.current.word).toBe(words[0]);
+
+  act(() => result.current.play());
+  act(() => jest.advanceTimersByTime(3000));
+  expect(result.current.word).toBe(words[1]);
+});
+
 it("does not switch to the next word before the specified time when calling play", () => {
   const { result } = renderHook(() => useWordPlayer(words, 3));
 
@@ -196,5 +206,19 @@ it("returns false for isPlaying and cancels word scheduling when calling pause",
   expect(result.current.isPlaying).toBe(false);
 
   act(() => jest.advanceTimersByTime(3000));
+  expect(result.current.word).toBe(words[0]);
+});
+
+it("schedules words with the new display time when display time changes", () => {
+  const { rerender, result } = renderHook(
+    ({ displayTime }) => useWordPlayer(words, displayTime),
+    { initialProps: { displayTime: 3 } },
+  );
+
+  act(() => result.current.play());
+
+  rerender({ displayTime: 5 });
+  act(() => jest.advanceTimersByTime(3000));
+
   expect(result.current.word).toBe(words[0]);
 });
