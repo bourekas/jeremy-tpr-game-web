@@ -51,7 +51,7 @@ it("calls the play function when start callback is called by setup-menu componen
   expect(play).toHaveBeenCalledTimes(1);
 });
 
-it("renders word-card component per returned word from word-Player hook", () => {
+it("renders word-card component per returned word from word-player hook", () => {
   const WordCard = jest.fn().mockReturnValue(<div data-testid="word-card" />);
   const useWordPlayer = jest.fn().mockReturnValue({ word: sourceWord });
 
@@ -62,6 +62,18 @@ it("renders word-card component per returned word from word-Player hook", () => 
   // assert that it was called with the correct props
   const wordCardProps = WordCard.mock.lastCall[0];
   expect(wordCardProps).toEqual(expect.objectContaining(initializedWord));
+});
+
+it("passes isPlaying returned from use-player hook to word-card component", () => {
+  const useWordPlayer = jest
+    .fn()
+    .mockReturnValue({ word: sourceWord, isPlaying: true });
+  const WordCard = jest.fn();
+
+  renderTprGame({ WordCard, useWordPlayer });
+
+  const wordCardProps = WordCard.mock.lastCall[0];
+  expect(wordCardProps).toHaveProperty("isPlaying", true);
 });
 
 it("calls the reset function when back-to-setup callback is called by word-card component", () => {
@@ -94,7 +106,7 @@ it("calls the next function when next-word callback is called by word-card compo
 
 // renders with default mocked dependencies which can be overriden
 function renderTprGame(props) {
-  render(
+  return render(
     <TprGame
       SetupMenu={jest.fn()}
       WordCard={jest.fn()}

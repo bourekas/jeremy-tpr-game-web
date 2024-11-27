@@ -12,7 +12,10 @@ export default function TprGame({
   useWordPlayer = defaultUseWordPlayer,
 }) {
   const [displayTime, setDisplayTime] = useState(5);
-  const { word, play, reset, next } = useWordPlayer(words, displayTime);
+  const { word, isPlaying, play, pause, reset, next } = useWordPlayer(
+    words,
+    displayTime,
+  );
   const audio = word?.audioSrc && new Audio(word.audioSrc);
 
   return word ? (
@@ -21,6 +24,9 @@ export default function TprGame({
       word={word.word}
       imageSrc={word?.imageSrc}
       audio={audio}
+      isPlaying={isPlaying}
+      onPlay={play}
+      onPause={pause}
       onBackToSetup={reset}
       onNextWord={next}
     />
