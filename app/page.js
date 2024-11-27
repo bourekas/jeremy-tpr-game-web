@@ -1,3 +1,4 @@
+import Box from "@mui/material/Box";
 import TprGame from "./components/tpr-game/tpr-game";
 
 const words = [
@@ -34,5 +35,9 @@ const words = [
 ];
 
 export default function Home() {
-  return <TprGame words={words} />;
+  return (
+    <Box sx={{ padding: { xs: 1, sm: 1.5 } }}>
+      <TprGame words={words} />
+    </Box>
+  );
 }
