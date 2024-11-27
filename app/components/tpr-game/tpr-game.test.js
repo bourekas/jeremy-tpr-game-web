@@ -8,17 +8,8 @@ const sourceWord = {
   audioSrc: "לגעת.mp3",
 };
 
-const initializedWord = {
-  word: "לגעת",
-  imageSrc: "לגעת.jpg",
-  audio: new Audio("לגעת.mp3"),
-};
-
 it("renders setup-menu component when initially loaded", () => {
-  const SetupMenu = jest.fn().mockReturnValue(<div data-testid="setup-menu" />);
-  const useWordPlayer = jest.fn().mockReturnValue({ play: jest.fn() });
-
-  renderTprGame({ SetupMenu, useWordPlayer });
+  const { SetupMenu } = renderTprGame();
 
   expect(screen.getByTestId("setup-menu")).toBeInTheDocument();
   expect(SetupMenu.mock.lastCall[0]).toEqual({
@@ -28,90 +19,44 @@ it("renders setup-menu component when initially loaded", () => {
   });
 });
 
-it("calls word-player hook with the words prop", () => {
+it("renders word-player when setup-menu component calls start callback", () => {
   const words = [sourceWord];
-  const useWordPlayer = jest.fn().mockReturnValue({ word: sourceWord });
-
-  renderTprGame({ words, useWordPlayer });
-
-  expect(useWordPlayer).toHaveBeenCalledWith(words, expect.any(Number));
-});
-
-it("calls the play function when start callback is called by setup-menu component", () => {
-  const SetupMenu = jest.fn();
-  const play = jest.fn();
-  const useWordPlayer = jest.fn().mockReturnValue({ play });
-
-  renderTprGame({ SetupMenu, useWordPlayer });
+  const { SetupMenu, WordPlayer } = renderTprGame({ words });
 
   // simulate setup-menu component calling the start callback
-  const { onStart } = SetupMenu.mock.lastCall[0];
-  act(() => onStart());
+  act(() => SetupMenu.mock.lastCall[0].onStart());
 
-  expect(play).toHaveBeenCalledTimes(1);
+  expect(screen.getByTestId("word-player")).toBeInTheDocument();
+  expect(WordPlayer.mock.lastCall[0]).toEqual({
+    words,
+    displayTime: expect.any(Number),
+    onBackToSetup: expect.any(Function),
+  });
 });
 
-it("renders word-card component per returned word from word-player hook", () => {
-  const WordCard = jest.fn().mockReturnValue(<div data-testid="word-card" />);
-  const useWordPlayer = jest.fn().mockReturnValue({ word: sourceWord });
+it("renders word-player when initial has-started is true", () => {
+  renderTprGame({ initialHasStarted: true });
 
-  renderTprGame({ WordCard, useWordPlayer });
-
-  expect(screen.getByTestId("word-card")).toBeInTheDocument();
-
-  // assert that it was called with the correct props
-  const wordCardProps = WordCard.mock.lastCall[0];
-  expect(wordCardProps).toEqual(expect.objectContaining(initializedWord));
+  expect(screen.getByTestId("word-player")).toBeInTheDocument();
 });
 
-it("passes isPlaying returned from use-player hook to word-card component", () => {
-  const useWordPlayer = jest
-    .fn()
-    .mockReturnValue({ word: sourceWord, isPlaying: true });
-  const WordCard = jest.fn();
+it("renders setup-menu component when word-player calls back-to-setup callback", () => {
+  const { WordPlayer } = renderTprGame({ initialHasStarted: true });
 
-  renderTprGame({ WordCard, useWordPlayer });
-
-  const wordCardProps = WordCard.mock.lastCall[0];
-  expect(wordCardProps).toHaveProperty("isPlaying", true);
-});
-
-it("calls the reset function when back-to-setup callback is called by word-card component", () => {
-  const WordCard = jest.fn();
-  const reset = jest.fn();
-  const useWordPlayer = jest.fn().mockReturnValue({ word: sourceWord, reset });
-
-  renderTprGame({ WordCard, useWordPlayer });
-
-  // simulate word-card component calling the back-to-setup callback
-  const { onBackToSetup } = WordCard.mock.lastCall[0];
-  act(() => onBackToSetup());
-
-  expect(reset).toHaveBeenCalledTimes(1);
-});
-
-it("calls the next function when next-word callback is called by word-card component", () => {
-  const WordCard = jest.fn();
-  const next = jest.fn();
-  const useWordPlayer = jest.fn().mockReturnValue({ word: sourceWord, next });
-
-  renderTprGame({ WordCard, useWordPlayer });
-
-  // simulate word-card component calling the next-word callback
-  const { onNextWord } = WordCard.mock.lastCall[0];
-  act(() => onNextWord());
-
-  expect(next).toHaveBeenCalledTimes(1);
+  expect(screen.getByTestId("word-player")).toBeInTheDocument();
+  // simulate word-player component calling the back-to-setup callback
+  act(() => WordPlayer.mock.lastCall[0].onBackToSetup());
+  expect(screen.getByTestId("setup-menu")).toBeInTheDocument();
 });
 
 // renders with default mocked dependencies which can be overriden
 function renderTprGame(props) {
-  return render(
-    <TprGame
-      SetupMenu={jest.fn()}
-      WordCard={jest.fn()}
-      useWordPlayer={jest.fn().mockReturnValue({})}
-      {...props}
-    />,
-  );
+  const SetupMenu = jest.fn().mockReturnValue(<div data-testid="setup-menu" />);
+  const WordPlayer = jest
+    .fn()
+    .mockReturnValue(<div data-testid="word-player" />);
+
+  render(<TprGame SetupMenu={SetupMenu} WordPlayer={WordPlayer} {...props} />);
+
+  return { SetupMenu, WordPlayer };
 }

@@ -2,39 +2,34 @@
 
 import { useState } from "react";
 import DefaultSetupMenu from "../setup-menu/setup-menu";
-import DefaultWordCard from "../word-card/word-card";
-import defaultUseWordPlayer from "./use-word-player";
+import DefaultWordPlayer from "../word-player/word-player";
 
 export default function TprGame({
   words,
+  initialHasStarted = false,
   SetupMenu = DefaultSetupMenu,
-  WordCard = DefaultWordCard,
-  useWordPlayer = defaultUseWordPlayer,
+  WordPlayer = DefaultWordPlayer,
 }) {
   const [displayTime, setDisplayTime] = useState(5);
-  const { word, isPlaying, play, pause, reset, next } = useWordPlayer(
-    words,
-    displayTime,
-  );
-  const audio = word?.audioSrc && new Audio(word.audioSrc);
+  const [hasStarted, setHasStarted] = useState(initialHasStarted);
+  const handleStart = () => setHasStarted(true);
+  const handleBackToSetup = () => setHasStarted(false);
 
-  return word ? (
-    <WordCard
-      key={word.word}
-      word={word.word}
-      imageSrc={word?.imageSrc}
-      audio={audio}
-      isPlaying={isPlaying}
-      onPlay={play}
-      onPause={pause}
-      onBackToSetup={reset}
-      onNextWord={next}
-    />
-  ) : (
-    <SetupMenu
+  if (!hasStarted) {
+    return (
+      <SetupMenu
+        displayTime={displayTime}
+        onDisplayTimeChange={setDisplayTime}
+        onStart={handleStart}
+      />
+    );
+  }
+
+  return (
+    <WordPlayer
+      words={words}
       displayTime={displayTime}
-      onDisplayTimeChange={setDisplayTime}
-      onStart={play}
+      onBackToSetup={handleBackToSetup}
     />
   );
 }
