@@ -6,17 +6,25 @@ export default function useWordPlayer(
   initialWordIndex = -1,
 ) {
   const [wordIndex, setWordIndex] = useState(initialWordIndex);
+  const [isPlaying, setIsPlaying] = useState(false);
   const word = words[wordIndex];
   const timeoutIdRef = useRef();
 
   useEffect(() => {
-    if (wordIndex < 0 || wordIndex >= words.length) return;
+    if (!isPlaying || wordIndex === -1) return;
 
     timeoutIdRef.current = setTimeout(setNextWordIndex, displayTime * 1000);
   }, [wordIndex]);
 
   const play = () => {
-    next();
+    cancelNextWord();
+    setIsPlaying(true);
+    setWordIndex((i) => (i === -1 ? 0 : i));
+  };
+
+  const pause = () => {
+    cancelNextWord();
+    setIsPlaying(false);
   };
 
   const reset = () => {
@@ -34,8 +42,11 @@ export default function useWordPlayer(
   };
 
   const setNextWordIndex = () => {
-    setWordIndex((i) => (i === words.length ? 0 : i + 1));
+    setWordIndex((i) => {
+      const nextIndex = i + 1;
+      return nextIndex < words.length ? nextIndex : -1;
+    });
   };
 
-  return { word, play, reset, next };
+  return { word, isPlaying, play, pause, reset, next };
 }
