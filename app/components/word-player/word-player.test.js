@@ -8,7 +8,7 @@ it("calls the use-word-player hook with words and display time props", () => {
 
   const { useWordPlayer } = renderWordPlayer({ words, displayTime });
 
-  expect(useWordPlayer).toHaveBeenCalledWith(words, displayTime);
+  expect(useWordPlayer).toHaveBeenCalledWith(words, displayTime, true);
 });
 
 it("renders the word-card component with values returned from use-word-player hook", () => {
@@ -41,14 +41,6 @@ it("calls reset and back-to-setup functions when word-card calls its back-to-set
 
   expect(reset).toHaveBeenCalledTimes(1);
   expect(onBackToSetup).toHaveBeenCalledTimes(1);
-});
-
-it("calls play function when mounting", () => {
-  const {
-    useWordPlayerReturnValue: { play },
-  } = renderWordPlayer();
-
-  expect(play).toHaveBeenCalledTimes(1);
 });
 
 function renderWordPlayer(props) {

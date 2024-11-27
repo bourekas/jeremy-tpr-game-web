@@ -3,25 +3,24 @@ import { useState, useRef, useEffect } from "react";
 export default function useWordPlayer(
   words = [],
   displayTime = 5,
-  initialWordIndex = -1,
+  initialIsPlaying = false,
+  initialWordIndex = 0,
 ) {
   const [wordIndex, setWordIndex] = useState(initialWordIndex);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(initialIsPlaying);
   const word = words[wordIndex];
   const timeoutIdRef = useRef();
 
   useEffect(() => {
-    if (!isPlaying || wordIndex === -1) return;
+    if (!isPlaying) return;
 
     timeoutIdRef.current = setTimeout(setNextWordIndex, displayTime * 1000);
-
     return cancelNextWord;
   }, [wordIndex, isPlaying, displayTime]);
 
   const play = () => {
     cancelNextWord();
     setIsPlaying(true);
-    setWordIndex((i) => (i === -1 ? 0 : i));
   };
 
   const pause = () => {
@@ -31,7 +30,8 @@ export default function useWordPlayer(
 
   const reset = () => {
     cancelNextWord();
-    setWordIndex(-1);
+    setIsPlaying(false);
+    setWordIndex(0);
   };
 
   const next = () => {
@@ -44,10 +44,7 @@ export default function useWordPlayer(
   };
 
   const setNextWordIndex = () => {
-    setWordIndex((i) => {
-      const nextIndex = i + 1;
-      return nextIndex < words.length ? nextIndex : -1;
-    });
+    setWordIndex((i) => (i + 1) % words.length);
   };
 
   return { word, isPlaying, play, pause, reset, next };

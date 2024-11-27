@@ -1,6 +1,5 @@
 import defaultUseWordPlayer from "./use-word-player";
 import DefaultWordCard from "../word-card/word-card";
-import { useEffect } from "react";
 
 export default function WordPlayer({
   words,
@@ -12,11 +11,8 @@ export default function WordPlayer({
   const { word, isPlaying, play, pause, reset, next } = useWordPlayer(
     words,
     displayTime,
+    true,
   );
-
-  useEffect(() => {
-    play();
-  }, []);
 
   const audio = word?.audioSrc && new Audio(word.audioSrc);
   const handleBackToSetup = () => {
