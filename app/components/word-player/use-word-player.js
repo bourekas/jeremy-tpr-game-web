@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 
 export default function useWordPlayer(
   words = [],
@@ -10,6 +10,7 @@ export default function useWordPlayer(
   const [isPlaying, setIsPlaying] = useState(initialIsPlaying);
   const word = words[wordIndex];
   const timeoutIdRef = useRef();
+  const audio = useMemo(() => new Audio(word.audioSrc), [word]);
 
   useEffect(() => {
     if (!isPlaying) return;
@@ -47,5 +48,5 @@ export default function useWordPlayer(
     setWordIndex((i) => (i + 1) % words.length);
   };
 
-  return { word, isPlaying, play, pause, reset, next };
+  return { word, isPlaying, audio, play, pause, reset, next };
 }

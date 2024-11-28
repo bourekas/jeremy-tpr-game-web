@@ -8,13 +8,12 @@ export default function WordPlayer({
   useWordPlayer = defaultUseWordPlayer,
   WordCard = DefaultWordCard,
 }) {
-  const { word, isPlaying, play, pause, reset, next } = useWordPlayer(
+  const { word, isPlaying, audio, play, pause, reset, next } = useWordPlayer(
     words,
     displayTime,
     true,
   );
 
-  const audio = word?.audioSrc && new Audio(word.audioSrc);
   const handleBackToSetup = () => {
     reset();
     onBackToSetup();

@@ -47,6 +47,7 @@ function renderWordPlayer(props) {
   const useWordPlayerReturnValue = {
     word: { word: "a", imageSrc: "a.webp", audioSrc: "a.mp3" },
     isPlaying: true,
+    audio: new Audio("a.mp3"),
     play: jest.fn(),
     pause: jest.fn(),
     reset: jest.fn(),
