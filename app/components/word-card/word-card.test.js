@@ -31,6 +31,44 @@ it("renders the word text as level 1 heading", () => {
   ).toBeInTheDocument();
 });
 
+it("renders pause button but not play button when playing", () => {
+  const { rerender } = render(<WordCard isPlaying={true} />);
+
+  expect(screen.getByRole("button", { name: "Pause" })).toBeInTheDocument();
+  expect(
+    screen.queryByRole("button", { name: "Play" }),
+  ).not.toBeInTheDocument();
+
+  rerender(<WordCard isPlaying={false} />);
+
+  expect(screen.getByRole("button", { name: "Play" })).toBeInTheDocument();
+  expect(
+    screen.queryByRole("button", { name: "Pause" }),
+  ).not.toBeInTheDocument();
+});
+
+it("calls pause callback when pause button is clicked", async () => {
+  const user = userEvent.setup();
+  const onPause = jest.fn();
+  render(<WordCard isPlaying={true} onPause={onPause} />);
+
+  const button = screen.getByRole("button", { name: "Pause" });
+  await user.click(button);
+
+  expect(onPause).toHaveBeenCalledTimes(1);
+});
+
+it("calls play callback when play button is clicked", async () => {
+  const user = userEvent.setup();
+  const onPlay = jest.fn();
+  render(<WordCard onPlay={onPlay} />);
+
+  const button = screen.getByRole("button", { name: "Play" });
+  await user.click(button);
+
+  expect(onPlay).toHaveBeenCalledTimes(1);
+});
+
 it("calls the next-word callback when next-word button is clicked", async () => {
   const user = userEvent.setup();
   const mockOnNextWord = jest.fn();
@@ -70,7 +108,7 @@ describe("word audio", () => {
     expect(mockAudioNew.play).toHaveBeenCalledTimes(1);
   });
 
-  it("pauses when component unmounts", () => {
+  it("pauses audio when component unmounts", () => {
     const mockAudio = createMockAudio();
     const { unmount } = render(<WordCard audio={mockAudio} />);
 

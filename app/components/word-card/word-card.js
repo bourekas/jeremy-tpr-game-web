@@ -7,12 +7,17 @@ import Image from "next/image";
 import Paper from "@mui/material/Paper";
 import Typogrophy from "@mui/material/Typography";
 import ReplayIcon from "@mui/icons-material/Replay";
+import PauseIcon from "@mui/icons-material/Pause";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 
 export default function WordCard({
   word,
   imageSrc,
   audio,
+  isPlaying,
+  onPlay,
+  onPause,
   onBackToSetup,
   onNextWord,
 }) {
@@ -40,6 +45,11 @@ export default function WordCard({
       <WordText>{word}</WordText>
       <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
         <ReplayAudioButton onReplayAudio={handleReplayAudio} />
+        {isPlaying ? (
+          <PauseButton onPause={onPause} />
+        ) : (
+          <PlayButton onPlay={onPlay} />
+        )}
         <NextWordButton onNextWord={onNextWord} />
       </Box>
     </Paper>
@@ -89,6 +99,22 @@ function ReplayAudioButton({ onReplayAudio }) {
   return (
     <ActionButton name="Replay audio" onClick={onReplayAudio}>
       <ReplayIcon />
+    </ActionButton>
+  );
+}
+
+function PauseButton({ onPause }) {
+  return (
+    <ActionButton name="Pause" onClick={onPause}>
+      <PauseIcon />
+    </ActionButton>
+  );
+}
+
+function PlayButton({ onPlay }) {
+  return (
+    <ActionButton name="Play" onClick={onPlay}>
+      <PlayArrowIcon />
     </ActionButton>
   );
 }
