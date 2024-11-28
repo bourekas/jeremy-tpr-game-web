@@ -83,37 +83,37 @@ it("calls the next-word callback when next-word button is clicked", async () => 
 describe("word audio", () => {
   const createMockAudio = () => ({ play: jest.fn(), pause: jest.fn() });
 
-  it("plays when component mounts and when replay-audio button is clicked", async () => {
+  it("plays when component mounts and when play-audio button is clicked", async () => {
     const user = userEvent.setup();
-    const mockAudio = createMockAudio();
-    render(<WordCard audio={mockAudio} />);
+    const audio = createMockAudio();
+    render(<WordCard audio={audio} />);
 
-    expect(mockAudio.play).toHaveBeenCalledTimes(1);
+    expect(audio.play).toHaveBeenCalledTimes(1);
 
-    await user.click(screen.getByRole("button", { name: "Replay audio" }));
+    await user.click(screen.getByRole("button", { name: "Play audio" }));
 
-    expect(mockAudio.play).toHaveBeenCalledTimes(2);
+    expect(audio.play).toHaveBeenCalledTimes(2);
   });
 
   it("plays new audio when audio prop changes", () => {
-    const mockAudio = createMockAudio();
-    const { rerender } = render(<WordCard audio={mockAudio} />);
+    const audio = createMockAudio();
+    const { rerender } = render(<WordCard audio={audio} />);
 
-    expect(mockAudio.play).toHaveBeenCalledTimes(1);
+    expect(audio.play).toHaveBeenCalledTimes(1);
 
-    const mockAudioNew = createMockAudio();
-    rerender(<WordCard audio={mockAudioNew} />);
+    const audioNew = createMockAudio();
+    rerender(<WordCard audio={audioNew} />);
 
-    expect(mockAudio.play).toHaveBeenCalledTimes(1);
-    expect(mockAudioNew.play).toHaveBeenCalledTimes(1);
+    expect(audio.play).toHaveBeenCalledTimes(1);
+    expect(audioNew.play).toHaveBeenCalledTimes(1);
   });
 
   it("pauses audio when component unmounts", () => {
-    const mockAudio = createMockAudio();
-    const { unmount } = render(<WordCard audio={mockAudio} />);
+    const audio = createMockAudio();
+    const { unmount } = render(<WordCard audio={audio} />);
 
     unmount();
 
-    expect(mockAudio.pause).toHaveBeenCalled();
+    expect(audio.pause).toHaveBeenCalled();
   });
 });

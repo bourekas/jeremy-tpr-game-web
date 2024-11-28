@@ -6,7 +6,7 @@ import Tooltip from "@mui/material/Tooltip";
 import Image from "next/image";
 import Paper from "@mui/material/Paper";
 import Typogrophy from "@mui/material/Typography";
-import ReplayIcon from "@mui/icons-material/Replay";
+import AudiotrackIcon from "@mui/icons-material/Audiotrack";
 import PauseIcon from "@mui/icons-material/Pause";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
@@ -21,7 +21,7 @@ export default function WordCard({
   onBackToSetup,
   onNextWord,
 }) {
-  const handleReplayAudio = useAudio(audio);
+  const handlePlayAudio = useAudio(audio);
 
   return (
     <Paper elevation={3} sx={{ px: { xs: 0, sm: 1 }, py: { xs: 0.5, sm: 1 } }}>
@@ -44,7 +44,7 @@ export default function WordCard({
       </Box>
       <WordText>{word}</WordText>
       <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
-        <ReplayAudioButton onReplayAudio={handleReplayAudio} />
+        <PlayAudioButton onPlayAudio={handlePlayAudio} />
         {isPlaying ? (
           <PauseButton onPause={onPause} />
         ) : (
@@ -95,10 +95,10 @@ function BackToSetupButton({ onBackToSetup }) {
   );
 }
 
-function ReplayAudioButton({ onReplayAudio }) {
+function PlayAudioButton({ onPlayAudio }) {
   return (
-    <ActionButton name="Replay audio" onClick={onReplayAudio}>
-      <ReplayIcon />
+    <ActionButton name="Play audio" onClick={onPlayAudio}>
+      <AudiotrackIcon sx={{ color: "#9C27B0" }} />
     </ActionButton>
   );
 }
@@ -106,7 +106,7 @@ function ReplayAudioButton({ onReplayAudio }) {
 function PauseButton({ onPause }) {
   return (
     <ActionButton name="Pause" onClick={onPause}>
-      <PauseIcon />
+      <PauseIcon sx={{ color: "#FFC107" }} />
     </ActionButton>
   );
 }
@@ -114,7 +114,7 @@ function PauseButton({ onPause }) {
 function PlayButton({ onPlay }) {
   return (
     <ActionButton name="Play" onClick={onPlay}>
-      <PlayArrowIcon />
+      <PlayArrowIcon sx={{ color: "#4CAF50" }} />
     </ActionButton>
   );
 }
@@ -122,7 +122,7 @@ function PlayButton({ onPlay }) {
 function NextWordButton({ name, onNextWord }) {
   return (
     <ActionButton name="Go to next word" onClick={onNextWord}>
-      <SkipNextIcon />
+      <SkipNextIcon sx={{ color: "#2196F3" }} />
     </ActionButton>
   );
 }
