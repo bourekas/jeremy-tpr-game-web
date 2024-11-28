@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import Image from "next/image";
 import Typogrophy from "@mui/material/Typography";
 
-export default function WordCard({ word, imageSrc, audio }) {
+export default function Word({ word, imageSrc, audio }) {
   useAudio(audio);
 
   return (

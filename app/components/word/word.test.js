@@ -1,9 +1,9 @@
 import { render, screen } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
-import WordCard from "./word-card";
+import Word from "./word";
 
 it("renders the TPR image", () => {
-  render(<WordCard word="לגעת" imageSrc="/word-card/to-touch.jpg" />);
+  render(<Word word="לגעת" imageSrc="/word/to-touch.jpg" />);
 
   const image = screen.getByRole("img", {
     name: "Total Physical Response for the word 'לגעת'",
@@ -13,7 +13,7 @@ it("renders the TPR image", () => {
 });
 
 it("renders the word text as level 1 heading", () => {
-  render(<WordCard word="לגעת" />);
+  render(<Word word="לגעת" />);
 
   expect(
     screen.getByRole("heading", { name: "לגעת", level: 1 }),
@@ -26,19 +26,19 @@ describe("word audio", () => {
   it("plays when component mounts and when play-audio button is clicked", async () => {
     const user = userEvent.setup();
     const audio = createMockAudio();
-    render(<WordCard audio={audio} />);
+    render(<Word audio={audio} />);
 
     expect(audio.play).toHaveBeenCalledTimes(1);
   });
 
   it("plays new audio when audio prop changes", () => {
     const audio = createMockAudio();
-    const { rerender } = render(<WordCard audio={audio} />);
+    const { rerender } = render(<Word audio={audio} />);
 
     expect(audio.play).toHaveBeenCalledTimes(1);
 
     const audioNew = createMockAudio();
-    rerender(<WordCard audio={audioNew} />);
+    rerender(<Word audio={audioNew} />);
 
     expect(audio.play).toHaveBeenCalledTimes(1);
     expect(audioNew.play).toHaveBeenCalledTimes(1);
@@ -46,7 +46,7 @@ describe("word audio", () => {
 
   it("pauses audio when component unmounts", () => {
     const audio = createMockAudio();
-    const { unmount } = render(<WordCard audio={audio} />);
+    const { unmount } = render(<Word audio={audio} />);
 
     unmount();
 

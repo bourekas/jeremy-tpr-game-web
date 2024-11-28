@@ -11,14 +11,14 @@ it("calls the use-word-player hook with words and display time props", () => {
   expect(useWordPlayer).toHaveBeenCalledWith(words, displayTime, true);
 });
 
-it("renders the word-card component with values returned from use-word-player hook", () => {
+it("renders the word component with values returned from use-word-player hook", () => {
   const {
-    useWordPlayerReturnValue: { word, isPlaying, next, play, pause },
-    WordCard,
+    useWordPlayerReturnValue: { word },
+    Word,
   } = renderWordPlayer();
 
-  expect(screen.getByTestId("word-card")).toBeInTheDocument();
-  expect(WordCard.mock.lastCall[0]).toEqual({
+  expect(screen.getByTestId("word")).toBeInTheDocument();
+  expect(Word.mock.lastCall[0]).toEqual({
     word: word.word,
     imageSrc: word.imageSrc,
     audio: new Audio(word.audioSrc),
@@ -94,14 +94,14 @@ function renderWordPlayer(props = {}) {
     next: jest.fn(),
   };
   const useWordPlayer = jest.fn().mockReturnValue(useWordPlayerReturnValue);
-  const WordCard = jest.fn().mockReturnValue(<div data-testid="word-card" />);
+  const Word = jest.fn().mockReturnValue(<div data-testid="word" />);
   const onBackToSetup = jest.fn();
   const user = userEvent.setup();
 
   render(
     <WordPlayer
       useWordPlayer={useWordPlayer}
-      WordCard={WordCard}
+      Word={Word}
       onBackToSetup={onBackToSetup}
       {...props}
     />,
@@ -110,7 +110,7 @@ function renderWordPlayer(props = {}) {
   return {
     useWordPlayer,
     useWordPlayerReturnValue,
-    WordCard,
+    Word,
     onBackToSetup,
     user,
   };

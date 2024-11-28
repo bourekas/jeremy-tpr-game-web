@@ -1,5 +1,5 @@
 import defaultUseWordPlayer from "./use-word-player";
-import DefaultWordCard from "../word-card/word-card";
+import DefaultWord from "../word/word";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -15,7 +15,7 @@ export default function WordPlayer({
   displayTime,
   onBackToSetup,
   useWordPlayer = defaultUseWordPlayer,
-  WordCard = DefaultWordCard,
+  Word = DefaultWord,
 }) {
   const { word, isPlaying, audio, play, pause, reset, next } = useWordPlayer(
     words,
@@ -35,7 +35,7 @@ export default function WordPlayer({
       <Box sx={{ mb: { xs: 0.5, sm: 1 } }}>
         <BackToSetupButton onBackToSetup={handleBackToSetup} />
       </Box>
-      <WordCard
+      <Word
         key={word.word}
         word={word.word}
         imageSrc={word.imageSrc}

@@ -1,7 +1,7 @@
-import WordCard from "./word-card";
+import Word from "./word";
 
 export default {
-  component: WordCard,
+  component: Word,
 };
 
 export const Medialess = {
@@ -13,15 +13,15 @@ export const Medialess = {
 export const ToTouch = {
   args: {
     word: "לָגַעַת",
-    imageSrc: "word-card/to-touch.jpg",
-    audio: new Audio("word-card/to-touch.mp3"),
+    imageSrc: "word/to-touch.jpg",
+    audio: new Audio("word/to-touch.mp3"),
   },
 };
 
 export const toCall = {
   args: {
     word: "לְהִתְקַשֵּׁר",
-    imageSrc: "word-card/to-call.jpg",
-    audio: new Audio("word-card/to-call.mp3"),
+    imageSrc: "word/to-call.jpg",
+    audio: new Audio("word/to-call.mp3"),
   },
 };
