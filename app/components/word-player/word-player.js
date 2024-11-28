@@ -8,6 +8,7 @@ import Paper from "@mui/material/Paper";
 import AudiotrackIcon from "@mui/icons-material/Audiotrack";
 import PauseIcon from "@mui/icons-material/Pause";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import StopIcon from "@mui/icons-material/Stop";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 
 export default function WordPlayer({
@@ -49,6 +50,7 @@ export default function WordPlayer({
           <PlayButton onPlay={play} />
         )}
         <NextWordButton onNextWord={next} />
+        <StopButton onStop={handleBackToSetup} />
       </Box>
     </Paper>
   );
@@ -65,7 +67,7 @@ function BackToSetupButton({ onBackToSetup }) {
 function PlayAudioButton({ onPlayAudio }) {
   return (
     <ActionButton name="Play audio" onClick={onPlayAudio}>
-      <AudiotrackIcon sx={{ color: "#9C27B0" }} />
+      <AudiotrackIcon sx={{ color: "#BA68C8" }} />
     </ActionButton>
   );
 }
@@ -73,7 +75,7 @@ function PlayAudioButton({ onPlayAudio }) {
 function PauseButton({ onPause }) {
   return (
     <ActionButton name="Pause" onClick={onPause}>
-      <PauseIcon sx={{ color: "#FFC107" }} />
+      <PauseIcon sx={{ color: "#FFCA28" }} />
     </ActionButton>
   );
 }
@@ -81,7 +83,7 @@ function PauseButton({ onPause }) {
 function PlayButton({ onPlay }) {
   return (
     <ActionButton name="Play" onClick={onPlay}>
-      <PlayArrowIcon sx={{ color: "#4CAF50" }} />
+      <PlayArrowIcon sx={{ color: "#66BB6A" }} />
     </ActionButton>
   );
 }
@@ -89,7 +91,15 @@ function PlayButton({ onPlay }) {
 function NextWordButton({ onNextWord }) {
   return (
     <ActionButton name="Go to next word" onClick={onNextWord}>
-      <SkipNextIcon sx={{ color: "#2196F3" }} />
+      <SkipNextIcon sx={{ color: "#42A5F5" }} />
+    </ActionButton>
+  );
+}
+
+function StopButton({ onStop }) {
+  return (
+    <ActionButton name="Stop game" onClick={onStop}>
+      <StopIcon sx={{ color: "#E57373" }} />
     </ActionButton>
   );
 }

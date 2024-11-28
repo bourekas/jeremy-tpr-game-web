@@ -33,6 +33,15 @@ it("calls the back-to-setup callback when back-to-setup button is clicked", asyn
   expect(onBackToSetup).toHaveBeenCalledTimes(1);
 });
 
+it("calls back-to-setup callback when stop button is clicked", async () => {
+  const { onBackToSetup, user } = renderWordPlayer();
+
+  const button = screen.getByRole("button", { name: "Stop game" });
+  await user.click(button);
+
+  expect(onBackToSetup).toHaveBeenCalledTimes(1);
+});
+
 it("calls pause when pause button is clicked", async () => {
   const {
     useWordPlayerReturnValue: { pause },
