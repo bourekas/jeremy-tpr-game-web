@@ -1,6 +1,6 @@
 import SetupMenu from "./setup-menu";
 
-export default {
+export default meta = {
   component: SetupMenu,
 };
 

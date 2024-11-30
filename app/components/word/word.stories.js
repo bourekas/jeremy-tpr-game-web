@@ -1,6 +1,6 @@
 import Word from "./word";
 
-export default {
+export default meta = {
   component: Word,
 };
 

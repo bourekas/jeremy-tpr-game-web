@@ -28,15 +28,13 @@ export default function Word({ word, imageSrc, audio }) {
 }
 
 function useAudio(audio) {
-  const playAudio = () => audio?.play();
-
   useEffect(() => {
-    playAudio();
+    audio?.play();
 
     return () => audio?.pause();
   }, [audio]);
 
-  return playAudio;
+  return () => audio?.play();
 }
 
 function TprImage({ word, src }) {

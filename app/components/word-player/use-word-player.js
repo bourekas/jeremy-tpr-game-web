@@ -15,9 +15,12 @@ export default function useWordPlayer(
   useEffect(() => {
     if (!isPlaying) return;
 
-    timeoutIdRef.current = setTimeout(setNextWordIndex, displayTime * 1000);
+    timeoutIdRef.current = setTimeout(
+      () => setWordIndex((wordIndex + 1) % words.length),
+      displayTime * 1000,
+    );
     return cancelNextWord;
-  }, [wordIndex, isPlaying, displayTime]);
+  }, [wordIndex, words, isPlaying, displayTime]);
 
   const play = () => {
     cancelNextWord();
