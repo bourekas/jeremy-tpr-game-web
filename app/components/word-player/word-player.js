@@ -44,11 +44,11 @@ export default function WordPlayer({
       />
       <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
         <PlayAudioButton onPlayAudio={handlePlayAudio} />
-        {isPlaying ? (
-          <PauseButton onPause={pause} />
-        ) : (
-          <PlayButton onPlay={play} />
-        )}
+        <PlayOrPauseButton
+          isPlaying={isPlaying}
+          onPause={pause}
+          onPlay={play}
+        />
         <NextWordButton onNextWord={next} />
         <StopButton onStop={handleBackToSetup} />
       </Box>
@@ -72,18 +72,24 @@ function PlayAudioButton({ onPlayAudio }) {
   );
 }
 
-function PauseButton({ onPause }) {
-  return (
-    <ActionButton name="Pause" onClick={onPause}>
-      <PauseIcon sx={{ color: "#FFCA28" }} />
-    </ActionButton>
-  );
-}
+function PlayOrPauseButton({ isPlaying, onPause, onPlay }) {
+  const pauseProps = {
+    name: "Pause",
+    handleClick: onPause,
+    Icon: PauseIcon,
+    color: "#FFCA28",
+  };
+  const playProps = {
+    name: "Play",
+    handleClick: onPlay,
+    Icon: PlayArrowIcon,
+    color: "#66BB6A",
+  };
+  const { name, handleClick, Icon, color } = isPlaying ? pauseProps : playProps;
 
-function PlayButton({ onPlay }) {
   return (
-    <ActionButton name="Play" onClick={onPlay}>
-      <PlayArrowIcon sx={{ color: "#66BB6A" }} />
+    <ActionButton name={name} onClick={handleClick}>
+      <Icon sx={{ color }} />
     </ActionButton>
   );
 }
