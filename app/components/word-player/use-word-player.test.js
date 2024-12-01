@@ -167,18 +167,3 @@ it("plays when initially loaded and provided with initialIsPlaying true", () => 
 
   expect(result.current.isPlaying).toBe(true);
 });
-
-it("returns an audio object", () => {
-  const { result } = renderHook(() => useWordPlayer(words));
-  const audio = new Audio(words[0].audioSrc);
-
-  expect(result.current.audio).toEqual(audio);
-});
-
-it("returns the same audio object when rerendering", () => {
-  let { result, rerender } = renderHook(() => useWordPlayer(words));
-  const audio = result.current.audio;
-
-  rerender();
-  expect(result.current.audio).toBe(audio);
-});

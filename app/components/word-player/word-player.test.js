@@ -3,6 +3,12 @@ import { userEvent } from "@testing-library/user-event";
 import WordPlayer from "./word-player";
 import { expect } from "@storybook/test";
 
+window.Audio = function () {};
+window.Audio.prototype = {
+  play: () => {},
+  pause: () => {},
+};
+
 it("calls the use-word-player hook with words and display time props", () => {
   const words = [{ word: "a", imageSrc: "a.webp", audioSrc: "a.mp3" }];
   const displayTime = 3;
@@ -78,24 +84,22 @@ it("calls next when next-word button is clicked", async () => {
   expect(next).toHaveBeenCalledTimes(1);
 });
 
-it("calls audio play when play-audio button is clicked", async () => {
-  const playAudio = jest.fn();
-  const audio = { play: playAudio };
-  const { user } = renderWordPlayer({ audio });
+it("calls play audio when audio changes and when play-audio button is clicked", async () => {
+  const playAudio = jest.spyOn(Audio.prototype, "play");
+  const { user } = renderWordPlayer();
+
+  expect(playAudio).toHaveBeenCalledTimes(1);
 
   const button = screen.getByRole("button", { name: "Play audio" });
   await user.click(button);
 
-  expect(playAudio).toHaveBeenCalledTimes(1);
+  expect(playAudio).toHaveBeenCalledTimes(2);
 });
 
 function renderWordPlayer(props = {}) {
-  const { audio } = props;
-
   const useWordPlayerReturnValue = {
     word: { word: "a", imageSrc: "a.webp", audioSrc: "a.mp3" },
     isPlaying: props.isPlaying === undefined ? true : props.isPlaying,
-    audio: audio || new Audio("a.mp3"),
     play: jest.fn(),
     pause: jest.fn(),
     reset: jest.fn(),

@@ -10,6 +10,7 @@ import PauseIcon from "@mui/icons-material/Pause";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import StopIcon from "@mui/icons-material/Stop";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
+import { useEffect, useMemo, useRef } from "react";
 
 export default function WordPlayer({
   words,
@@ -18,18 +19,19 @@ export default function WordPlayer({
   useWordPlayer = defaultUseWordPlayer,
   Word = DefaultWord,
 }) {
-  const { word, isPlaying, audio, play, pause, reset, next } = useWordPlayer(
+  const { word, isPlaying, play, pause, reset, next } = useWordPlayer(
     words,
     displayTime,
     true,
   );
+  const audio = useAudio(word);
 
   const handleBackToSetup = () => {
     reset();
     onBackToSetup();
   };
 
-  const handlePlayAudio = () => audio?.play();
+  const handlePlayAudio = () => audio.play();
 
   return (
     <Paper elevation={3} sx={{ px: { xs: 0, sm: 1 }, py: { xs: 0.5, sm: 1 } }}>
@@ -49,6 +51,22 @@ export default function WordPlayer({
       </Box>
     </Paper>
   );
+}
+
+function useAudio(word) {
+  const prevAudioRef = useRef(null);
+  const audio = useMemo(() => new Audio(word.audioSrc), [word.audioSrc]);
+
+  useEffect(() => {
+    if (Object.is(audio, prevAudioRef.current)) return;
+
+    audio.play();
+    prevAudioRef.current = audio;
+
+    return () => audio.pause();
+  }, [audio]);
+
+  return audio;
 }
 
 function BackToSetupButton({ onBackToSetup }) {
