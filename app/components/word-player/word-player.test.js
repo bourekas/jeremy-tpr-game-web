@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import WordPlayer from "./word-player";
+import { expect } from "@storybook/test";
 
 it("calls the use-word-player hook with words and display time props", () => {
   const words = [{ word: "a", imageSrc: "a.webp", audioSrc: "a.mp3" }];
@@ -79,12 +80,9 @@ it("calls next when next-word button is clicked", async () => {
 });
 
 it("calls audio play when play-audio button is clicked", async () => {
-  const {
-    useWordPlayerReturnValue: { audio },
-    user,
-  } = renderWordPlayer();
-
-  const playAudio = jest.spyOn(audio, "play");
+  const playAudio = jest.fn();
+  const audio = { play: playAudio };
+  const { user } = renderWordPlayer({ audio });
 
   const button = screen.getByRole("button", { name: "Play audio" });
   await user.click(button);
@@ -93,10 +91,12 @@ it("calls audio play when play-audio button is clicked", async () => {
 });
 
 function renderWordPlayer(props = {}) {
+  const { audio } = props;
+
   const useWordPlayerReturnValue = {
     word: { word: "a", imageSrc: "a.webp", audioSrc: "a.mp3" },
     isPlaying: props.isPlaying === undefined ? true : props.isPlaying,
-    audio: new Audio("a.mp3"),
+    audio: audio || new Audio("a.mp3"),
     play: jest.fn(),
     pause: jest.fn(),
     reset: jest.fn(),
