@@ -1,11 +1,8 @@
-import { useEffect } from "react";
 import Box from "@mui/material/Box";
 import Image from "next/image";
 import Typogrophy from "@mui/material/Typography";
 
-export default function Word({ word, imageSrc, audio }) {
-  useAudio(audio);
-
+export default function Word({ word, imageSrc }) {
   return (
     <>
       <Box
@@ -25,16 +22,6 @@ export default function Word({ word, imageSrc, audio }) {
       <WordText>{word}</WordText>
     </>
   );
-}
-
-function useAudio(audio) {
-  useEffect(() => {
-    audio?.play();
-
-    return () => audio?.pause();
-  }, [audio]);
-
-  return () => audio?.play();
 }
 
 function TprImage({ word, src }) {

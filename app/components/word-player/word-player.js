@@ -36,12 +36,7 @@ export default function WordPlayer({
       <Box sx={{ mb: { xs: 0.5, sm: 1 } }}>
         <BackToSetupButton onBackToSetup={handleBackToSetup} />
       </Box>
-      <Word
-        key={word.word}
-        word={word.word}
-        imageSrc={word.imageSrc}
-        audio={audio}
-      />
+      <Word key={word.word} word={word.word} imageSrc={word.imageSrc} />
       <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
         <PlayAudioButton onPlayAudio={handlePlayAudio} />
         <PlayOrPauseButton

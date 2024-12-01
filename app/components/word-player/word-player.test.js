@@ -22,7 +22,6 @@ it("renders the word component with values returned from use-word-player hook", 
   expect(Word.mock.lastCall[0]).toEqual({
     word: word.word,
     imageSrc: word.imageSrc,
-    audio: new Audio(word.audioSrc),
   });
 });
 
