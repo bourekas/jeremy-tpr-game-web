@@ -167,3 +167,17 @@ it("plays when initially loaded and provided with initialIsPlaying true", () => 
 
   expect(result.current.isPlaying).toBe(true);
 });
+
+it("goes back to previous word when calling preious", () => {
+  const { result } = renderHook(() => useWordPlayer(words));
+  expect(result.current.word).toBe(words[0]);
+
+  act(() => result.current.next());
+  expect(result.current.word).toBe(words[1]);
+
+  act(() => result.current.previous());
+  expect(result.current.word).toBe(words[0]);
+
+  act(() => result.current.previous());
+  expect(result.current.word).toBe(words[1]);
+});

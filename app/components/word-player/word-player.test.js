@@ -87,6 +87,18 @@ it("calls useAudio with audio source of current word", () => {
   expect(useAudio).toHaveBeenCalledWith(word.audioSrc);
 });
 
+it("has previous button", async () => {
+  const {
+    useWordPlayerReturnValue: { previous },
+    user,
+  } = renderWordPlayer();
+
+  const button = screen.getByRole("button", { name: "Go to previous word" });
+  await user.click(button);
+
+  expect(previous).toHaveBeenCalledTimes(1);
+});
+
 function renderWordPlayer(props = {}) {
   const useWordPlayerReturnValue = {
     word: { word: "a", imageSrc: "a.webp", audioSrc: "a.mp3" },
@@ -94,6 +106,7 @@ function renderWordPlayer(props = {}) {
     play: jest.fn(),
     pause: jest.fn(),
     reset: jest.fn(),
+    previous: jest.fn(),
     next: jest.fn(),
   };
   const useWordPlayer = jest.fn().mockReturnValue(useWordPlayerReturnValue);

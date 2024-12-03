@@ -10,6 +10,7 @@ import AudiotrackIcon from "@mui/icons-material/Audiotrack";
 import PauseIcon from "@mui/icons-material/Pause";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import StopIcon from "@mui/icons-material/Stop";
+import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 
 export default function WordPlayer({
@@ -20,7 +21,7 @@ export default function WordPlayer({
   useAudio = defaultUseAudio,
   Word = DefaultWord,
 }) {
-  const { word, isPlaying, play, pause, reset, next } = useWordPlayer(
+  const { word, isPlaying, play, pause, reset, previous, next } = useWordPlayer(
     words,
     displayTime,
     true,
@@ -42,6 +43,7 @@ export default function WordPlayer({
       <Word key={word.word} word={word.word} imageSrc={word.imageSrc} />
       <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
         <PlayAudioButton onPlayAudio={handlePlayAudio} />
+        <PreviousWordButton onPreviousWord={previous} />
         <PlayOrPauseButton
           isPlaying={isPlaying}
           onPause={pause}
@@ -58,6 +60,14 @@ function BackToSetupButton({ onBackToSetup }) {
   return (
     <ActionButton name="Back to setup menu" onClick={onBackToSetup}>
       <ArrowBackIcon />
+    </ActionButton>
+  );
+}
+
+function PreviousWordButton({ onPreviousWord }) {
+  return (
+    <ActionButton name="Go to previous word" onClick={onPreviousWord}>
+      <SkipPreviousIcon sx={{ color: "#42A5F5" }} />
     </ActionButton>
   );
 }

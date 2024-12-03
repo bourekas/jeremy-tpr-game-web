@@ -43,6 +43,10 @@ export default function useWordPlayer(
     setNextWordIndex();
   };
 
+  const previous = () => {
+    setWordIndex((i) => (i === 0 ? words.length - 1 : i - 1));
+  };
+
   const cancelNextWord = () => {
     clearTimeout(timeoutIdRef.current);
   };
@@ -51,5 +55,5 @@ export default function useWordPlayer(
     setWordIndex((i) => (i + 1) % words.length);
   };
 
-  return { word, isPlaying, play, pause, reset, next };
+  return { word, isPlaying, play, pause, reset, previous, next };
 }
