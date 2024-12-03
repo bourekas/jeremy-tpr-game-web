@@ -3,12 +3,6 @@ import { userEvent } from "@testing-library/user-event";
 import WordPlayer from "./word-player";
 import { expect } from "@storybook/test";
 
-window.Audio = function () {};
-window.Audio.prototype = {
-  play: () => {},
-  pause: () => {},
-};
-
 it("calls the use-word-player hook with words and display time props", () => {
   const words = [{ word: "a", imageSrc: "a.webp", audioSrc: "a.mp3" }];
   const displayTime = 3;
@@ -84,16 +78,13 @@ it("calls next when next-word button is clicked", async () => {
   expect(next).toHaveBeenCalledTimes(1);
 });
 
-it("calls play audio when audio changes and when play-audio button is clicked", async () => {
-  const playAudio = jest.spyOn(Audio.prototype, "play");
-  const { user } = renderWordPlayer();
+it("calls useAudio with audio source of current word", () => {
+  const {
+    useWordPlayerReturnValue: { word },
+    useAudio,
+  } = renderWordPlayer();
 
-  expect(playAudio).toHaveBeenCalledTimes(1);
-
-  const button = screen.getByRole("button", { name: "Play audio" });
-  await user.click(button);
-
-  expect(playAudio).toHaveBeenCalledTimes(2);
+  expect(useAudio).toHaveBeenCalledWith(word.audioSrc);
 });
 
 function renderWordPlayer(props = {}) {
@@ -106,6 +97,7 @@ function renderWordPlayer(props = {}) {
     next: jest.fn(),
   };
   const useWordPlayer = jest.fn().mockReturnValue(useWordPlayerReturnValue);
+  const useAudio = jest.fn();
   const Word = jest.fn().mockReturnValue(<div data-testid="word" />);
   const onBackToSetup = jest.fn();
   const user = userEvent.setup();
@@ -113,6 +105,7 @@ function renderWordPlayer(props = {}) {
   render(
     <WordPlayer
       useWordPlayer={useWordPlayer}
+      useAudio={useAudio}
       Word={Word}
       onBackToSetup={onBackToSetup}
       {...props}
@@ -122,6 +115,7 @@ function renderWordPlayer(props = {}) {
   return {
     useWordPlayer,
     useWordPlayerReturnValue,
+    useAudio,
     Word,
     onBackToSetup,
     user,
