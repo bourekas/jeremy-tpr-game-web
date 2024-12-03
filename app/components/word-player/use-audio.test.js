@@ -75,6 +75,12 @@ it("pauses when unmounting", () => {
   expect(result.current.pause).toHaveBeenCalledTimes(1);
 });
 
+it("does not play when automatic playing is disabled", () => {
+  const { result } = renderHook(() => useAudio("foo.mp3", false));
+
+  expect(result.current.play).not.toHaveBeenCalled();
+});
+
 function spyOnAudio() {
   return jest.spyOn(window, "Audio").mockImplementation((audioSrc) => ({
     audioSrc,
