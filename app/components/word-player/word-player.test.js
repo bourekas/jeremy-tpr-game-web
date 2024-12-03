@@ -78,13 +78,13 @@ it("calls next when next-word button is clicked", async () => {
   expect(next).toHaveBeenCalledTimes(1);
 });
 
-it("calls useAudio with audio source of current word", () => {
+it("calls use-audio with audio source and is-auto-play-audio props", () => {
   const {
     useWordPlayerReturnValue: { word },
     useAudio,
-  } = renderWordPlayer();
+  } = renderWordPlayer({ isAutoPlayAudio: false });
 
-  expect(useAudio).toHaveBeenCalledWith(word.audioSrc);
+  expect(useAudio).toHaveBeenCalledWith(word.audioSrc, false);
 });
 
 it("has previous button", async () => {

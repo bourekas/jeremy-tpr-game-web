@@ -16,6 +16,7 @@ import SkipNextIcon from "@mui/icons-material/SkipNext";
 export default function WordPlayer({
   words,
   displayTime,
+  isAutoPlayAudio,
   onBackToSetup,
   useWordPlayer = defaultUseWordPlayer,
   useAudio = defaultUseAudio,
@@ -26,7 +27,7 @@ export default function WordPlayer({
     displayTime,
     true,
   );
-  const audio = useAudio(word.audioSrc);
+  const audio = useAudio(word.audioSrc, isAutoPlayAudio);
 
   const handleBackToSetup = () => {
     reset();
@@ -64,18 +65,18 @@ function BackToSetupButton({ onBackToSetup }) {
   );
 }
 
-function PreviousWordButton({ onPreviousWord }) {
-  return (
-    <ActionButton name="Go to previous word" onClick={onPreviousWord}>
-      <SkipPreviousIcon sx={{ color: "#42A5F5" }} />
-    </ActionButton>
-  );
-}
-
 function PlayAudioButton({ onPlayAudio }) {
   return (
     <ActionButton name="Play audio" onClick={onPlayAudio}>
       <AudiotrackIcon sx={{ color: "#BA68C8" }} />
+    </ActionButton>
+  );
+}
+
+function PreviousWordButton({ onPreviousWord }) {
+  return (
+    <ActionButton name="Go to previous word" onClick={onPreviousWord}>
+      <SkipPreviousIcon sx={{ color: "#42A5F5" }} />
     </ActionButton>
   );
 }

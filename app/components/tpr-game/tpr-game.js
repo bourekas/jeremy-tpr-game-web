@@ -11,6 +11,7 @@ export default function TprGame({
   WordPlayer = DefaultWordPlayer,
 }) {
   const [displayTime, setDisplayTime] = useState(5);
+  const [isAutoPlayAudio, setIsAutoPlayAudio] = useState(true);
   const [hasStarted, setHasStarted] = useState(initialHasStarted);
   const handleStart = () => setHasStarted(true);
   const handleBackToSetup = () => setHasStarted(false);
@@ -29,6 +30,7 @@ export default function TprGame({
     <WordPlayer
       words={words}
       displayTime={displayTime}
+      isAutoPlayAudio={isAutoPlayAudio}
       onBackToSetup={handleBackToSetup}
     />
   );

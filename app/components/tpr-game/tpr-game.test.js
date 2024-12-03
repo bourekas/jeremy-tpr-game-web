@@ -30,6 +30,7 @@ it("renders word-player when setup-menu component calls start callback", () => {
   expect(WordPlayer.mock.lastCall[0]).toEqual({
     words,
     displayTime: expect.any(Number),
+    isAutoPlayAudio: expect.any(Boolean),
     onBackToSetup: expect.any(Function),
   });
 });
