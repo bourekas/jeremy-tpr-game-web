@@ -8,29 +8,34 @@ const sourceWord = {
   audioSrc: "לגעת.mp3",
 };
 
-it("renders setup-menu component when initially loaded", () => {
-  const { SetupMenu } = renderTprGame();
+it("renders setup menu with the initial setup", () => {
+  const setup = { displayTime: 3, isAutoPlayAudio: false };
+  const { SetupMenu } = renderTprGame({ initialSetup: setup });
 
   expect(screen.getByTestId("setup-menu")).toBeInTheDocument();
   expect(SetupMenu.mock.lastCall[0]).toEqual({
-    displayTime: expect.any(Number),
-    onDisplayTimeChange: expect.any(Function),
+    setup,
+    onSetupChange: expect.any(Function),
     onStart: expect.any(Function),
   });
 });
 
-it("renders word-player when setup-menu component calls start callback", () => {
+it("renders word-player with the configured setup when starting game", () => {
   const words = [sourceWord];
-  const { SetupMenu, WordPlayer } = renderTprGame({ words });
+  const initialSetup = { displayTime: 10, isAutoPlayAudio: false };
+  const { SetupMenu, WordPlayer } = renderTprGame({ words, initialSetup });
 
   // simulate setup-menu component calling the start callback
-  act(() => SetupMenu.mock.lastCall[0].onStart());
+  act(() => {
+    const setupMenuProps = SetupMenu.mock.lastCall[0];
+    setupMenuProps.onStart();
+  });
 
+  const wordPlayerProps = WordPlayer.mock.lastCall[0];
   expect(screen.getByTestId("word-player")).toBeInTheDocument();
-  expect(WordPlayer.mock.lastCall[0]).toEqual({
+  expect(wordPlayerProps).toEqual({
     words,
-    displayTime: expect.any(Number),
-    isAutoPlayAudio: expect.any(Boolean),
+    setup: initialSetup,
     onBackToSetup: expect.any(Function),
   });
 });
@@ -48,6 +53,24 @@ it("renders setup-menu component when word-player calls back-to-setup callback",
   // simulate word-player component calling the back-to-setup callback
   act(() => WordPlayer.mock.lastCall[0].onBackToSetup());
   expect(screen.getByTestId("setup-menu")).toBeInTheDocument();
+});
+
+it("renders word-player with the updated setup", () => {
+  const initialSetup = { displayTime: 3, isAutoPlayAudio: false };
+  const updatedSetup = { displayTime: 4, isAutoPlayAudio: true };
+
+  const { SetupMenu, WordPlayer } = renderTprGame({ initialSetup });
+
+  // simulate setup menu component updating setup and starting game
+  act(() => {
+    const setupMenuProps = SetupMenu.mock.lastCall[0];
+    setupMenuProps.onSetupChange(updatedSetup);
+    setupMenuProps.onStart();
+  });
+
+  const wordPlayerProps = WordPlayer.mock.lastCall[0];
+  expect(wordPlayerProps.setup).not.toEqual(initialSetup);
+  expect(wordPlayerProps.setup).toEqual(updatedSetup);
 });
 
 // renders with default mocked dependencies which can be overriden

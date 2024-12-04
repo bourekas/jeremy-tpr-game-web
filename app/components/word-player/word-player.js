@@ -15,8 +15,7 @@ import SkipNextIcon from "@mui/icons-material/SkipNext";
 
 export default function WordPlayer({
   words,
-  displayTime,
-  isAutoPlayAudio,
+  setup = {},
   onBackToSetup,
   useWordPlayer = defaultUseWordPlayer,
   useAudio = defaultUseAudio,
@@ -24,10 +23,10 @@ export default function WordPlayer({
 }) {
   const { word, isPlaying, play, pause, reset, previous, next } = useWordPlayer(
     words,
-    displayTime,
+    setup.displayTime,
     true,
   );
-  const audio = useAudio(word.audioSrc, isAutoPlayAudio);
+  const audio = useAudio(word.audioSrc, setup.isAutoPlayAudio);
 
   const handleBackToSetup = () => {
     reset();

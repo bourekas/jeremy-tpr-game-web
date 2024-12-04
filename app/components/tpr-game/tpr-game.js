@@ -4,34 +4,28 @@ import { useState } from "react";
 import DefaultSetupMenu from "../setup-menu/setup-menu";
 import DefaultWordPlayer from "../word-player/word-player";
 
+const defaultSetup = { displayTime: 5, isAutoPlayAudio: true };
+
 export default function TprGame({
   words,
   initialHasStarted = false,
+  initialSetup = defaultSetup,
   SetupMenu = DefaultSetupMenu,
   WordPlayer = DefaultWordPlayer,
 }) {
-  const [displayTime, setDisplayTime] = useState(5);
-  const [isAutoPlayAudio, setIsAutoPlayAudio] = useState(true);
+  const [setup, setSetup] = useState(initialSetup);
   const [hasStarted, setHasStarted] = useState(initialHasStarted);
+
   const handleStart = () => setHasStarted(true);
   const handleBackToSetup = () => setHasStarted(false);
 
   if (!hasStarted) {
     return (
-      <SetupMenu
-        displayTime={displayTime}
-        onDisplayTimeChange={setDisplayTime}
-        onStart={handleStart}
-      />
+      <SetupMenu setup={setup} onSetupChange={setSetup} onStart={handleStart} />
     );
   }
 
   return (
-    <WordPlayer
-      words={words}
-      displayTime={displayTime}
-      isAutoPlayAudio={isAutoPlayAudio}
-      onBackToSetup={handleBackToSetup}
-    />
+    <WordPlayer words={words} setup={setup} onBackToSetup={handleBackToSetup} />
   );
 }

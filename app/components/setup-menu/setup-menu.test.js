@@ -19,14 +19,14 @@ describe("TPR Game Setup heading", () => {
 
 describe("display time option", () => {
   it("renders slider with the initial display time value", () => {
-    render(<SetupMenu displayTime={3} />);
+    render(<SetupMenu setup={{ displayTime: 3 }} />);
     const slider = getDisplayTimeSlider();
 
     expect(slider).toHaveValue("3");
   });
 
   it("does not increment slider value above max value", () => {
-    render(<SetupMenu displayTime={10} />);
+    render(<SetupMenu setup={{ displayTime: 10 }} />);
     const slider = getDisplayTimeSlider();
 
     incrementDisplayTimeSlider(slider);
@@ -35,7 +35,7 @@ describe("display time option", () => {
   });
 
   it("does not decrement slider value below min value", () => {
-    render(<SetupMenu displayTime={1} />);
+    render(<SetupMenu setup={{ displayTime: 1 }} />);
     const slider = getDisplayTimeSlider();
 
     decrementDisplayTimeSlider(slider);
@@ -44,9 +44,9 @@ describe("display time option", () => {
   });
 
   it("renders the latest display time value text", async () => {
-    const onDisplayTimeChange = jest.fn();
+    const onSetupChange = jest.fn();
     render(
-      <SetupMenu displayTime={5} onDisplayTimeChange={onDisplayTimeChange} />,
+      <SetupMenu setup={{ displayTime: 5 }} onSetupChange={onSetupChange} />,
     );
 
     expect(
@@ -54,7 +54,7 @@ describe("display time option", () => {
     ).toBeInTheDocument();
 
     incrementDisplayTimeSlider();
-    expect(onDisplayTimeChange).toHaveBeenCalledWith(6);
+    expect(onSetupChange).toHaveBeenCalledWith({ displayTime: 6 });
   });
 });
 
@@ -62,7 +62,7 @@ it("calls start callback when start button is clicked", async () => {
   const user = userEvent.setup();
   const onStart = jest.fn();
 
-  render(<SetupMenu displayTime={5} onStart={onStart} />);
+  render(<SetupMenu setup={{ displayTime: 5 }} onStart={onStart} />);
 
   const startButton = screen.getByRole("button", { name: "Start" });
   await user.click(startButton);

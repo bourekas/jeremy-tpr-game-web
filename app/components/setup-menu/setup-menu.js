@@ -7,11 +7,14 @@ import Slider from "@mui/material/Slider";
 import Button from "@mui/material/Button";
 
 export default function SetupMenu({
-  displayTime = 5,
+  setup = {},
   headingLevel = 1,
-  onDisplayTimeChange,
+  onSetupChange,
   onStart,
 }) {
+  const handleDisplayTimeChange = (dt) =>
+    onSetupChange({ ...setup, displayTime: dt });
+
   return (
     <Paper elevation={3} sx={{ padding: 3 }}>
       <Box sx={{ textAlign: "center" }}>
@@ -19,8 +22,8 @@ export default function SetupMenu({
       </Box>
       <Box sx={{ mb: 2 }}>
         <DisplayTimeOption
-          displayTime={displayTime}
-          onDisplayTimeChange={onDisplayTimeChange}
+          displayTime={setup.displayTime}
+          onDisplayTimeChange={handleDisplayTimeChange}
         />
       </Box>
       <Box sx={{ display: "flex", justifyContent: "center" }}>

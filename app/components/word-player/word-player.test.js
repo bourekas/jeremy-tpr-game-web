@@ -3,13 +3,13 @@ import { userEvent } from "@testing-library/user-event";
 import WordPlayer from "./word-player";
 import { expect } from "@storybook/test";
 
-it("calls the use-word-player hook with words and display time props", () => {
+it("calls use-word-player with given words and setup", () => {
   const words = [{ word: "a", imageSrc: "a.webp", audioSrc: "a.mp3" }];
-  const displayTime = 3;
+  const setup = { displayTime: 3 };
 
-  const { useWordPlayer } = renderWordPlayer({ words, displayTime });
+  const { useWordPlayer } = renderWordPlayer({ words, setup });
 
-  expect(useWordPlayer).toHaveBeenCalledWith(words, displayTime, true);
+  expect(useWordPlayer).toHaveBeenCalledWith(words, setup.displayTime, true);
 });
 
 it("renders the word component with values returned from use-word-player hook", () => {
@@ -82,7 +82,7 @@ it("calls use-audio with audio source and is-auto-play-audio props", () => {
   const {
     useWordPlayerReturnValue: { word },
     useAudio,
-  } = renderWordPlayer({ isAutoPlayAudio: false });
+  } = renderWordPlayer({ setup: { isAutoPlayAudio: false } });
 
   expect(useAudio).toHaveBeenCalledWith(word.audioSrc, false);
 });
