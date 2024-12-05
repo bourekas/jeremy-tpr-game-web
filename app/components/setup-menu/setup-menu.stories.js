@@ -1,8 +1,10 @@
 import SetupMenu from "./setup-menu";
 
-export default meta = {
+const meta = {
   component: SetupMenu,
 };
+
+export default meta;
 
 export const Default = {
   args: {

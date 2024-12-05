@@ -1,8 +1,9 @@
 import Word from "./word";
 
-export default meta = {
+const meta = {
   component: Word,
 };
+export default meta;
 
 export const Medialess = {
   args: {

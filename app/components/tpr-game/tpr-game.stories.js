@@ -1,8 +1,9 @@
 import TprGame from "./tpr-game";
 
-export default meta = {
+const meta = {
   component: TprGame,
 };
+export default meta;
 
 export const SetupMenu = {
   args: {
