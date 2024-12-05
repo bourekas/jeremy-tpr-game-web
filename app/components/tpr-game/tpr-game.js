@@ -8,24 +8,19 @@ const defaultSetup = { displayTime: 5, isAutoPlayAudio: true };
 
 export default function TprGame({
   words,
-  initialHasStarted = false,
+  initialIsGameStarted = false,
   initialSetup = defaultSetup,
   SetupMenu = DefaultSetupMenu,
   WordPlayer = DefaultWordPlayer,
 }) {
+  const [isGameStarted, setIsGameStarted] = useState(initialIsGameStarted);
   const [setup, setSetup] = useState(initialSetup);
-  const [hasStarted, setHasStarted] = useState(initialHasStarted);
+  const handleStart = () => setIsGameStarted(true);
+  const handleBackToSetup = () => setIsGameStarted(false);
 
-  const handleStart = () => setHasStarted(true);
-  const handleBackToSetup = () => setHasStarted(false);
-
-  if (!hasStarted) {
-    return (
-      <SetupMenu setup={setup} onSetupChange={setSetup} onStart={handleStart} />
-    );
-  }
-
-  return (
+  return isGameStarted ? (
     <WordPlayer words={words} setup={setup} onBackToSetup={handleBackToSetup} />
+  ) : (
+    <SetupMenu setup={setup} onSetupChange={setSetup} onStart={handleStart} />
   );
 }
