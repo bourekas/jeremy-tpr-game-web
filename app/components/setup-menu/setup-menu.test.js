@@ -58,6 +58,63 @@ describe("display time option", () => {
   });
 });
 
+describe("auto-play audio option", () => {
+  it("renders switch button", () => {
+    render(<SetupMenu />);
+    const checkbox = screen.getByRole("checkbox", { name: "Auto-Play Audio" });
+
+    expect(checkbox).toBeInTheDocument();
+  });
+
+  it("is enabled when isAutoPlayAudio is true", () => {
+    render(<SetupMenu setup={{ isAutoPlayAudio: true }} />);
+    const checkbox = screen.getByRole("checkbox", { name: "Auto-Play Audio" });
+
+    expect(checkbox).toBeChecked();
+  });
+
+  it("is disabled when isAutoPlayAudio is false", () => {
+    render(<SetupMenu setup={{ isAutoPlayAudio: false }} />);
+    const checkbox = screen.getByRole("checkbox", { name: "Auto-Play Audio" });
+
+    expect(checkbox).not.toBeChecked();
+  });
+
+  it("calls onSetupChange with isAutoPlayAudio false when disabling auto audio", async () => {
+    const user = userEvent.setup();
+    const onSetupChange = jest.fn();
+
+    render(
+      <SetupMenu
+        setup={{ isAutoPlayAudio: true }}
+        onSetupChange={onSetupChange}
+      />,
+    );
+
+    const checkbox = screen.getByRole("checkbox", { name: "Auto-Play Audio" });
+    await user.click(checkbox);
+
+    expect(onSetupChange).toHaveBeenCalledWith({ isAutoPlayAudio: false });
+  });
+
+  it("calls onSetupChange with isAutoPlayAudio true when enabling auto audio", async () => {
+    const user = userEvent.setup();
+    const onSetupChange = jest.fn();
+
+    render(
+      <SetupMenu
+        setup={{ isAutoPlayAudio: false }}
+        onSetupChange={onSetupChange}
+      />,
+    );
+
+    const checkbox = screen.getByRole("checkbox", { name: "Auto-Play Audio" });
+    await user.click(checkbox);
+
+    expect(onSetupChange).toHaveBeenCalledWith({ isAutoPlayAudio: true });
+  });
+});
+
 it("calls start callback when start button is clicked", async () => {
   const user = userEvent.setup();
   const onStart = jest.fn();
