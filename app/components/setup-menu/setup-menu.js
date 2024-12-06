@@ -12,8 +12,8 @@ export default function SetupMenu({
   onSetupChange,
   onStart,
 }) {
-  const handleDisplayTimeChange = (dt) =>
-    onSetupChange({ ...setup, displayTime: dt });
+  const setupChange = (key) => (val) => onSetupChange({ ...setup, [key]: val });
+  const handleDisplayTimeChange = setupChange("displayTime");
 
   return (
     <Paper elevation={3} sx={{ padding: 3 }}>
