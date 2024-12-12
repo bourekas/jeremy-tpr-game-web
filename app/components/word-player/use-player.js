@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 
-export default function usePlayer(
+export default function usePlayer({
   length = 0,
   displayTime = 5,
-  initialIsPlaying = false,
   initialIndex = 0,
-) {
+  initialIsPlaying = false,
+}) {
   const [index, setIndex] = useState(initialIndex);
   const [isPlaying, setIsPlaying] = useState(initialIsPlaying);
   const timeoutIdRef = useRef();

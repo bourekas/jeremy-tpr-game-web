@@ -9,7 +9,11 @@ it("calls usePlayer with given words and setup", () => {
 
   const { usePlayer } = renderWordPlayer({ words, setup });
 
-  expect(usePlayer).toHaveBeenCalledWith(words.length, setup.displayTime, true);
+  expect(usePlayer).toHaveBeenCalledWith({
+    length: words.length,
+    displayTime: setup.displayTime,
+    initialIsPlaying: true,
+  });
 });
 
 it("renders the word component with values returned from usePlayer hook", () => {

@@ -24,11 +24,11 @@ export default function WordPlayer({
   Word = DefaultWord,
 }) {
   const shuffledWords = useMemo(() => _.shuffle(words), [words]);
-  const { index, isPlaying, play, pause, reset, previous, next } = usePlayer(
-    shuffledWords.length,
-    setup.displayTime,
-    true,
-  );
+  const { index, isPlaying, play, pause, reset, previous, next } = usePlayer({
+    length: shuffledWords.length,
+    displayTime: setup.displayTime,
+    initialIsPlaying: true,
+  });
   const word = shuffledWords[index];
   const audio = useAudio(word.audioSrc, setup.isAutoPlayAudio);
 
