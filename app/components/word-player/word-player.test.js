@@ -3,20 +3,18 @@ import { userEvent } from "@testing-library/user-event";
 import WordPlayer from "./word-player";
 import { expect } from "@storybook/test";
 
-it("calls use-word-player with given words and setup", () => {
+it("calls usePlayer with given words and setup", () => {
   const words = [{ word: "a", imageSrc: "a.webp", audioSrc: "a.mp3" }];
   const setup = { displayTime: 3 };
 
-  const { useWordPlayer } = renderWordPlayer({ words, setup });
+  const { usePlayer } = renderWordPlayer({ words, setup });
 
-  expect(useWordPlayer).toHaveBeenCalledWith(words, setup.displayTime, true);
+  expect(usePlayer).toHaveBeenCalledWith(words.length, setup.displayTime, true);
 });
 
-it("renders the word component with values returned from use-word-player hook", () => {
-  const {
-    useWordPlayerReturnValue: { word },
-    Word,
-  } = renderWordPlayer();
+it("renders the word component with values returned from usePlayer hook", () => {
+  const { words, Word } = renderWordPlayer();
+  const word = words[0];
 
   expect(screen.getByTestId("word")).toBeInTheDocument();
   expect(Word.mock.lastCall[0]).toEqual({
@@ -44,7 +42,7 @@ it("calls back-to-setup callback when stop button is clicked", async () => {
 
 it("calls pause when pause button is clicked", async () => {
   const {
-    useWordPlayerReturnValue: { pause },
+    usePlayerReturnValue: { pause },
     user,
   } = renderWordPlayer({ isPlaying: true });
 
@@ -56,7 +54,7 @@ it("calls pause when pause button is clicked", async () => {
 
 it("calls play when play button is clicked", async () => {
   const {
-    useWordPlayerReturnValue: { play },
+    usePlayerReturnValue: { play },
     user,
   } = renderWordPlayer({ isPlaying: false });
 
@@ -68,7 +66,7 @@ it("calls play when play button is clicked", async () => {
 
 it("calls next when next-word button is clicked", async () => {
   const {
-    useWordPlayerReturnValue: { next },
+    usePlayerReturnValue: { next },
     user,
   } = renderWordPlayer();
 
@@ -79,17 +77,16 @@ it("calls next when next-word button is clicked", async () => {
 });
 
 it("calls use-audio with audio source and is-auto-play-audio props", () => {
-  const {
-    useWordPlayerReturnValue: { word },
-    useAudio,
-  } = renderWordPlayer({ setup: { isAutoPlayAudio: false } });
+  const { words, useAudio } = renderWordPlayer({
+    setup: { isAutoPlayAudio: false },
+  });
 
-  expect(useAudio).toHaveBeenCalledWith(word.audioSrc, false);
+  expect(useAudio).toHaveBeenCalledWith(words[0].audioSrc, false);
 });
 
 it("has previous button", async () => {
   const {
-    useWordPlayerReturnValue: { previous },
+    usePlayerReturnValue: { previous },
     user,
   } = renderWordPlayer();
 
@@ -100,8 +97,9 @@ it("has previous button", async () => {
 });
 
 function renderWordPlayer(props = {}) {
-  const useWordPlayerReturnValue = {
-    word: { word: "a", imageSrc: "a.webp", audioSrc: "a.mp3" },
+  const words = [{ word: "a", imageSrc: "a.webp", audioSrc: "a.mp3" }];
+  const usePlayerReturnValue = {
+    index: 0,
     isPlaying: props.isPlaying === undefined ? true : props.isPlaying,
     play: jest.fn(),
     pause: jest.fn(),
@@ -109,7 +107,7 @@ function renderWordPlayer(props = {}) {
     previous: jest.fn(),
     next: jest.fn(),
   };
-  const useWordPlayer = jest.fn().mockReturnValue(useWordPlayerReturnValue);
+  const usePlayer = jest.fn().mockReturnValue(usePlayerReturnValue);
   const useAudio = jest.fn();
   const Word = jest.fn().mockReturnValue(<div data-testid="word" />);
   const onBackToSetup = jest.fn();
@@ -117,7 +115,8 @@ function renderWordPlayer(props = {}) {
 
   render(
     <WordPlayer
-      useWordPlayer={useWordPlayer}
+      words={words}
+      usePlayer={usePlayer}
       useAudio={useAudio}
       Word={Word}
       onBackToSetup={onBackToSetup}
@@ -126,8 +125,9 @@ function renderWordPlayer(props = {}) {
   );
 
   return {
-    useWordPlayer,
-    useWordPlayerReturnValue,
+    words,
+    usePlayer,
+    usePlayerReturnValue,
     useAudio,
     Word,
     onBackToSetup,

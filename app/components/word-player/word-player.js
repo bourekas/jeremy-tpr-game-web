@@ -1,4 +1,4 @@
-import defaultUseWordPlayer from "./use-word-player";
+import defaultUsePlayer from "./use-player";
 import defaultUseAudio from "./use-audio";
 import DefaultWord from "../word/word";
 import Box from "@mui/material/Box";
@@ -17,15 +17,16 @@ export default function WordPlayer({
   words,
   setup = {},
   onBackToSetup,
-  useWordPlayer = defaultUseWordPlayer,
+  usePlayer = defaultUsePlayer,
   useAudio = defaultUseAudio,
   Word = DefaultWord,
 }) {
-  const { word, isPlaying, play, pause, reset, previous, next } = useWordPlayer(
-    words,
+  const { index, isPlaying, play, pause, reset, previous, next } = usePlayer(
+    words.length,
     setup.displayTime,
     true,
   );
+  const word = words[index];
   const audio = useAudio(word.audioSrc, setup.isAutoPlayAudio);
 
   const handleBackToSetup = () => {
