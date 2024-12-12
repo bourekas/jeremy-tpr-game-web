@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import defaultUsePlayer from "./use-player";
 import defaultUseAudio from "./use-audio";
 import DefaultWord from "../word/word";
@@ -12,6 +13,7 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import StopIcon from "@mui/icons-material/Stop";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
+import _ from "lodash";
 
 export default function WordPlayer({
   words,
@@ -21,12 +23,13 @@ export default function WordPlayer({
   useAudio = defaultUseAudio,
   Word = DefaultWord,
 }) {
+  const shuffledWords = useMemo(() => _.shuffle(words), [words]);
   const { index, isPlaying, play, pause, reset, previous, next } = usePlayer(
-    words.length,
+    shuffledWords.length,
     setup.displayTime,
     true,
   );
-  const word = words[index];
+  const word = shuffledWords[index];
   const audio = useAudio(word.audioSrc, setup.isAutoPlayAudio);
 
   const handleBackToSetup = () => {
