@@ -1,3 +1,5 @@
+"use client";
+
 import { useMemo } from "react";
 import defaultUsePlayer from "./use-player";
 import defaultUseAudio from "./use-audio";

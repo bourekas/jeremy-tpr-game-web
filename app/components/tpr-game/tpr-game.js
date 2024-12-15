@@ -1,17 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import DefaultSetupMenu from "../setup-menu/setup-menu";
-import DefaultWordPlayer from "../word-player/word-player";
 
 const defaultSetup = { displayTime: 5, isAutoPlayAudio: true };
 
 export default function TprGame({
+  Setup,
+  Words,
   words,
   initialIsGameStarted = false,
   initialSetup = defaultSetup,
-  SetupMenu = DefaultSetupMenu,
-  WordPlayer = DefaultWordPlayer,
 }) {
   const [isGameStarted, setIsGameStarted] = useState(initialIsGameStarted);
   const [setup, setSetup] = useState(initialSetup);
@@ -19,8 +17,8 @@ export default function TprGame({
   const handleBackToSetup = () => setIsGameStarted(false);
 
   return isGameStarted ? (
-    <WordPlayer words={words} setup={setup} onBackToSetup={handleBackToSetup} />
+    <Words words={words} setup={setup} onBackToSetup={handleBackToSetup} />
   ) : (
-    <SetupMenu setup={setup} onSetupChange={setSetup} onStart={handleStart} />
+    <Setup setup={setup} onSetupChange={setSetup} onStart={handleStart} />
   );
 }
