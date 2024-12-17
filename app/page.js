@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box";
-import ComposedTprGame from "./composed-client";
+import ComposedTprGame from "./composition-client";
 
 const words = [
   "לָגַעַת",
