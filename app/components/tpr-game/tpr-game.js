@@ -5,11 +5,11 @@ import { useState } from "react";
 const defaultSetup = { displayTime: 5, isAutoPlayAudio: true };
 
 export default function TprGame({
-  Setup,
-  Words,
   words,
   initialIsGameStarted = false,
   initialSetup = defaultSetup,
+  Words,
+  Setup,
 }) {
   const [isGameStarted, setIsGameStarted] = useState(initialIsGameStarted);
   const [setup, setSetup] = useState(initialSetup);
@@ -17,7 +17,7 @@ export default function TprGame({
   const handleBackToSetup = () => setIsGameStarted(false);
 
   return isGameStarted ? (
-    <Words words={words} setup={setup} onBackToSetup={handleBackToSetup} />
+    <Words setup={setup} words={words} onBackToSetup={handleBackToSetup} />
   ) : (
     <Setup setup={setup} onSetupChange={setSetup} onStart={handleStart} />
   );
