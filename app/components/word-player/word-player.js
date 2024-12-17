@@ -3,7 +3,6 @@
 import { useMemo } from "react";
 import defaultUsePlayer from "./use-player";
 import defaultUseAudio from "./use-audio";
-import DefaultWord from "../word/word";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -23,7 +22,7 @@ export default function WordPlayer({
   onBackToSetup,
   usePlayer = defaultUsePlayer,
   useAudio = defaultUseAudio,
-  Word = DefaultWord,
+  Word,
 }) {
   const shuffledWords = useMemo(() => _.shuffle(words), [words]);
   const { index, isPlaying, play, pause, reset, previous, next } = usePlayer({
