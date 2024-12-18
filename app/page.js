@@ -1,5 +1,6 @@
 import Box from "@mui/material/Box";
-import ComposedTprGame from "./composition-client";
+import TprGame from "./components/tpr-game/tpr-game";
+import { renderSetup, renderWords } from "./renders.client";
 
 const words = [
   "לָגַעַת",
@@ -21,7 +22,11 @@ const words = [
 export default function Home() {
   return (
     <Box sx={{ padding: { xs: 1, sm: 1.5 } }}>
-      <ComposedTprGame words={words} />
+      <TprGame
+        words={words}
+        renderSetup={renderSetup}
+        renderWords={renderWords}
+      />
     </Box>
   );
 }

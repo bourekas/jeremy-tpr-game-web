@@ -8,17 +8,15 @@ export default function TprGame({
   words,
   initialIsGameStarted = false,
   initialSetup = defaultSetup,
-  Words,
-  Setup,
+  renderSetup,
+  renderWords,
 }) {
   const [isGameStarted, setIsGameStarted] = useState(initialIsGameStarted);
   const [setup, setSetup] = useState(initialSetup);
   const handleStart = () => setIsGameStarted(true);
   const handleBackToSetup = () => setIsGameStarted(false);
 
-  return isGameStarted ? (
-    <Words setup={setup} words={words} onBackToSetup={handleBackToSetup} />
-  ) : (
-    <Setup setup={setup} onSetupChange={setSetup} onStart={handleStart} />
-  );
+  return isGameStarted
+    ? renderWords(setup, words, handleBackToSetup)
+    : renderSetup(setup, setSetup, handleStart);
 }

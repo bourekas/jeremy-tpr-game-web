@@ -17,12 +17,12 @@ import SkipNextIcon from "@mui/icons-material/SkipNext";
 import _ from "lodash";
 
 export default function WordPlayer({
-  words,
   setup = {},
+  words,
+  renderWord,
   onBackToSetup,
   usePlayer = defaultUsePlayer,
   useAudio = defaultUseAudio,
-  Word,
 }) {
   const shuffledWords = useMemo(() => _.shuffle(words), [words]);
   const { index, isPlaying, play, pause, reset, previous, next } = usePlayer({
@@ -45,7 +45,7 @@ export default function WordPlayer({
       <Box sx={{ mb: { xs: 0.5, sm: 1 } }}>
         <BackToSetupButton onBackToSetup={handleBackToSetup} />
       </Box>
-      <Word key={word.word} word={word.word} imageSrc={word.imageSrc} />
+      {renderWord(word.word, word.word, word.imageSrc)}
       <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
         <PlayAudioButton onPlayAudio={handlePlayAudio} />
         <PreviousWordButton onPreviousWord={previous} />

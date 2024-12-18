@@ -16,18 +16,15 @@ it("calls usePlayer with given words and setup", () => {
   });
 });
 
-it("renders the word component with values returned from usePlayer hook", () => {
-  const { words, Word } = renderWordPlayer();
+it("calls renderWord with values returned from usePlayer hook", () => {
+  const { words, renderWord } = renderWordPlayer();
   const word = words[0];
 
   expect(screen.getByTestId("word")).toBeInTheDocument();
-  expect(Word.mock.lastCall[0]).toEqual({
-    word: word.word,
-    imageSrc: word.imageSrc,
-  });
+  expect(renderWord).toHaveBeenCalledWith(word.word, word.word, word.imageSrc);
 });
 
-it("calls the back-to-setup callback when back-to-setup button is clicked", async () => {
+it("calls onBackToSetup when back-to-setup button is clicked", async () => {
   const { onBackToSetup, user } = renderWordPlayer();
 
   await user.click(screen.getByRole("button", { name: "Back to setup menu" }));
@@ -35,7 +32,7 @@ it("calls the back-to-setup callback when back-to-setup button is clicked", asyn
   expect(onBackToSetup).toHaveBeenCalledTimes(1);
 });
 
-it("calls back-to-setup callback when stop button is clicked", async () => {
+it("calls onBackToSetup when stop button is clicked", async () => {
   const { onBackToSetup, user } = renderWordPlayer();
 
   const button = screen.getByRole("button", { name: "Stop game" });
@@ -113,16 +110,16 @@ function renderWordPlayer(props = {}) {
   };
   const usePlayer = jest.fn().mockReturnValue(usePlayerReturnValue);
   const useAudio = jest.fn();
-  const Word = jest.fn().mockReturnValue(<div data-testid="word" />);
+  const renderWord = jest.fn().mockReturnValue(<div data-testid="word" />);
   const onBackToSetup = jest.fn();
   const user = userEvent.setup();
 
   render(
     <WordPlayer
       words={words}
+      renderWord={renderWord}
       usePlayer={usePlayer}
       useAudio={useAudio}
-      Word={Word}
       onBackToSetup={onBackToSetup}
       {...props}
     />,
@@ -130,10 +127,10 @@ function renderWordPlayer(props = {}) {
 
   return {
     words,
+    renderWord,
     usePlayer,
     usePlayerReturnValue,
     useAudio,
-    Word,
     onBackToSetup,
     user,
   };
