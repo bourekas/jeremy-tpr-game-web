@@ -14,7 +14,7 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import StopIcon from "@mui/icons-material/Stop";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
-import _ from "lodash";
+import { shuffle } from "lodash";
 
 export default function WordPlayer({
   setup = {},
@@ -23,14 +23,18 @@ export default function WordPlayer({
   onBackToSetup,
   usePlayer = defaultUsePlayer,
   useAudio = defaultUseAudio,
+  processWords = shuffle,
 }) {
-  const shuffledWords = useMemo(() => _.shuffle(words), [words]);
+  const processedWords = useMemo(
+    () => processWords(words),
+    [words, processWords],
+  );
   const { index, isPlaying, play, pause, reset, previous, next } = usePlayer({
-    length: shuffledWords.length,
+    length: processedWords.length,
     displayTime: setup.displayTime,
     initialIsPlaying: true,
   });
-  const word = shuffledWords[index];
+  const word = processedWords[index];
   const audio = useAudio(word.audioSrc, setup.isAutoPlayAudio);
 
   const handleBackToSetup = () => {
