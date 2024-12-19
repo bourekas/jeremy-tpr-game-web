@@ -1,8 +1,8 @@
 "use client";
 
 import { useMemo } from "react";
-import defaultUsePlayer from "./use-player";
-import defaultUseAudio from "./use-audio";
+import usePlayer from "./use-player";
+import useAudio from "./use-audio";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -21,8 +21,9 @@ export default function WordPlayer({
   words,
   renderWord,
   onBackToSetup,
-  usePlayer = defaultUsePlayer,
-  useAudio = defaultUseAudio,
+  initialWordIndex,
+  initialIsPlaying = true,
+  Audio = window.Audio,
   processWords = shuffle,
 }) {
   const processedWords = useMemo(
@@ -32,10 +33,11 @@ export default function WordPlayer({
   const { index, isPlaying, play, pause, reset, previous, next } = usePlayer({
     length: processedWords.length,
     displayTime: setup.displayTime,
-    initialIsPlaying: true,
+    initialIsPlaying,
+    initialIndex: initialWordIndex,
   });
   const word = processedWords[index];
-  const audio = useAudio(word.audioSrc, setup.isAutoPlayAudio);
+  const audio = useAudio(word.audioSrc, setup.isAutoPlayAudio, Audio);
 
   const handleBackToSetup = () => {
     reset();
