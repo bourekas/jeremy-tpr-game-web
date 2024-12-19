@@ -4,9 +4,7 @@ import { useMemo } from "react";
 import usePlayer from "./use-player";
 import useAudio from "./use-audio";
 import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import Tooltip from "@mui/material/Tooltip";
 import Paper from "@mui/material/Paper";
 import AudiotrackIcon from "@mui/icons-material/Audiotrack";
 import PauseIcon from "@mui/icons-material/Pause";
@@ -14,6 +12,7 @@ import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import StopIcon from "@mui/icons-material/Stop";
 import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
+import ActionButton from "@/app/components/action-button/action-button";
 import { shuffle } from "lodash";
 
 export default function WordPlayer({
@@ -126,13 +125,5 @@ function StopButton({ onStop }) {
     <ActionButton name="Stop game" onClick={onStop}>
       <StopIcon sx={{ color: "#E57373" }} />
     </ActionButton>
-  );
-}
-
-function ActionButton({ name, onClick, children }) {
-  return (
-    <Tooltip title={name}>
-      <IconButton onClick={onClick}>{children}</IconButton>
-    </Tooltip>
   );
 }
