@@ -4,7 +4,7 @@ import { useState } from "react";
 
 const defaultSetup = { displayTime: 5, isAutoPlayAudio: true };
 
-export default function TprGame({
+export default function GameDisplay({
   words,
   initialIsGameStarted = false,
   initialSetup = defaultSetup,

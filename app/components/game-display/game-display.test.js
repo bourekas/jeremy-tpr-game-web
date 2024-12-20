@@ -1,6 +1,6 @@
 import { act } from "react";
 import { render, screen } from "@testing-library/react";
-import TprGame from "./tpr-game";
+import GameDisplay from "./game-display";
 
 it("initially renders setup by default", () => {
   renderTprGame();
@@ -103,7 +103,11 @@ function renderTprGame(props) {
   const renderWords = jest.fn().mockReturnValue(<div data-testid="words" />);
 
   render(
-    <TprGame renderSetup={renderSetup} renderWords={renderWords} {...props} />,
+    <GameDisplay
+      renderSetup={renderSetup}
+      renderWords={renderWords}
+      {...props}
+    />,
   );
 
   return { renderSetup, renderWords };

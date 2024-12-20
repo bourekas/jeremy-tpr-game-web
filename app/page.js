@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box";
-import TprGame from "./components/tpr-game/tpr-game";
+import GameDisplay from "./components/game-display/game-display";
 import { renderSetup, renderWords } from "./renders";
 
 const words = [
@@ -22,7 +22,7 @@ const words = [
 export default function Home() {
   return (
     <Box sx={{ padding: { xs: 1, sm: 1.5 } }}>
-      <TprGame
+      <GameDisplay
         words={words}
         renderSetup={renderSetup}
         renderWords={renderWords}

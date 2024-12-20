@@ -1,7 +1,7 @@
-import TprGame from "./tpr-game";
+import GameDisplay from "./game-display";
 
 const meta = {
-  component: TprGame,
+  component: GameDisplay,
 };
 export default meta;
 
