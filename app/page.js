@@ -1,6 +1,6 @@
 import Box from "@mui/material/Box";
 import TprGame from "./components/tpr-game/tpr-game";
-import { renderSetup, renderWords } from "./renders.client";
+import { renderSetup, renderWords } from "./renders";
 
 const words = [
   "לָגַעַת",
