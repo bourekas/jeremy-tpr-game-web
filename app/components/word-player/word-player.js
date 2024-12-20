@@ -4,14 +4,14 @@ import { useMemo } from "react";
 import usePlayer from "./use-player";
 import useAudio from "./use-audio";
 import Box from "@mui/material/Box";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import AudiotrackIcon from "@mui/icons-material/Audiotrack";
-import PauseIcon from "@mui/icons-material/Pause";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import StopIcon from "@mui/icons-material/Stop";
-import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
-import SkipNextIcon from "@mui/icons-material/SkipNext";
-import ActionButton from "@/app/components/action-button/action-button";
+import {
+  PlayAudioButton,
+  BackToSetupButton,
+  PreviousWordButton,
+  PlayPauseButton,
+  NextWordButton,
+  StopButton,
+} from "../controls/controls";
 import { shuffle } from "lodash";
 
 export default function WordPlayer({
@@ -43,86 +43,21 @@ export default function WordPlayer({
   };
 
   const handlePlayAudio = () => audio.play();
+  const handleTogglePlay = isPlaying ? pause : play;
 
   return (
     <Box>
       <Box sx={{ mb: { xs: 0.5, sm: 1 } }}>
-        <BackToSetupButton onBackToSetup={handleBackToSetup} />
+        <BackToSetupButton onClick={handleBackToSetup} />
       </Box>
       {renderWord(word.word, word.word, word.imageSrc)}
       <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
-        <PlayAudioButton onPlayAudio={handlePlayAudio} />
-        <PreviousWordButton onPreviousWord={previous} />
-        <PlayOrPauseButton
-          isPlaying={isPlaying}
-          onPause={pause}
-          onPlay={play}
-        />
-        <NextWordButton onNextWord={next} />
-        <StopButton onStop={handleBackToSetup} />
+        <PlayAudioButton onClick={handlePlayAudio} />
+        <PreviousWordButton onClick={previous} />
+        <PlayPauseButton isPlaying={isPlaying} onClick={handleTogglePlay} />
+        <NextWordButton onClick={next} />
+        <StopButton onClick={handleBackToSetup} />
       </Box>
     </Box>
-  );
-}
-
-function BackToSetupButton({ onBackToSetup }) {
-  return (
-    <ActionButton name="Back to setup menu" onClick={onBackToSetup}>
-      <ArrowBackIcon />
-    </ActionButton>
-  );
-}
-
-function PlayAudioButton({ onPlayAudio }) {
-  return (
-    <ActionButton name="Play audio" onClick={onPlayAudio}>
-      <AudiotrackIcon sx={{ color: "#BA68C8" }} />
-    </ActionButton>
-  );
-}
-
-function PreviousWordButton({ onPreviousWord }) {
-  return (
-    <ActionButton name="Go to previous word" onClick={onPreviousWord}>
-      <SkipPreviousIcon sx={{ color: "#42A5F5" }} />
-    </ActionButton>
-  );
-}
-
-function PlayOrPauseButton({ isPlaying, onPause, onPlay }) {
-  const pauseProps = {
-    name: "Pause",
-    handleClick: onPause,
-    Icon: PauseIcon,
-    color: "#FFCA28",
-  };
-  const playProps = {
-    name: "Play",
-    handleClick: onPlay,
-    Icon: PlayArrowIcon,
-    color: "#66BB6A",
-  };
-  const { name, handleClick, Icon, color } = isPlaying ? pauseProps : playProps;
-
-  return (
-    <ActionButton name={name} onClick={handleClick}>
-      <Icon sx={{ color }} />
-    </ActionButton>
-  );
-}
-
-function NextWordButton({ onNextWord }) {
-  return (
-    <ActionButton name="Go to next word" onClick={onNextWord}>
-      <SkipNextIcon sx={{ color: "#42A5F5" }} />
-    </ActionButton>
-  );
-}
-
-function StopButton({ onStop }) {
-  return (
-    <ActionButton name="Stop game" onClick={onStop}>
-      <StopIcon sx={{ color: "#E57373" }} />
-    </ActionButton>
   );
 }
