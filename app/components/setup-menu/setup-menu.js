@@ -1,6 +1,5 @@
 "use client";
 
-import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Slider from "@mui/material/Slider";
@@ -19,7 +18,7 @@ export default function SetupMenu({
   const handleAutoPlayAudioChange = setupChange("isAutoPlayAudio");
 
   return (
-    <Paper elevation={3} sx={{ padding: 3 }}>
+    <Box sx={{ padding: 3 }}>
       <Box sx={{ textAlign: "center" }}>
         <SetupHeading headingLevel={headingLevel} />
       </Box>
@@ -38,7 +37,7 @@ export default function SetupMenu({
       <Box sx={{ display: "flex", justifyContent: "center" }}>
         <StartButton onStart={onStart} />
       </Box>
-    </Paper>
+    </Box>
   );
 }
 

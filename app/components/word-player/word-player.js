@@ -5,7 +5,6 @@ import usePlayer from "./use-player";
 import useAudio from "./use-audio";
 import Box from "@mui/material/Box";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import Paper from "@mui/material/Paper";
 import AudiotrackIcon from "@mui/icons-material/Audiotrack";
 import PauseIcon from "@mui/icons-material/Pause";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
@@ -46,7 +45,7 @@ export default function WordPlayer({
   const handlePlayAudio = () => audio.play();
 
   return (
-    <Paper elevation={3} sx={{ px: { xs: 0, sm: 1 }, py: { xs: 0.5, sm: 1 } }}>
+    <Box>
       <Box sx={{ mb: { xs: 0.5, sm: 1 } }}>
         <BackToSetupButton onBackToSetup={handleBackToSetup} />
       </Box>
@@ -62,7 +61,7 @@ export default function WordPlayer({
         <NextWordButton onNextWord={next} />
         <StopButton onStop={handleBackToSetup} />
       </Box>
-    </Paper>
+    </Box>
   );
 }
 

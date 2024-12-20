@@ -1,3 +1,4 @@
+import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import GameDisplay from "./components/game-display/game-display";
 import { renderSetup, renderWords } from "./renders";
@@ -21,12 +22,26 @@ const words = [
 
 export default function Home() {
   return (
-    <Box sx={{ padding: { xs: 1, sm: 1.5 } }}>
-      <GameDisplay
-        words={words}
-        renderSetup={renderSetup}
-        renderWords={renderWords}
-      />
-    </Box>
+    <PageWrapper>
+      <GamePanel>
+        <GameDisplay
+          words={words}
+          renderSetup={renderSetup}
+          renderWords={renderWords}
+        />
+      </GamePanel>
+    </PageWrapper>
+  );
+}
+
+function PageWrapper({ children }) {
+  return <Box sx={{ padding: { xs: 1, sm: 1.5 } }}>{children}</Box>;
+}
+
+function GamePanel({ children }) {
+  return (
+    <Paper elevation={3} sx={{ px: { xs: 0, sm: 1 }, py: { xs: 0.5, sm: 1 } }}>
+      {children}
+    </Paper>
   );
 }
