@@ -46,7 +46,7 @@ export default function WordPlayer({
   const handleTogglePlay = isPlaying ? pause : play;
 
   return (
-    <Box>
+    <>
       <Box sx={{ mb: { xs: 0.5, sm: 1 } }}>
         <BackToSetupButton onClick={handleBackToSetup} />
       </Box>
@@ -58,6 +58,6 @@ export default function WordPlayer({
         <NextWordButton onClick={next} />
         <StopButton onClick={handleBackToSetup} />
       </Box>
-    </Box>
+    </>
   );
 }

@@ -5,20 +5,7 @@ import Typogrophy from "@mui/material/Typography";
 export default function Word({ word, imageSrc }) {
   return (
     <>
-      <Box
-        sx={{
-          position: "relative",
-          width: "100%",
-          height: "auto",
-          objectFit: "contain",
-          maxWidth: "525px",
-          marginX: "auto",
-          mb: 1,
-          aspectRatio: "7 / 4",
-        }}
-      >
-        <TprImage word={word} src={imageSrc} />
-      </Box>
+      <TprImage word={word} src={imageSrc} />
       <WordText>{word}</WordText>
     </>
   );
@@ -26,12 +13,25 @@ export default function Word({ word, imageSrc }) {
 
 function TprImage({ word, src }) {
   return (
-    <Image
-      src={src || "placeholder.svg"}
-      alt={`Total Physical Response for the word '${word}'`}
-      fill
-      priority
-    />
+    <Box
+      sx={{
+        position: "relative",
+        width: "100%",
+        height: "auto",
+        objectFit: "contain",
+        maxWidth: "525px",
+        marginX: "auto",
+        mb: 1,
+        aspectRatio: "7 / 4",
+      }}
+    >
+      <Image
+        src={src || "placeholder.svg"}
+        alt={`Total Physical Response for the word '${word}'`}
+        fill
+        priority
+      />
+    </Box>
   );
 }
 
