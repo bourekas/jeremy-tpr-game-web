@@ -11,7 +11,7 @@ import {
   PlayPauseButton,
   NextWordButton,
   StopButton,
-} from "../controls/controls";
+} from "../word-controls/word-controls";
 import { shuffle } from "lodash";
 
 export default function WordPlayer({

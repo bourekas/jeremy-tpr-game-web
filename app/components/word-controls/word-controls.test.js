@@ -7,7 +7,8 @@ import {
   PlayPauseButton,
   NextWordButton,
   StopButton,
-} from "./controls";
+} from "./word-controls";
+import WordControls from "./word-controls";
 
 it.each([
   ["Play audio", PlayAudioButton],
