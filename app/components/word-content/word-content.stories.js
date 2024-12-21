@@ -1,7 +1,7 @@
-import Word from "./word";
+import WordContent from "./word-content";
 
 const meta = {
-  component: Word,
+  component: WordContent,
 };
 export default meta;
 

@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import Image from "next/image";
 import Typogrophy from "@mui/material/Typography";
 
-export default function Word({ word, imageSrc }) {
+export default function WordContent({ word, imageSrc }) {
   return (
     <>
       <TprImage word={word} src={imageSrc} />

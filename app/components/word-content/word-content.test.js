@@ -1,9 +1,8 @@
 import { render, screen } from "@testing-library/react";
-import { userEvent } from "@testing-library/user-event";
-import Word from "./word";
+import WordContent from "./word-content";
 
 it("renders the TPR image", () => {
-  render(<Word word="לגעת" imageSrc="/word/to-touch.jpg" />);
+  render(<WordContent word="לגעת" imageSrc="/word/to-touch.jpg" />);
 
   const image = screen.getByRole("img", {
     name: "Total Physical Response for the word 'לגעת'",
@@ -13,7 +12,7 @@ it("renders the TPR image", () => {
 });
 
 it("renders the word text as level 1 heading", () => {
-  render(<Word word="לגעת" />);
+  render(<WordContent word="לגעת" />);
 
   expect(
     screen.getByRole("heading", { name: "לגעת", level: 1 }),
