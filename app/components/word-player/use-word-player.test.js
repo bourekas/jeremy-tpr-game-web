@@ -41,7 +41,6 @@ it("calls useIndexPlayer with the initialIndex equal to the initialWordIndex", (
 
 it("returns the word matching the index returned from useIndexPlayer", () => {
   const { result } = renderWordPlayerHook({
-    words,
     playerHookReturnValue: { index: 1 },
   });
 
