@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useMemo } from "react";
 
-export default function usePlayer({
+export default function useIndexPlayer({
   length = 0,
   displayTime = 5,
   initialIndex = 0,

@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import usePlayer from "./use-player";
+import useIndexPlayer from "./use-index-player";
 import useAudio from "./use-audio";
 import Box from "@mui/material/Box";
 import {
@@ -15,7 +15,7 @@ import {
 import { shuffle } from "lodash";
 import { createWordPlayerHook } from "./use-word-player";
 
-const useWordPlayer = createWordPlayerHook(usePlayer, useAudio);
+const useWordPlayer = createWordPlayerHook(useIndexPlayer, useAudio);
 
 export default function WordPlayer({
   setup = {},
