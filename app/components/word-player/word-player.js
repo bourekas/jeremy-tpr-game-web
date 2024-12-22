@@ -1,14 +1,14 @@
 "use client";
 
 import { useMemo } from "react";
-import useIndexPlayer from "./use-index-player";
-import useAudio from "./use-audio";
+import useIndexPlayer from "../../hooks/use-index-player/use-index-player";
+import useAudio from "../../hooks/use-audio/use-audio";
 import Box from "@mui/material/Box";
 import { shuffle } from "lodash";
 import WordControls from "../word-controls/word-controls";
 import ActionButton from "../action-button/action-button";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { createWordPlayerHook } from "./use-word-player";
+import { createWordPlayerHook } from "../../hooks/use-word-player/use-word-player";
 
 const useWordPlayer = createWordPlayerHook(useIndexPlayer, useAudio);
 
