@@ -4,15 +4,10 @@ import { useMemo } from "react";
 import useIndexPlayer from "./use-index-player";
 import useAudio from "./use-audio";
 import Box from "@mui/material/Box";
-import {
-  PlayAudioButton,
-  BackToSetupButton,
-  PreviousWordButton,
-  PlayPauseButton,
-  NextWordButton,
-  StopButton,
-} from "../word-controls/word-controls";
 import { shuffle } from "lodash";
+import WordControls from "../word-controls/word-controls";
+import ActionButton from "../action-button/action-button";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { createWordPlayerHook } from "./use-word-player";
 
 const useWordPlayer = createWordPlayerHook(useIndexPlayer, useAudio);
@@ -44,7 +39,15 @@ export default function WordPlayer({
   };
 
   const handlePlayAudio = () => audio.play();
-  const handleTogglePlay = isPlaying ? pause : play;
+
+  const controlHandlers = {
+    onPlayAudio: handlePlayAudio,
+    onPlay: play,
+    onPause: pause,
+    onPrevious: previous,
+    onNext: next,
+    onStop: handleBackToSetup,
+  };
 
   return (
     <>
@@ -52,13 +55,17 @@ export default function WordPlayer({
         <BackToSetupButton onClick={handleBackToSetup} />
       </Box>
       {renderWord(word.word, word.word, word.imageSrc)}
-      <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
-        <PlayAudioButton onClick={handlePlayAudio} />
-        <PreviousWordButton onClick={previous} />
-        <PlayPauseButton isPlaying={isPlaying} onClick={handleTogglePlay} />
-        <NextWordButton onClick={next} />
-        <StopButton onClick={handleBackToSetup} />
+      <Box sx={{ mb: 1 }}>
+        <WordControls isPlaying={isPlaying} controlHandlers={controlHandlers} />
       </Box>
     </>
+  );
+}
+
+function BackToSetupButton({ onClick }) {
+  return (
+    <ActionButton name="Back to setup menu" onClick={onClick}>
+      <ArrowBackIcon />
+    </ActionButton>
   );
 }

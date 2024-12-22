@@ -1,50 +1,91 @@
 import { render, screen } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
-import {
-  PlayAudioButton,
-  BackToSetupButton,
-  PreviousWordButton,
-  PlayPauseButton,
-  NextWordButton,
-  StopButton,
-} from "./word-controls";
 import WordControls from "./word-controls";
 
-it.each([
-  ["Play audio", PlayAudioButton],
-  ["Back to setup menu", BackToSetupButton],
-  ["Go to previous word", PreviousWordButton],
-  ["Go to next word", NextWordButton],
-  ["Stop game", StopButton],
-])("calls onClick when clicking '%s' button", async (name, Button) => {
-  const user = userEvent.setup();
-  const handleClick = jest.fn();
-  render(<Button onClick={handleClick} />);
+const playButtonName = "Play";
+const pauseButtonName = "Pause";
 
-  const button = screen.getByRole("button", { name });
-  await user.click(button);
+it("calls onPlayAudio when clicking play audio button", async () => {
+  const { clickButton, onPlayAudio } = renderWordControls();
 
-  expect(handleClick).toHaveBeenCalledTimes(1);
+  await clickButton("Play audio");
+  expect(onPlayAudio).toHaveBeenCalledTimes(1);
 });
 
-it("calls onClick when clicking play/pause and playing", async () => {
-  const user = userEvent.setup();
-  const handleClick = jest.fn();
-  render(<PlayPauseButton isPlaying={true} onClick={handleClick} />);
+it("calls onPlay when clicking play button", async () => {
+  const { clickButton, onPlay } = renderWordControls({ isPlaying: false });
 
-  const button = screen.getByRole("button", { name: "Pause" });
-  await user.click(button);
-
-  expect(handleClick).toHaveBeenCalledTimes(1);
+  await clickButton(playButtonName);
+  expect(onPlay).toHaveBeenCalledTimes(1);
 });
 
-it("calls onClick when clicking play/pause and not playing", async () => {
-  const user = userEvent.setup();
-  const handleClick = jest.fn();
-  render(<PlayPauseButton isPlaying={false} onClick={handleClick} />);
+it("calls onPause when clicking pause button", async () => {
+  const { clickButton, onPause } = renderWordControls({ isPlaying: true });
 
-  const button = screen.getByRole("button", { name: "Play" });
-  await user.click(button);
-
-  expect(handleClick).toHaveBeenCalledTimes(1);
+  await clickButton(pauseButtonName);
+  expect(onPause).toHaveBeenCalledTimes(1);
 });
+
+it("calls onPrevious when clicking previous button", async () => {
+  const { clickButton, onPrevious } = renderWordControls();
+
+  await clickButton("Go to previous word");
+  expect(onPrevious).toHaveBeenCalledTimes(1);
+});
+
+it("calls onNext when clicking next button", async () => {
+  const { clickButton, onNext } = renderWordControls();
+
+  await clickButton("Go to next word");
+  expect(onNext).toHaveBeenCalledTimes(1);
+});
+
+it("calls onStop when clicking stop button", async () => {
+  const { clickButton, onStop } = renderWordControls();
+
+  await clickButton("Stop game");
+  expect(onStop).toHaveBeenCalledTimes(1);
+});
+
+it("renders play button but not pause button when isPlaying is false", () => {
+  renderWordControls({ isPlaying: false });
+
+  expect(
+    screen.getByRole("button", { name: playButtonName }),
+  ).toBeInTheDocument();
+
+  expect(
+    screen.queryByRole("button", { name: pauseButtonName }),
+  ).not.toBeInTheDocument();
+});
+
+it("renders pause button but not play button when isPlaying is true", () => {
+  renderWordControls({ isPlaying: true });
+
+  expect(
+    screen.getByRole("button", { name: pauseButtonName }),
+  ).toBeInTheDocument();
+
+  expect(
+    screen.queryByRole("button", { name: playButtonName }),
+  ).not.toBeInTheDocument();
+});
+
+function renderWordControls(props) {
+  const user = userEvent.setup();
+  const controlHandlers = {
+    onPlayAudio: jest.fn(),
+    onPlay: jest.fn(),
+    onPause: jest.fn(),
+    onPrevious: jest.fn(),
+    onNext: jest.fn(),
+    onStop: jest.fn(),
+  };
+
+  render(<WordControls controlHandlers={controlHandlers} {...props} />);
+
+  const clickButton = (name) =>
+    user.click(screen.getByRole("button", { name }));
+
+  return { clickButton, ...controlHandlers };
+}
