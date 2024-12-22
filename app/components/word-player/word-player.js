@@ -13,6 +13,9 @@ import {
   StopButton,
 } from "../word-controls/word-controls";
 import { shuffle } from "lodash";
+import { createWordPlayerHook } from "./use-word-player";
+
+const useWordPlayer = createWordPlayerHook(usePlayer, useAudio);
 
 export default function WordPlayer({
   setup = {},
@@ -21,21 +24,19 @@ export default function WordPlayer({
   onBackToSetup,
   initialWordIndex,
   initialIsPlaying = true,
-  Audio = window.Audio,
   processWords = shuffle,
 }) {
   const processedWords = useMemo(
     () => processWords(words),
     [words, processWords],
   );
-  const { index, isPlaying, play, pause, reset, previous, next } = usePlayer({
-    length: processedWords.length,
-    displayTime: setup.displayTime,
-    initialIsPlaying,
-    initialIndex: initialWordIndex,
-  });
-  const word = processedWords[index];
-  const audio = useAudio(word.audioSrc, setup.isAutoPlayAudio, Audio);
+  const { word, audio, isPlaying, play, pause, reset, previous, next } =
+    useWordPlayer({
+      words: processedWords,
+      setup,
+      initialIsPlaying,
+      initialWordIndex,
+    });
 
   const handleBackToSetup = () => {
     reset();
