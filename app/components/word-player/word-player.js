@@ -9,24 +9,9 @@ export function createWordPlayerComponent(
   WordContent,
   WordControls,
 ) {
-  return function WordPlayer({
-    setup = {},
-    words,
-    onBackToSetup,
-    initialWordIndex,
-    initialIsPlaying = true,
-  }) {
-    const {
-      word,
-      audio,
-      isPlaying,
-      controls: { play, pause, reset, previous, next },
-    } = useWordPlayer({
-      words,
-      setup,
-      initialIsPlaying,
-      initialWordIndex,
-    });
+  return function WordPlayer({ onBackToSetup, ...props }) {
+    const { word, audio, isPlaying, controls } = useWordPlayer(props);
+    const { play, pause, reset, previous, next } = controls;
 
     const handleBackToSetup = () => {
       reset();
