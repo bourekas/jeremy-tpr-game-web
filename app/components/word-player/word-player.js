@@ -1,18 +1,19 @@
 "use client";
 
-import { useMemo } from "react";
-import useIndexPlayer from "../../hooks/use-index-player/use-index-player";
-import { createValuePlayerHook } from "../../hooks/use-value-player/use-value-player";
-import useAudio from "../../hooks/use-audio/use-audio";
 import Box from "@mui/material/Box";
 import { shuffle } from "lodash";
+import useIndexPlayer from "../../hooks/use-index-player/use-index-player";
+import { createValuePlayerHook } from "../../hooks/use-value-player/use-value-player";
+import { createShufflePlayerHook } from "@/app/hooks/use-shuffle-player/use-shuffle-player";
+import { createWordPlayerHook } from "../../hooks/use-word-player/use-word-player";
+import useAudio from "../../hooks/use-audio/use-audio";
 import WordControls from "../word-controls/word-controls";
 import ActionButton from "../action-button/action-button";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { createWordPlayerHook } from "../../hooks/use-word-player/use-word-player";
 
 const useValuePlayer = createValuePlayerHook(useIndexPlayer);
-const useWordPlayer = createWordPlayerHook(useValuePlayer, useAudio);
+const useShufflePlayer = createShufflePlayerHook(shuffle, useValuePlayer);
+const useWordPlayer = createWordPlayerHook(useShufflePlayer, useAudio);
 
 export default function WordPlayer({
   setup = {},
@@ -21,19 +22,14 @@ export default function WordPlayer({
   onBackToSetup,
   initialWordIndex,
   initialIsPlaying = true,
-  processWords = shuffle,
 }) {
-  const processedWords = useMemo(
-    () => processWords(words),
-    [words, processWords],
-  );
   const {
     word,
     audio,
     isPlaying,
     controls: { play, pause, reset, previous, next },
   } = useWordPlayer({
-    words: processedWords,
+    words,
     setup,
     initialIsPlaying,
     initialWordIndex,
