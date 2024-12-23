@@ -1,19 +1,22 @@
-export function createWordPlayerHook(useIndexPlayer, useAudio) {
+export function createWordPlayerHook(useValuePlayer, useAudio) {
   return function useWordPlayer({
     words,
     setup,
     initialIsPlaying,
     initialWordIndex,
   }) {
-    const { index, ...playerRest } = useIndexPlayer({
-      length: words.length,
+    const {
+      value: word,
+      isPlaying,
+      controls,
+    } = useValuePlayer({
+      values: words,
       displayTime: setup.displayTime,
       initialIsPlaying,
-      initialIndex: initialWordIndex,
+      initialValueIndex: initialWordIndex,
     });
-    const word = words[index];
-    const audio = useAudio(word.audioSrc, setup.isAutoPlayAudio, Audio);
+    const audio = useAudio(word.audioSrc, setup.isAutoPlayAudio);
 
-    return { word, audio, ...playerRest };
+    return { word, audio, isPlaying, controls };
   };
 }

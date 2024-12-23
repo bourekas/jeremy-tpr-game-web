@@ -7,79 +7,88 @@ const words = [
 ];
 const setup = { displayTime: 4, isAutoPlayAudio: true };
 
-it("calls useIndexPlayer with the given displayTime and initialIsPlaying", () => {
-  const { useIndexPlayer } = renderWordPlayerHook({
-    setup: { displayTime: 4 },
-    initialIsPlaying: true,
-  });
+it("forwards words prop as values prop to useValuePlayer", () => {
+  const { useValuePlayer } = renderWordPlayerHook({ words });
 
-  expect(useIndexPlayer).toHaveBeenCalledWith(
-    expect.objectContaining({ displayTime: 4, initialIsPlaying: true }),
+  expect(useValuePlayer).toHaveBeenCalledWith(
+    expect.objectContaining({ values: words }),
   );
 });
 
-it("calls useIndexPlayer with the length of the given words", () => {
-  const { useIndexPlayer } = renderWordPlayerHook({
-    words: [
-      { word: "a", imageSrc: "a.webp", audioSrc: "a.mp3" },
-      { word: "b", imageSrc: "b.webp", audioSrc: "b.mp3" },
-    ],
-  });
+it("forwards displayTime property of setup prop to useValuePlayer", () => {
+  const displayTime = 10;
+  const { useValuePlayer } = renderWordPlayerHook({ setup: { displayTime } });
 
-  expect(useIndexPlayer).toHaveBeenCalledWith(
-    expect.objectContaining({ length: 2 }),
+  expect(useValuePlayer).toHaveBeenCalledWith(
+    expect.objectContaining({ displayTime }),
   );
 });
 
-it("calls useIndexPlayer with the initialIndex equal to the initialWordIndex", () => {
-  const { useIndexPlayer } = renderWordPlayerHook({ initialWordIndex: 1 });
+it("forwards initialWordIndex prop as initialValueIndex to useValuePlayer", () => {
+  const initialWordIndex = 1;
+  const { useValuePlayer } = renderWordPlayerHook({ initialWordIndex });
 
-  expect(useIndexPlayer).toHaveBeenCalledWith(
-    expect.objectContaining({ initialIndex: 1 }),
+  expect(useValuePlayer).toHaveBeenCalledWith(
+    expect.objectContaining({ initialValueIndex: initialWordIndex }),
   );
 });
 
-it("returns the word matching the index returned from useIndexPlayer", () => {
+it("forwards initialIsPlaying prop to useValuePlayer", () => {
+  const initialIsPlaying = true;
+  const { useValuePlayer } = renderWordPlayerHook({ initialIsPlaying });
+
+  expect(useValuePlayer).toHaveBeenCalledWith(
+    expect.objectContaining({ initialIsPlaying }),
+  );
+});
+
+it("returns the value prop returned from useValuePlayer as word prop", () => {
+  const value = { word: "c", imageSrc: "c.webp", audioSrc: "c.mp3" };
+  const valuePlayerHookReturnValue = { value };
+
+  const { result } = renderWordPlayerHook({ valuePlayerHookReturnValue });
+
+  expect(result.current.word).toBe(value);
+});
+
+it("returns the controls prop returned from useValuePlayer", () => {
+  const controls = { someControl: () => {} };
+
   const { result } = renderWordPlayerHook({
-    playerHookReturnValue: { index: 1 },
-  });
-
-  expect(result.current.word).toEqual(words[1]);
-});
-
-it("returns the controls returned from useIndexPlayer", () => {
-  const play = jest.fn();
-  const pause = jest.fn();
-  const previous = jest.fn();
-  const next = jest.fn();
-  const reset = jest.fn();
-  const controls = { play, pause, previous, next, reset };
-
-  const { result } = renderWordPlayerHook({
-    playerHookReturnValue: { controls },
+    valuePlayerHookReturnValue: { controls },
   });
 
   expect(result.current).toHaveProperty("controls", controls);
 });
 
-it("returns isPlaying value returned from useIndexPlayer", () => {
+it("returnsthe isPlaying prop returned from useValuePlayer", () => {
+  const isPlaying = true;
   const { result } = renderWordPlayerHook({
-    playerHookReturnValue: { isPlaying: true },
+    valuePlayerHookReturnValue: { isPlaying },
   });
 
-  expect(result.current.isPlaying).toBe(true);
+  expect(result.current.isPlaying).toBe(isPlaying);
 });
 
-it("calls useAudio with the given audioSrc, isAutoPlayAudio, and Audio arguments", () => {
-  const { useAudio } = renderWordPlayerHook({
-    words: [{ word: "a", imageSrc: "a.webp", audioSrc: "a.mp3" }],
-    setup: { isAutoPlayAudio: true },
-  });
+it("forwards the word audio source returned from useValuePlayer to useAudio", () => {
+  const audioSrc = "d.mp3";
+  const valuePlayerHookReturnValue = {
+    value: { word: "d", imageSrc: "d.webp", audioSrc },
+  };
 
-  expect(useAudio).toHaveBeenCalledWith("a.mp3", true, Audio);
+  const { useAudio } = renderWordPlayerHook({ valuePlayerHookReturnValue });
+
+  expect(useAudio).toHaveBeenCalledWith(audioSrc, expect.anything());
 });
 
-it("returns the useAudio return value", () => {
+it("forwards the isAutoPlayAudio prop from setup as isAutoPlay prop to useAudio", () => {
+  const isAutoPlayAudio = true;
+  const { useAudio } = renderWordPlayerHook({ setup: { isAutoPlayAudio } });
+
+  expect(useAudio).toHaveBeenCalledWith(expect.anything(), isAutoPlayAudio);
+});
+
+it("returns the audio returned from useAudio", () => {
   const audioReturnValue = new Audio("a.mp3");
 
   const { result } = renderWordPlayerHook({ audioReturnValue });
@@ -88,24 +97,15 @@ it("returns the useAudio return value", () => {
 });
 
 function renderWordPlayerHook(props = {}) {
-  const useIndexPlayer = createMockIndexPlayerHook(props.playerHookReturnValue);
-  const useAudio = createMockAudioHook(props.audioReturnValue);
-  const useWordPlayer = createWordPlayerHook(useIndexPlayer, useAudio);
+  const useValuePlayer = jest
+    .fn()
+    .mockReturnValue({ value: words[0], ...props.valuePlayerHookReturnValue });
+  const useAudio = jest.fn().mockReturnValue(props.audioReturnValue);
+  const useWordPlayer = createWordPlayerHook(useValuePlayer, useAudio);
 
   const renderResult = renderHook(() =>
     useWordPlayer({ words, setup, ...props }),
   );
 
-  return { useIndexPlayer, useAudio, ...renderResult };
-}
-
-function createMockIndexPlayerHook(playerHookReturnValue) {
-  return jest.fn().mockReturnValue({
-    ...{ index: 0, isPlaying: false },
-    ...playerHookReturnValue,
-  });
-}
-
-function createMockAudioHook(audioReturnValue) {
-  return jest.fn().mockReturnValue(audioReturnValue);
+  return { useValuePlayer, useAudio, ...renderResult };
 }

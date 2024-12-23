@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import useIndexPlayer from "../../hooks/use-index-player/use-index-player";
+import { createValuePlayerHook } from "../../hooks/use-value-player/use-value-player";
 import useAudio from "../../hooks/use-audio/use-audio";
 import Box from "@mui/material/Box";
 import { shuffle } from "lodash";
@@ -10,7 +11,8 @@ import ActionButton from "../action-button/action-button";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { createWordPlayerHook } from "../../hooks/use-word-player/use-word-player";
 
-const useWordPlayer = createWordPlayerHook(useIndexPlayer, useAudio);
+const useValuePlayer = createValuePlayerHook(useIndexPlayer);
+const useWordPlayer = createWordPlayerHook(useValuePlayer, useAudio);
 
 export default function WordPlayer({
   setup = {},
