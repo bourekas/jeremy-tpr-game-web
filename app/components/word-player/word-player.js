@@ -11,10 +11,10 @@ export function createWordPlayerComponent(
 ) {
   return function WordPlayer({ onBackToSetup, ...props }) {
     const { word, audio, isPlaying, controls } = useWordPlayer(props);
-    const { play, pause, reset, previous, next } = controls;
+    const { play, pause, stop, previous, next } = controls;
 
     const handleBackToSetup = () => {
-      reset();
+      stop();
       onBackToSetup();
     };
 

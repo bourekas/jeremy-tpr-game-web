@@ -31,7 +31,7 @@ export default function useIndexPlayer({
     setIsPlaying(false);
   };
 
-  const reset = () => {
+  const stop = () => {
     cancelNextWord();
     setIsPlaying(false);
     setIndex(0);
@@ -57,6 +57,6 @@ export default function useIndexPlayer({
   return {
     index,
     isPlaying,
-    controls: { play, pause, reset, previous, next },
+    controls: { play, pause, previous, next, stop },
   };
 }

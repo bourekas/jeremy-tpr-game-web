@@ -98,13 +98,13 @@ it("switches to the next index at the specified time when calling play", () => {
   expect(result.current.index).toBe(1);
 });
 
-it("terminates and resets back to the start when calling reset callback", () => {
+it("stops and goes back to the start when calling stop", () => {
   const { result } = renderHook(() =>
     useIndexPlayer({ length: 2, displayTime: 3, initialIndex: 1 }),
   );
 
   expect(result.current.index).toBe(1);
-  act(() => result.current.controls.reset());
+  act(() => result.current.controls.stop());
   expect(result.current.index).toBe(0);
 
   // working as expected from the initial state
@@ -133,15 +133,15 @@ it("reschedules the next index when calling next callback", () => {
   expect(result.current.index).toBe(0);
 });
 
-it("unschedules the next index when calling reset callback", () => {
+it("unschedules the next index when calling stop", () => {
   const { result } = renderHook(() =>
     useIndexPlayer({ length: 2, displayTime: 3 }),
   );
 
   act(() => {
-    // calling play and immediately resetting to cancel the scheduling of the next index
+    // calling play and immediately stopping to cancel the scheduling of the next index
     result.current.controls.play();
-    result.current.controls.reset();
+    result.current.controls.stop();
   });
   act(() => jest.advanceTimersByTime(3000));
 

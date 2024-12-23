@@ -12,27 +12,26 @@ const words = [
   { word: "b", imageSrc: "b.webp", audioSrc: "b.mp3" },
 ];
 
-it("calls onBackToSetup when clicking back-to-setup button", async () => {
-  const { onBackToSetup, user } = renderWordPlayer();
+it("calls onBackToSetup when clicking back to setup button", async () => {
+  const { onBackToSetup, clickBackToSetupButton } = renderWordPlayer();
 
-  const backToSetupButton = screen.getByRole("button", {
-    name: "Back to setup menu",
-  });
-  await user.click(backToSetupButton);
-
+  await clickBackToSetupButton();
   expect(onBackToSetup).toHaveBeenCalled();
 });
 
 function renderWordPlayer(props = {}) {
   const onBackToSetup = jest.fn();
-  const Audio = jest.fn(() => ({ play: jest.fn(), pause: jest.fn() }));
-  const user = userEvent.setup({ delay: null });
+  const user = userEvent.setup();
+
+  const clickBackToSetupButton = () =>
+    user.click(screen.getByRole("button", "Back to setup menu"));
 
   const useWordPlayer = jest
     .fn()
-    .mockReturnValue({ word: {}, controls: { reset: jest.fn() } });
+    .mockReturnValue({ word: words[0], controls: { stop: jest.fn() } });
   const WordContent = jest.fn();
   const WordControls = jest.fn();
+
   const WordPlayer = createWordPlayerComponent(
     useWordPlayer,
     WordContent,
@@ -44,15 +43,16 @@ function renderWordPlayer(props = {}) {
       setup={setup}
       words={words}
       onBackToSetup={onBackToSetup}
-      Audio={Audio}
-      processWords={(words) => words}
       {...props}
     />,
   );
 
   return {
+    useWordPlayer,
+    WordContent,
+    WordControls,
     onBackToSetup,
-    Audio,
     user,
+    clickBackToSetupButton,
   };
 }
