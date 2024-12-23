@@ -29,11 +29,11 @@ it("returns false for isPlay by default when initializes", () => {
 it("switches to the next index when calling next callback", () => {
   const { result } = renderHook(() => useIndexPlayer({ length: 2 }));
 
-  act(() => result.current.next());
+  act(() => result.current.controls.next());
   expect(result.current.index).toBe(1);
 
   // continues back from the start
-  act(() => result.current.next());
+  act(() => result.current.controls.next());
   expect(result.current.index).toBe(0);
 });
 
@@ -46,7 +46,7 @@ it("does not automatically switch to next index when not playing", () => {
   act(() => jest.advanceTimersByTime(3000));
   expect(result.current.index).toBe(0);
 
-  act(() => result.current.next());
+  act(() => result.current.controls.next());
 
   expect(result.current.index).toBe(1);
   act(() => jest.advanceTimersByTime(3000));
@@ -58,7 +58,7 @@ it("returns true for isPlaying when calling play callback", () => {
     useIndexPlayer({ length: 2, displayTime: 3 }),
   );
 
-  act(() => result.current.play());
+  act(() => result.current.controls.play());
   expect(result.current.isPlaying).toBe(true);
 });
 
@@ -69,7 +69,7 @@ it("continues playing from the middle when calling play", () => {
 
   expect(result.current.index).toBe(1);
 
-  act(() => result.current.play());
+  act(() => result.current.controls.play());
   act(() => jest.advanceTimersByTime(3000));
   expect(result.current.index).toBe(0);
 });
@@ -79,7 +79,7 @@ it("does not switch to the next index before the specified time when calling pla
     useIndexPlayer({ length: 2, displayTime: 3 }),
   );
 
-  act(() => result.current.play());
+  act(() => result.current.controls.play());
 
   expect(result.current.index).toBe(0);
   act(() => jest.advanceTimersByTime(2999));
@@ -91,7 +91,7 @@ it("switches to the next index at the specified time when calling play", () => {
     useIndexPlayer({ length: 2, displayTime: 3 }),
   );
 
-  act(() => result.current.play());
+  act(() => result.current.controls.play());
   expect(result.current.index).toBe(0);
 
   act(() => jest.advanceTimersByTime(3000));
@@ -104,11 +104,11 @@ it("terminates and resets back to the start when calling reset callback", () => 
   );
 
   expect(result.current.index).toBe(1);
-  act(() => result.current.reset());
+  act(() => result.current.controls.reset());
   expect(result.current.index).toBe(0);
 
   // working as expected from the initial state
-  act(() => result.current.next());
+  act(() => result.current.controls.next());
   expect(result.current.index).toBe(1);
 });
 
@@ -117,11 +117,11 @@ it("reschedules the next index when calling next callback", () => {
     useIndexPlayer({ length: 2, displayTime: 3 }),
   );
 
-  act(() => result.current.play());
+  act(() => result.current.controls.play());
   act(() => jest.advanceTimersByTime(2999));
 
   // manually going to the next index just before scheduling is due
-  act(() => result.current.next());
+  act(() => result.current.controls.next());
   expect(result.current.index).toBe(1);
 
   // still at the same index due to canceling of the previous scheduling
@@ -140,8 +140,8 @@ it("unschedules the next index when calling reset callback", () => {
 
   act(() => {
     // calling play and immediately resetting to cancel the scheduling of the next index
-    result.current.play();
-    result.current.reset();
+    result.current.controls.play();
+    result.current.controls.reset();
   });
   act(() => jest.advanceTimersByTime(3000));
 
@@ -153,11 +153,11 @@ it("returns false for isPlaying and cancels index scheduling when calling pause"
     useIndexPlayer({ length: 2, displayTime: 3 }),
   );
 
-  act(() => result.current.play());
+  act(() => result.current.controls.play());
   expect(result.current.index).toBe(0);
   expect(result.current.isPlaying).toBe(true);
 
-  act(() => result.current.pause());
+  act(() => result.current.controls.pause());
   expect(result.current.isPlaying).toBe(false);
 
   act(() => jest.advanceTimersByTime(3000));
@@ -170,7 +170,7 @@ it("schedules indexes with the new display time when display time changes", () =
     { initialProps: { displayTime: 3 } },
   );
 
-  act(() => result.current.play());
+  act(() => result.current.controls.play());
 
   rerender({ displayTime: 5 });
   act(() => jest.advanceTimersByTime(3000));
@@ -190,12 +190,12 @@ it("goes back to previous index when calling previous", () => {
   const { result } = renderHook(() => useIndexPlayer({ length: 2 }));
   expect(result.current.index).toBe(0);
 
-  act(() => result.current.next());
+  act(() => result.current.controls.next());
   expect(result.current.index).toBe(1);
 
-  act(() => result.current.previous());
+  act(() => result.current.controls.previous());
   expect(result.current.index).toBe(0);
 
-  act(() => result.current.previous());
+  act(() => result.current.controls.previous());
   expect(result.current.index).toBe(1);
 });

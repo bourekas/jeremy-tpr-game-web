@@ -55,9 +55,11 @@ it("returns the controls returned from useIndexPlayer", () => {
   const reset = jest.fn();
   const controls = { play, pause, previous, next, reset };
 
-  const { result } = renderWordPlayerHook({ playerHookReturnValue: controls });
+  const { result } = renderWordPlayerHook({
+    playerHookReturnValue: { controls },
+  });
 
-  expect(result.current).toEqual(expect.objectContaining(controls));
+  expect(result.current).toHaveProperty("controls", controls);
 });
 
 it("returns isPlaying value returned from useIndexPlayer", () => {

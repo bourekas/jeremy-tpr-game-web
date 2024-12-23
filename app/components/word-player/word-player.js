@@ -25,13 +25,17 @@ export default function WordPlayer({
     () => processWords(words),
     [words, processWords],
   );
-  const { word, audio, isPlaying, play, pause, reset, previous, next } =
-    useWordPlayer({
-      words: processedWords,
-      setup,
-      initialIsPlaying,
-      initialWordIndex,
-    });
+  const {
+    word,
+    audio,
+    isPlaying,
+    controls: { play, pause, reset, previous, next },
+  } = useWordPlayer({
+    words: processedWords,
+    setup,
+    initialIsPlaying,
+    initialWordIndex,
+  });
 
   const handleBackToSetup = () => {
     reset();

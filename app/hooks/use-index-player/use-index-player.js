@@ -54,5 +54,9 @@ export default function useIndexPlayer({
     setIndex((i) => (i + 1) % length);
   };
 
-  return { index, isPlaying, play, pause, reset, previous, next };
+  return {
+    index,
+    isPlaying,
+    controls: { play, pause, reset, previous, next },
+  };
 }
