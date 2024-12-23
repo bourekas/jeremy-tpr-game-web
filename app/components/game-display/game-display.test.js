@@ -1,6 +1,6 @@
 import { act } from "react";
 import { render, screen } from "@testing-library/react";
-import GameDisplay from "./game-display";
+import { createGameDisplayComponent } from "./game-display";
 
 it("initially renders setup by default", () => {
   renderTprGame();
@@ -14,26 +14,26 @@ it("renders setup when initialIsGameStarted is false", () => {
   expect(screen.getByTestId("setup")).toBeInTheDocument();
 });
 
-it("calls renderSetup with the default setup by default", () => {
-  const { renderSetup } = renderTprGame();
+it("calls Setup with the default setup by default", () => {
+  const { Setup } = renderTprGame();
   const defaultSetup = { displayTime: 5, isAutoPlayAudio: true };
 
-  expect(renderSetup).toHaveBeenCalledWith(
-    defaultSetup,
-    expect.any(Function),
-    expect.any(Function),
-  );
+  expect(Setup.mock.lastCall[0]).toEqual({
+    setup: defaultSetup,
+    onSetupChange: expect.any(Function),
+    onStart: expect.any(Function),
+  });
 });
 
-it("calls renderSetup with the given initialSetup", () => {
+it("calls Setup with the given initialSetup", () => {
   const initialSetup = { displayTime: 9, isAutoPlayAudio: false };
-  const { renderSetup } = renderTprGame({ initialSetup });
+  const { Setup } = renderTprGame({ initialSetup });
 
-  expect(renderSetup).toHaveBeenCalledWith(
-    initialSetup,
-    expect.any(Function),
-    expect.any(Function),
-  );
+  expect(Setup.mock.lastCall[0]).toEqual({
+    setup: initialSetup,
+    onSetupChange: expect.any(Function),
+    onStart: expect.any(Function),
+  });
 });
 
 it("renders words when initialIsGameStarted is true", () => {
@@ -42,73 +42,71 @@ it("renders words when initialIsGameStarted is true", () => {
   expect(screen.getByTestId("words")).toBeInTheDocument();
 });
 
-it("calls renderWords with the given words and initialSetup", () => {
+it("calls Words with the given words and initialSetup", () => {
   const words = [{ word: "a", imageSrc: "a.webp", audioSrc: "a.mp3" }];
   const initialSetup = { displayTime: 9, isAutoPlayAudio: false };
 
-  const { renderWords } = renderTprGame({
+  const { Words } = renderTprGame({
     initialIsGameStarted: true,
     words,
     initialSetup,
   });
 
-  expect(renderWords).toHaveBeenCalledWith(
-    initialSetup,
+  expect(Words.mock.lastCall[0]).toEqual({
+    setup: initialSetup,
     words,
-    expect.any(Function),
-  );
+    onBackToSetup: expect.any(Function),
+  });
 });
 
-it("calls renderWords when calling onStart", () => {
-  const { renderSetup } = renderTprGame();
+it("calls Words when calling onStart", () => {
+  const { Setup } = renderTprGame();
 
   act(() => {
-    const onStart = renderSetup.mock.lastCall[2];
+    const { onStart } = Setup.mock.lastCall[0];
     onStart();
   });
 
   expect(screen.getByTestId("words")).toBeInTheDocument();
 });
 
-it("calls renderSetup when calling onBackToSetup", () => {
-  const { renderWords } = renderTprGame({ initialIsGameStarted: true });
+it("calls Setup when calling onBackToSetup", () => {
+  const { Words } = renderTprGame({ initialIsGameStarted: true });
 
   act(() => {
-    const onBackToSetup = renderWords.mock.lastCall[2];
+    const { onBackToSetup } = Words.mock.lastCall[0];
     onBackToSetup();
   });
 
   expect(screen.getByTestId("setup")).toBeInTheDocument();
 });
 
-it("calls renderWords with updated setup when calling onSetupChange", () => {
+it("calls Words with updated setup when calling onSetupChange", () => {
   const initialSetup = { displayTime: 3, isAutoPlayAudio: false };
   const updatedSetup = { displayTime: 4, isAutoPlayAudio: true };
 
-  const { renderSetup, renderWords } = renderTprGame({ initialSetup });
+  const { Setup, Words } = renderTprGame({
+    initialSetup,
+  });
 
   act(() => {
-    const [, onSetupChange, onStart] = renderSetup.mock.lastCall;
+    const { onSetupChange, onStart } = Setup.mock.lastCall[0];
     onSetupChange(updatedSetup);
     onStart();
   });
 
-  const renderWordsSetup = renderWords.mock.lastCall[0];
-  expect(renderWordsSetup).toEqual(updatedSetup);
+  const { setup: wordsSetup } = Words.mock.lastCall[0];
+  expect(wordsSetup).toEqual(updatedSetup);
 });
 
 // render with mocked dependencies
 function renderTprGame(props) {
-  const renderSetup = jest.fn().mockReturnValue(<div data-testid="setup" />);
-  const renderWords = jest.fn().mockReturnValue(<div data-testid="words" />);
+  const Setup = jest.fn().mockReturnValue(<div data-testid="setup" />);
+  const Words = jest.fn().mockReturnValue(<div data-testid="words" />);
 
-  render(
-    <GameDisplay
-      renderSetup={renderSetup}
-      renderWords={renderWords}
-      {...props}
-    />,
-  );
+  const GameDisplay = createGameDisplayComponent(Setup, Words);
 
-  return { renderSetup, renderWords };
+  render(<GameDisplay {...props} />);
+
+  return { Setup, Words };
 }

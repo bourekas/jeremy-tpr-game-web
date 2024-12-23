@@ -4,19 +4,21 @@ import { useState } from "react";
 
 const defaultSetup = { displayTime: 5, isAutoPlayAudio: true };
 
-export default function GameDisplay({
-  words,
-  initialIsGameStarted = false,
-  initialSetup = defaultSetup,
-  renderSetup,
-  renderWords,
-}) {
-  const [isGameStarted, setIsGameStarted] = useState(initialIsGameStarted);
-  const [setup, setSetup] = useState(initialSetup);
-  const handleStart = () => setIsGameStarted(true);
-  const handleBackToSetup = () => setIsGameStarted(false);
+export function createGameDisplayComponent(Setup, Words) {
+  return function GameDisplay({
+    words,
+    initialIsGameStarted = false,
+    initialSetup = defaultSetup,
+  }) {
+    const [isGameStarted, setIsGameStarted] = useState(initialIsGameStarted);
+    const [setup, setSetup] = useState(initialSetup);
+    const handleStart = () => setIsGameStarted(true);
+    const handleBackToSetup = () => setIsGameStarted(false);
 
-  return isGameStarted
-    ? renderWords(setup, words, handleBackToSetup)
-    : renderSetup(setup, setSetup, handleStart);
+    return isGameStarted ? (
+      <Words setup={setup} words={words} onBackToSetup={handleBackToSetup} />
+    ) : (
+      <Setup setup={setup} onSetupChange={setSetup} onStart={handleStart} />
+    );
+  };
 }

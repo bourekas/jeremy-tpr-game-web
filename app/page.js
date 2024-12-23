@@ -1,7 +1,6 @@
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
-import GameDisplay from "./components/game-display/game-display";
-import { renderSetup, renderWords } from "./renders";
+import { GameDisplay } from "./composition";
 
 const words = [
   "לָגַעַת",
@@ -24,11 +23,7 @@ export default function Home() {
   return (
     <PageWrapper>
       <GamePanel>
-        <GameDisplay
-          words={words}
-          renderSetup={renderSetup}
-          renderWords={renderWords}
-        />
+        <GameDisplay words={words} />
       </GamePanel>
     </PageWrapper>
   );
