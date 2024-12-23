@@ -2,7 +2,7 @@ export function createWordPlayerHook(useValuePlayer, useAudio) {
   return function useWordPlayer({
     words,
     setup,
-    initialIsPlaying,
+    initialIsPlaying = true,
     initialWordIndex,
   }) {
     const {
