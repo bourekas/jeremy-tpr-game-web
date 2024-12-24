@@ -28,6 +28,7 @@ function TprImage({ word, src }) {
       <Image
         src={src || "placeholder.svg"}
         alt={`Total Physical Response for the word '${word}'`}
+        sizes="525px"
         fill
         priority
       />
