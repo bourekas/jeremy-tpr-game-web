@@ -1,6 +1,7 @@
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import { GameDisplay } from "./composition";
+import { SetupProvider } from "./contexts/setup/setup";
 
 const words = [
   "לָגַעַת",
@@ -23,7 +24,9 @@ export default function Home() {
   return (
     <PageWrapper>
       <GamePanel>
-        <GameDisplay words={words} />
+        <SetupProvider>
+          <GameDisplay words={words} />
+        </SetupProvider>
       </GamePanel>
     </PageWrapper>
   );
