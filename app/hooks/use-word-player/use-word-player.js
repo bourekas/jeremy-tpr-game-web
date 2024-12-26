@@ -1,10 +1,11 @@
-export function createWordPlayerHook(useValuePlayer, useAudio) {
+export function createWordPlayerHook({ useSetup, useValuePlayer, useAudio }) {
   return function useWordPlayer({
     words,
-    setup,
     initialIsPlaying = true,
     initialWordIndex,
   }) {
+    const setup = useSetup();
+
     const {
       value: word,
       isPlaying,
@@ -15,6 +16,7 @@ export function createWordPlayerHook(useValuePlayer, useAudio) {
       initialIsPlaying,
       initialValueIndex: initialWordIndex,
     });
+
     const audio = useAudio(word.audioSrc, setup.isAutoPlayAudio);
 
     return { word, audio, isPlaying, controls };

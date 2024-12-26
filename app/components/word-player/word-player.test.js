@@ -3,10 +3,6 @@ import { render, screen } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import { createWordPlayerComponent } from "./word-player";
 
-const setup = {
-  displayTime: 3,
-};
-
 const words = [
   { word: "a", imageSrc: "a.webp", audioSrc: "a.mp3" },
   { word: "b", imageSrc: "b.webp", audioSrc: "b.mp3" },
@@ -31,7 +27,6 @@ it("calls stop control when clicking back to setup button", async () => {
 
 it("forwards all props except onBackToSetup to useWordPlayer", () => {
   const propsExceptOnBackToSetup = {
-    setup,
     words,
     initialIsPlaying: true,
     initialWordIndex: 1,
@@ -205,14 +200,7 @@ function renderWordPlayer(props = {}) {
     WordControls,
   );
 
-  render(
-    <WordPlayer
-      setup={setup}
-      words={words}
-      onBackToSetup={onBackToSetup}
-      {...props}
-    />,
-  );
+  render(<WordPlayer words={words} onBackToSetup={onBackToSetup} {...props} />);
 
   return {
     useWordPlayer,

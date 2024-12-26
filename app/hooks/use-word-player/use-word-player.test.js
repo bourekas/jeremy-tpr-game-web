@@ -7,20 +7,28 @@ const words = [
 ];
 const setup = { displayTime: 4, isAutoPlayAudio: true };
 
+it("forwards the displayTime returned from useSetup to useValuePlayer", () => {
+  const { useValuePlayer } = renderWordPlayerHook();
+
+  expect(useValuePlayer).toHaveBeenCalledWith(
+    expect.objectContaining({ displayTime: setup.displayTime }),
+  );
+});
+
+it("forwards the isAutoPlayAudio returned from useSetup to useAudio", () => {
+  const { useAudio } = renderWordPlayerHook();
+
+  expect(useAudio).toHaveBeenCalledWith(
+    expect.anything(),
+    setup.isAutoPlayAudio,
+  );
+});
+
 it("forwards words prop as values prop to useValuePlayer", () => {
   const { useValuePlayer } = renderWordPlayerHook({ words });
 
   expect(useValuePlayer).toHaveBeenCalledWith(
     expect.objectContaining({ values: words }),
-  );
-});
-
-it("forwards displayTime property of setup prop to useValuePlayer", () => {
-  const displayTime = 10;
-  const { useValuePlayer } = renderWordPlayerHook({ setup: { displayTime } });
-
-  expect(useValuePlayer).toHaveBeenCalledWith(
-    expect.objectContaining({ displayTime }),
   );
 });
 
@@ -81,13 +89,6 @@ it("forwards the word audio source returned from useValuePlayer to useAudio", ()
   expect(useAudio).toHaveBeenCalledWith(audioSrc, expect.anything());
 });
 
-it("forwards the isAutoPlayAudio prop from setup as isAutoPlay prop to useAudio", () => {
-  const isAutoPlayAudio = true;
-  const { useAudio } = renderWordPlayerHook({ setup: { isAutoPlayAudio } });
-
-  expect(useAudio).toHaveBeenCalledWith(expect.anything(), isAutoPlayAudio);
-});
-
 it("returns the audio returned from useAudio", () => {
   const audioReturnValue = new Audio("a.mp3");
 
@@ -97,15 +98,18 @@ it("returns the audio returned from useAudio", () => {
 });
 
 function renderWordPlayerHook(props = {}) {
+  const useSetup = jest.fn().mockReturnValue(setup);
   const useValuePlayer = jest
     .fn()
     .mockReturnValue({ value: words[0], ...props.valuePlayerHookReturnValue });
   const useAudio = jest.fn().mockReturnValue(props.audioReturnValue);
-  const useWordPlayer = createWordPlayerHook(useValuePlayer, useAudio);
+  const useWordPlayer = createWordPlayerHook({
+    useSetup,
+    useValuePlayer,
+    useAudio,
+  });
 
-  const renderResult = renderHook(() =>
-    useWordPlayer({ words, setup, ...props }),
-  );
+  const renderResult = renderHook(() => useWordPlayer({ words, ...props }));
 
   return { useValuePlayer, useAudio, ...renderResult };
 }
