@@ -42,18 +42,15 @@ it("renders words when initialIsGameStarted is true", () => {
   expect(screen.getByTestId("words")).toBeInTheDocument();
 });
 
-it("calls Words with the given words and initialSetup", () => {
+it("calls Words with the given words", () => {
   const words = [{ word: "a", imageSrc: "a.webp", audioSrc: "a.mp3" }];
-  const initialSetup = { displayTime: 9, isAutoPlayAudio: false };
 
   const { Words } = renderTprGame({
     initialIsGameStarted: true,
     words,
-    initialSetup,
   });
 
   expect(Words.mock.lastCall[0]).toEqual({
-    setup: initialSetup,
     words,
     onBackToSetup: expect.any(Function),
   });
@@ -79,24 +76,6 @@ it("calls Setup when calling onBackToSetup", () => {
   });
 
   expect(screen.getByTestId("setup")).toBeInTheDocument();
-});
-
-it("calls Words with updated setup when calling onSetupChange", () => {
-  const initialSetup = { displayTime: 3, isAutoPlayAudio: false };
-  const updatedSetup = { displayTime: 4, isAutoPlayAudio: true };
-
-  const { Setup, Words } = renderTprGame({
-    initialSetup,
-  });
-
-  act(() => {
-    const { onSetupChange, onStart } = Setup.mock.lastCall[0];
-    onSetupChange(updatedSetup);
-    onStart();
-  });
-
-  const { setup: wordsSetup } = Words.mock.lastCall[0];
-  expect(wordsSetup).toEqual(updatedSetup);
 });
 
 // render with mocked dependencies

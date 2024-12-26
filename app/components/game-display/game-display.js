@@ -16,7 +16,7 @@ export function createGameDisplayComponent(Setup, Words) {
     const handleBackToSetup = () => setIsGameStarted(false);
 
     return isGameStarted ? (
-      <Words setup={setup} words={words} onBackToSetup={handleBackToSetup} />
+      <Words words={words} onBackToSetup={handleBackToSetup} />
     ) : (
       <Setup setup={setup} onSetupChange={setSetup} onStart={handleStart} />
     );
