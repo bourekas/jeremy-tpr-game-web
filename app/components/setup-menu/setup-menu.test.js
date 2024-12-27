@@ -1,32 +1,37 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import SetupMenu from "./setup-menu";
+import {
+  SetupContext,
+  SetupChangeContext,
+  defaultSetup,
+} from "@/app/contexts/setup/setup";
 
 describe("TPR Game Setup heading", () => {
   const getGameSetupHeading = (level) =>
     screen.getByRole("heading", { name: "TPR Game Setup", level });
 
   it("renders with level 1 heading by default", () => {
-    render(<SetupMenu />);
+    renderSetupMenu();
     expect(getGameSetupHeading(1)).toBeInTheDocument();
   });
 
   it("renders with specified heading level", () => {
-    render(<SetupMenu headingLevel={3} />);
+    renderSetupMenu({ headingLevel: 3 });
     expect(getGameSetupHeading(3)).toBeInTheDocument();
   });
 });
 
 describe("display time option", () => {
   it("renders slider with the initial display time value", () => {
-    render(<SetupMenu setup={{ displayTime: 3 }} />);
+    renderSetupMenu({ setup: { displayTime: 3 } });
     const slider = getDisplayTimeSlider();
 
     expect(slider).toHaveValue("3");
   });
 
   it("does not increment slider value above max value", () => {
-    render(<SetupMenu setup={{ displayTime: 10 }} />);
+    renderSetupMenu({ setup: { displayTime: 10 } });
     const slider = getDisplayTimeSlider();
 
     incrementDisplayTimeSlider(slider);
@@ -35,7 +40,7 @@ describe("display time option", () => {
   });
 
   it("does not decrement slider value below min value", () => {
-    render(<SetupMenu setup={{ displayTime: 1 }} />);
+    renderSetupMenu({ setup: { displayTime: 1 } });
     const slider = getDisplayTimeSlider();
 
     decrementDisplayTimeSlider(slider);
@@ -44,10 +49,9 @@ describe("display time option", () => {
   });
 
   it("renders the latest display time value text", async () => {
-    const onSetupChange = jest.fn();
-    render(
-      <SetupMenu setup={{ displayTime: 5 }} onSetupChange={onSetupChange} />,
-    );
+    const { onSetupChange } = renderSetupMenu({
+      setup: { displayTime: 5 },
+    });
 
     expect(
       screen.getByText("Display time for each word: 5 second(s)"),
@@ -60,36 +64,30 @@ describe("display time option", () => {
 
 describe("auto-play audio option", () => {
   it("renders switch button", () => {
-    render(<SetupMenu />);
+    renderSetupMenu();
     const checkbox = screen.getByRole("checkbox", { name: "Auto-Play Audio" });
 
     expect(checkbox).toBeInTheDocument();
   });
 
   it("is enabled when isAutoPlayAudio is true", () => {
-    render(<SetupMenu setup={{ isAutoPlayAudio: true }} />);
+    renderSetupMenu({ setup: { isAutoPlayAudio: true } });
     const checkbox = screen.getByRole("checkbox", { name: "Auto-Play Audio" });
 
     expect(checkbox).toBeChecked();
   });
 
   it("is disabled when isAutoPlayAudio is false", () => {
-    render(<SetupMenu setup={{ isAutoPlayAudio: false }} />);
+    renderSetupMenu({ setup: { isAutoPlayAudio: false } });
     const checkbox = screen.getByRole("checkbox", { name: "Auto-Play Audio" });
 
     expect(checkbox).not.toBeChecked();
   });
 
   it("calls onSetupChange with isAutoPlayAudio false when disabling auto audio", async () => {
-    const user = userEvent.setup();
-    const onSetupChange = jest.fn();
-
-    render(
-      <SetupMenu
-        setup={{ isAutoPlayAudio: true }}
-        onSetupChange={onSetupChange}
-      />,
-    );
+    const { user, onSetupChange } = renderSetupMenu({
+      setup: { isAutoPlayAudio: true },
+    });
 
     const checkbox = screen.getByRole("checkbox", { name: "Auto-Play Audio" });
     await user.click(checkbox);
@@ -98,15 +96,9 @@ describe("auto-play audio option", () => {
   });
 
   it("calls onSetupChange with isAutoPlayAudio true when enabling auto audio", async () => {
-    const user = userEvent.setup();
-    const onSetupChange = jest.fn();
-
-    render(
-      <SetupMenu
-        setup={{ isAutoPlayAudio: false }}
-        onSetupChange={onSetupChange}
-      />,
-    );
+    const { user, onSetupChange } = renderSetupMenu({
+      setup: { isAutoPlayAudio: false },
+    });
 
     const checkbox = screen.getByRole("checkbox", { name: "Auto-Play Audio" });
     await user.click(checkbox);
@@ -116,10 +108,7 @@ describe("auto-play audio option", () => {
 });
 
 it("calls start callback when start button is clicked", async () => {
-  const user = userEvent.setup();
-  const onStart = jest.fn();
-
-  render(<SetupMenu setup={{ displayTime: 5 }} onStart={onStart} />);
+  const { user, onStart } = renderSetupMenu({ setup: { displayTime: 5 } });
 
   const startButton = screen.getByRole("button", { name: "Start" });
   await user.click(startButton);
@@ -143,4 +132,20 @@ function changeDisplayTimeSlider(slider = getDisplayTimeSlider(), increment) {
 
 function getDisplayTimeSlider() {
   return screen.getByRole("slider", { name: "Display time" });
+}
+
+function renderSetupMenu(props = {}) {
+  const user = userEvent.setup();
+  const onSetupChange = jest.fn();
+  const onStart = jest.fn();
+
+  render(
+    <SetupContext.Provider value={props.setup || defaultSetup}>
+      <SetupChangeContext.Provider value={onSetupChange}>
+        <SetupMenu onStart={onStart} {...props} />
+      </SetupChangeContext.Provider>
+    </SetupContext.Provider>,
+  );
+
+  return { user, onSetupChange, onStart };
 }

@@ -2,9 +2,9 @@
 
 import { createContext, useContext, useState } from "react";
 
-const defaultSetup = { displayTime: 5, isAutoPlayAudio: true };
-const SetupContext = createContext(defaultSetup);
-const SetupChangeContext = createContext(null);
+export const defaultSetup = { displayTime: 5, isAutoPlayAudio: true };
+export const SetupContext = createContext(defaultSetup);
+export const SetupChangeContext = createContext(null);
 
 export function SetupProvider({ initialSetup = defaultSetup, children }) {
   const [setup, setSetup] = useState(initialSetup);

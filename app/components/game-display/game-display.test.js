@@ -19,8 +19,6 @@ it("calls Setup with the default setup by default", () => {
   const defaultSetup = { displayTime: 5, isAutoPlayAudio: true };
 
   expect(Setup.mock.lastCall[0]).toEqual({
-    setup: defaultSetup,
-    onSetupChange: expect.any(Function),
     onStart: expect.any(Function),
   });
 });
@@ -30,8 +28,6 @@ it("calls Setup with the given initialSetup", () => {
   const { Setup } = renderTprGame({ initialSetup });
 
   expect(Setup.mock.lastCall[0]).toEqual({
-    setup: initialSetup,
-    onSetupChange: expect.any(Function),
     onStart: expect.any(Function),
   });
 });

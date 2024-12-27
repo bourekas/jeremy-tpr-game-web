@@ -6,13 +6,11 @@ import Slider from "@mui/material/Slider";
 import Button from "@mui/material/Button";
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import { useSetup, useSetupChange } from "@/app/contexts/setup/setup";
 
-export default function SetupMenu({
-  setup = {},
-  headingLevel = 1,
-  onSetupChange,
-  onStart,
-}) {
+export default function SetupMenu({ headingLevel = 1, onStart }) {
+  const setup = useSetup();
+  const onSetupChange = useSetupChange();
   const setupChange = (key) => (val) => onSetupChange({ ...setup, [key]: val });
   const handleDisplayTimeChange = setupChange("displayTime");
   const handleAutoPlayAudioChange = setupChange("isAutoPlayAudio");
