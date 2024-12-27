@@ -6,8 +6,8 @@ const defaultSetup = { displayTime: 5, isAutoPlayAudio: true };
 const SetupContext = createContext(defaultSetup);
 const SetupChangeContext = createContext(null);
 
-export function SetupProvider({ children }) {
-  const [setup, setSetup] = useState(defaultSetup);
+export function SetupProvider({ initialSetup = defaultSetup, children }) {
+  const [setup, setSetup] = useState(initialSetup);
 
   return (
     <SetupContext.Provider value={setup}>
