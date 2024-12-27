@@ -12,10 +12,10 @@ export default function WordContent() {
   } = useContext(WordPlaybackContext);
 
   return (
-    <>
+    <div key={word}>
       <TprImage word={word} src={imageSrc} />
       <WordText>{word}</WordText>
-    </>
+    </div>
   );
 }
 
