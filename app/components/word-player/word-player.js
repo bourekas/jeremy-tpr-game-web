@@ -7,8 +7,8 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { GameDisplayContext } from "@/app/contexts/game-display";
 import { WordPlaybackContext } from "@/app/contexts/word-playback";
 
-export function createWordPlayerComponent(useWordPlayer, WordContent) {
-  return function WordPlayer({ controls: controlsElement, ...props }) {
+export function createWordPlayerComponent(useWordPlayer) {
+  return function WordPlayer({ content, controls: controlsElement, ...props }) {
     const { onBackToSetup } = useContext(GameDisplayContext);
     const { word, audio, isPlaying, controls } = useWordPlayer(props);
     const { play, pause, stop, previous, next } = controls;
@@ -30,15 +30,13 @@ export function createWordPlayerComponent(useWordPlayer, WordContent) {
     };
 
     return (
-      <WordPlaybackContext.Provider value={{ isPlaying, controlHandlers }}>
+      <WordPlaybackContext.Provider
+        value={{ word, isPlaying, controlHandlers }}
+      >
         <Box sx={{ mb: { xs: 0.5, sm: 1 } }}>
           <BackToSetupButton onClick={handleBackToSetup} />
         </Box>
-        <WordContent
-          key={word.word}
-          word={word.word}
-          imageSrc={word.imageSrc}
-        />
+        {content}
         <Box sx={{ mb: 1 }}>{controlsElement}</Box>
       </WordPlaybackContext.Provider>
     );

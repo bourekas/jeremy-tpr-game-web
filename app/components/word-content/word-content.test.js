@@ -1,8 +1,9 @@
 import { render, screen } from "@testing-library/react";
 import WordContent from "./word-content";
+import { WordPlaybackContext } from "@/app/contexts/word-playback";
 
 it("renders the TPR image", () => {
-  render(<WordContent word="לגעת" imageSrc="/word/to-touch.jpg" />);
+  renderWordContent();
 
   const image = screen.getByRole("img", {
     name: "Total Physical Response for the word 'לגעת'",
@@ -12,9 +13,19 @@ it("renders the TPR image", () => {
 });
 
 it("renders the word text as level 1 heading", () => {
-  render(<WordContent word="לגעת" />);
+  renderWordContent();
 
   expect(
     screen.getByRole("heading", { name: "לגעת", level: 1 }),
   ).toBeInTheDocument();
 });
+
+function renderWordContent() {
+  render(
+    <WordPlaybackContext.Provider
+      value={{ word: { word: "לגעת", imageSrc: "/word/to-touch.jpg" } }}
+    >
+      <WordContent />
+    </WordPlaybackContext.Provider>,
+  );
+}

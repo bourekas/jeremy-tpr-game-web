@@ -1,8 +1,16 @@
+"use client";
+
+import { useContext } from "react";
 import Box from "@mui/material/Box";
 import Image from "next/image";
 import Typogrophy from "@mui/material/Typography";
+import { WordPlaybackContext } from "@/app/contexts/word-playback";
 
-export default function WordContent({ word, imageSrc }) {
+export default function WordContent() {
+  const {
+    word: { word, imageSrc },
+  } = useContext(WordPlaybackContext);
+
   return (
     <>
       <TprImage word={word} src={imageSrc} />

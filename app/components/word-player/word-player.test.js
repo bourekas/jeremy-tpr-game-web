@@ -38,14 +38,19 @@ it("forwards all props except onBackToSetup to useWordPlayer", () => {
   expect(useWordPlayer).toHaveBeenCalledWith(propsExceptOnBackToSetup);
 });
 
-it("forwards the returned word from useWordPlayer to WordContent", () => {
-  const word = words[0].word;
-  const imageSrc = words[0].imageSrc;
-  const { WordContent } = renderWordPlayer();
+it("provides the returned word prop from useWordPlayer", () => {
+  let providedWord;
 
-  expect(WordContent.mock.lastCall[0]).toEqual(
-    expect.objectContaining({ word, imageSrc }),
-  );
+  const WordContent = jest.fn(() => {
+    const result = useContext(WordPlaybackContext);
+    providedWord = result.word;
+  });
+
+  const {
+    wordPlayerHookReturnValue: { word },
+  } = renderWordPlayer({ WordContent });
+
+  expect(providedWord).toEqual(word);
 });
 
 it("provides the returned isPlaying prop from useWordPlayer", () => {
@@ -177,6 +182,12 @@ it("provides onStop which calls the returned stop control from useWordPlayer and
   expect(onBackToSetup).toHaveBeenCalled();
 });
 
+it("renders the given content element", () => {
+  renderWordPlayer();
+
+  expect(screen.getByTestId("content")).toBeInTheDocument();
+});
+
 it("renders the given controls element", () => {
   renderWordPlayer();
 
@@ -206,20 +217,23 @@ function renderWordPlayer(props = {}) {
   };
   const useWordPlayer = jest.fn().mockReturnValue(wordPlayerHookReturnValue);
 
-  const WordContent = props.WebContent || jest.fn();
+  const WordContent =
+    props.WordContent ||
+    jest.fn().mockReturnValue(<div data-testid="content" />);
   const WordControls =
     props.WordControls ||
     jest.fn().mockReturnValue(<div data-testid="controls" />);
 
-  const WordPlayer = createWordPlayerComponent(
-    useWordPlayer,
-    WordContent,
-    WordControls,
-  );
+  const WordPlayer = createWordPlayerComponent(useWordPlayer);
 
   render(
     <GameDisplayContext.Provider value={{ onBackToSetup }}>
-      <WordPlayer words={words} controls={<WordControls />} {...props} />
+      <WordPlayer
+        words={words}
+        content={<WordContent />}
+        controls={<WordControls />}
+        {...props}
+      />
     </GameDisplayContext.Provider>,
   );
 
