@@ -1,6 +1,8 @@
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
-import { GameDisplay } from "./composition";
+import { WordPlayer } from "./composition";
+import SetupMenu from "./components/setup-menu/setup-menu";
+import GameDisplay from "./components/game-display/game-display";
 import { SetupProvider } from "./contexts/setup/setup";
 
 const words = [
@@ -25,7 +27,10 @@ export default function Home() {
     <PageWrapper>
       <GamePanel>
         <SetupProvider>
-          <GameDisplay words={words} />
+          <GameDisplay
+            setup={<SetupMenu />}
+            words={<WordPlayer words={words} />}
+          />
         </SetupProvider>
       </GamePanel>
     </PageWrapper>

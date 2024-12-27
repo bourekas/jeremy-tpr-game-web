@@ -1,6 +1,6 @@
 import { act, useContext } from "react";
 import { render, screen } from "@testing-library/react";
-import { createGameDisplayComponent } from "./game-display";
+import GameDisplay from "./game-display";
 import { GameDisplayContext } from "@/app/contexts/game-display";
 
 it("initially renders setup by default", () => {
@@ -19,17 +19,6 @@ it("renders words when initialIsGameStarted is true", () => {
   renderGameDisplay({ initialIsGameStarted: true });
 
   expect(screen.getByTestId("words")).toBeInTheDocument();
-});
-
-it("calls Words with the given words", () => {
-  const words = [{ word: "a", imageSrc: "a.webp", audioSrc: "a.mp3" }];
-
-  const { Words } = renderGameDisplay({
-    initialIsGameStarted: true,
-    words,
-  });
-
-  expect(Words.mock.lastCall[0]).toEqual({ words });
 });
 
 it("provides the onBackToSetup callback", () => {
@@ -67,9 +56,7 @@ function renderGameDisplay(props = {}) {
   const Words =
     props.Words || jest.fn().mockReturnValue(<div data-testid="words" />);
 
-  const GameDisplay = createGameDisplayComponent(Setup, Words);
-
-  render(<GameDisplay {...props} />);
+  render(<GameDisplay setup={<Setup />} words={<Words />} {...props} />);
 
   return { Setup, Words };
 }
