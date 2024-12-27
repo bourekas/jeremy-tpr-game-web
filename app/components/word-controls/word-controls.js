@@ -1,3 +1,6 @@
+"use client";
+
+import { useContext } from "react";
 import Box from "@mui/material/Box";
 import AudiotrackIcon from "@mui/icons-material/Audiotrack";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
@@ -6,8 +9,10 @@ import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 import StopIcon from "@mui/icons-material/Stop";
 import ActionButton from "../action-button/action-button";
+import { WordPlaybackContext } from "@/app/contexts/word-playback";
 
-export default function WordControls({ isPlaying, controlHandlers }) {
+export default function WordControls() {
+  const { isPlaying, controlHandlers } = useContext(WordPlaybackContext);
   const { onPlayAudio, onPrevious, onPlay, onPause, onNext, onStop } =
     controlHandlers;
   const handleTogglePlay = isPlaying ? onPause : onPlay;

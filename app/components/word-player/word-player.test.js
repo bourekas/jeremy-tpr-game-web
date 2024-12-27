@@ -1,8 +1,9 @@
-import { act } from "react";
+import { act, useContext } from "react";
 import { render, screen } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import { createWordPlayerComponent } from "./word-player";
 import { GameDisplayContext } from "@/app/contexts/game-display";
+import { WordPlaybackContext } from "@/app/contexts/word-playback";
 
 const words = [
   { word: "a", imageSrc: "a.webp", audioSrc: "a.mp3" },
@@ -47,127 +48,140 @@ it("forwards the returned word from useWordPlayer to WordContent", () => {
   );
 });
 
-it("forwards the returned isPlaying props from useWordPlayer to WordControls", () => {
-  const { WordControls, wordPlayerHookReturnValue } = renderWordPlayer();
+it("provides the returned isPlaying prop from useWordPlayer", () => {
+  let providedIsPlaying;
 
-  expect(WordControls.mock.lastCall[0]).toHaveProperty(
-    "isPlaying",
-    wordPlayerHookReturnValue.isPlaying,
-  );
+  const WordControls = jest.fn(() => {
+    const result = useContext(WordPlaybackContext);
+    providedIsPlaying = result.isPlaying;
+  });
+
+  const {
+    wordPlayerHookReturnValue: { isPlaying },
+  } = renderWordPlayer({ WordControls });
+
+  expect(providedIsPlaying).toEqual(isPlaying);
 });
 
-it("calls audio.play when WordControls calls onPlayAudio", () => {
+it("provides onPlayAudio which calls the returned audio.play from useWordPlayer", () => {
+  let onPlayAudio;
+
+  const WordControls = jest.fn(() => {
+    const result = useContext(WordPlaybackContext);
+    onPlayAudio = result.controlHandlers.onPlayAudio;
+  });
+
   const {
     wordPlayerHookReturnValue: { audio },
-    WordControls,
-  } = renderWordPlayer();
+  } = renderWordPlayer({ WordControls });
 
-  act(() => {
-    const { onPlayAudio } = getControlHandlers(WordControls);
-    onPlayAudio();
-  });
+  act(onPlayAudio);
 
   expect(audio.play).toHaveBeenCalledTimes(1);
 });
 
-it("calls play control when WordControls calls onPlay", () => {
+it("provides onPlay which calls the returned play control from useWordPlayer", () => {
+  let onPlay;
+
+  const WordControls = jest.fn(() => {
+    const result = useContext(WordPlaybackContext);
+    onPlay = result.controlHandlers.onPlay;
+  });
+
   const {
     wordPlayerHookReturnValue: {
       controls: { play },
     },
-    WordControls,
-  } = renderWordPlayer();
+  } = renderWordPlayer({ WordControls });
 
-  act(() => {
-    const { onPlay } = getControlHandlers(WordControls);
-    onPlay();
-  });
+  act(onPlay);
 
   expect(play).toHaveBeenCalledTimes(1);
 });
 
-it("calls pause control when WordControls calls onPause", () => {
+it("provides onPause which calls the returned pause control from useWordPlayer", () => {
+  let onPause;
+
+  const WordControls = jest.fn(() => {
+    const result = useContext(WordPlaybackContext);
+    onPause = result.controlHandlers.onPause;
+  });
+
   const {
     wordPlayerHookReturnValue: {
       controls: { pause },
     },
-    WordControls,
-  } = renderWordPlayer();
+  } = renderWordPlayer({ WordControls });
 
-  act(() => {
-    const { onPause } = getControlHandlers(WordControls);
-    onPause();
-  });
+  act(onPause);
 
   expect(pause).toHaveBeenCalledTimes(1);
 });
 
-it("calls previous control when WordControls calls onPrevious", () => {
+it("provides onPrevious which calls the returned previous control from useWordPlayer", () => {
+  let onPrevious;
+
+  const WordControls = jest.fn(() => {
+    const result = useContext(WordPlaybackContext);
+    onPrevious = result.controlHandlers.onPrevious;
+  });
+
   const {
     wordPlayerHookReturnValue: {
       controls: { previous },
     },
-    WordControls,
-  } = renderWordPlayer();
+  } = renderWordPlayer({ WordControls });
 
-  act(() => {
-    const { onPrevious } = getControlHandlers(WordControls);
-    onPrevious();
-  });
+  act(onPrevious);
 
   expect(previous).toHaveBeenCalledTimes(1);
 });
 
-it("calls next control when WordControls calls onNext", () => {
+it("provides onNext which calls the returned next control from useWordPlayer", () => {
+  let onNext;
+
+  const WordControls = jest.fn(() => {
+    const result = useContext(WordPlaybackContext);
+    onNext = result.controlHandlers.onNext;
+  });
+
   const {
     wordPlayerHookReturnValue: {
       controls: { next },
     },
-    WordControls,
-  } = renderWordPlayer();
+  } = renderWordPlayer({ WordControls });
 
-  act(() => {
-    const { onNext } = getControlHandlers(WordControls);
-    onNext();
-  });
+  act(onNext);
 
   expect(next).toHaveBeenCalledTimes(1);
 });
 
-it("calls stop control when WordControls calls onStop", () => {
+it("provides onStop which calls the returned stop control from useWordPlayer and onBackToSetup", () => {
+  let onStop;
+
+  const WordControls = jest.fn(() => {
+    const result = useContext(WordPlaybackContext);
+    onStop = result.controlHandlers.onStop;
+  });
+
   const {
     wordPlayerHookReturnValue: {
       controls: { stop },
     },
-    WordControls,
-  } = renderWordPlayer();
+    onBackToSetup,
+  } = renderWordPlayer({ WordControls });
 
-  act(() => {
-    const { onStop } = getControlHandlers(WordControls);
-    onStop();
-  });
+  act(onStop);
 
   expect(stop).toHaveBeenCalledTimes(1);
+  expect(onBackToSetup).toHaveBeenCalled();
 });
 
-it("calls onBackToSetup when WordControls calls onStop", () => {
-  const { onBackToSetup, WordControls } = renderWordPlayer();
+it("renders the given controls element", () => {
+  renderWordPlayer();
 
-  act(() => {
-    const { onStop } = getControlHandlers(WordControls);
-    onStop();
-  });
-
-  expect(onBackToSetup).toHaveBeenCalledTimes(1);
+  expect(screen.getByTestId("controls")).toBeInTheDocument();
 });
-
-function getControlHandlers(WordControls) {
-  return getProps(WordControls).controlHandlers;
-}
-
-function getProps(Mock) {
-  return Mock.mock.lastCall[0];
-}
 
 function renderWordPlayer(props = {}) {
   const onBackToSetup = jest.fn();
@@ -192,8 +206,10 @@ function renderWordPlayer(props = {}) {
   };
   const useWordPlayer = jest.fn().mockReturnValue(wordPlayerHookReturnValue);
 
-  const WordContent = jest.fn();
-  const WordControls = jest.fn();
+  const WordContent = props.WebContent || jest.fn();
+  const WordControls =
+    props.WordControls ||
+    jest.fn().mockReturnValue(<div data-testid="controls" />);
 
   const WordPlayer = createWordPlayerComponent(
     useWordPlayer,
@@ -203,7 +219,7 @@ function renderWordPlayer(props = {}) {
 
   render(
     <GameDisplayContext.Provider value={{ onBackToSetup }}>
-      <WordPlayer words={words} {...props} />
+      <WordPlayer words={words} controls={<WordControls />} {...props} />
     </GameDisplayContext.Provider>,
   );
 

@@ -2,7 +2,6 @@
 
 import { shuffle } from "lodash";
 import WordContent from "./components/word-content/word-content";
-import WordControls from "./components/word-controls/word-controls";
 import { useSetup } from "./contexts/setup/setup";
 import useIndexPlayer from "./hooks/use-index-player/use-index-player";
 import useAudio from "./hooks/use-audio/use-audio";
@@ -19,8 +18,4 @@ const useWordPlayer = createWordPlayerHook({
   useAudio,
 });
 
-export const WordPlayer = createWordPlayerComponent(
-  useWordPlayer,
-  WordContent,
-  WordControls,
-);
+export const WordPlayer = createWordPlayerComponent(useWordPlayer, WordContent);

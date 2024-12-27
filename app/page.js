@@ -1,5 +1,6 @@
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
+import WordControls from "./components/word-controls/word-controls";
 import { WordPlayer } from "./composition";
 import SetupMenu from "./components/setup-menu/setup-menu";
 import GameDisplay from "./components/game-display/game-display";
@@ -29,7 +30,7 @@ export default function Home() {
         <SetupProvider>
           <GameDisplay
             setup={<SetupMenu />}
-            words={<WordPlayer words={words} />}
+            words={<WordPlayer words={words} controls={<WordControls />} />}
           />
         </SetupProvider>
       </GamePanel>

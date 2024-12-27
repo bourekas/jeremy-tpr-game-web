@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import WordControls from "./word-controls";
+import { WordPlaybackContext } from "@/app/contexts/word-playback";
 
 const playButtonName = "Play";
 const pauseButtonName = "Pause";
@@ -71,7 +72,7 @@ it("renders pause button but not play button when isPlaying is true", () => {
   ).not.toBeInTheDocument();
 });
 
-function renderWordControls(props) {
+function renderWordControls({ isPlaying } = {}) {
   const user = userEvent.setup();
   const controlHandlers = {
     onPlayAudio: jest.fn(),
@@ -82,7 +83,11 @@ function renderWordControls(props) {
     onStop: jest.fn(),
   };
 
-  render(<WordControls controlHandlers={controlHandlers} {...props} />);
+  render(
+    <WordPlaybackContext.Provider value={{ controlHandlers, isPlaying }}>
+      <WordControls />
+    </WordPlaybackContext.Provider>,
+  );
 
   const clickButton = (name) =>
     user.click(screen.getByRole("button", { name }));
