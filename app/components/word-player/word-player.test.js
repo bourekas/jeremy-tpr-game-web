@@ -228,12 +228,10 @@ function renderWordPlayer(props = {}) {
 
   render(
     <GameDisplayContext.Provider value={{ onBackToSetup }}>
-      <WordPlayer
-        words={words}
-        content={<WordContent />}
-        controls={<WordControls />}
-        {...props}
-      />
+      <WordPlayer words={words} {...props}>
+        <WordContent />
+        <WordControls />
+      </WordPlayer>
     </GameDisplayContext.Provider>,
   );
 

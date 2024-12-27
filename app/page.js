@@ -32,11 +32,10 @@ export default function Home() {
           <GameDisplay
             setup={<SetupMenu />}
             words={
-              <WordPlayer
-                words={words}
-                content={<WordContent />}
-                controls={<WordControls />}
-              />
+              <WordPlayer words={words}>
+                <WordContent />
+                <WordControls />
+              </WordPlayer>
             }
           />
         </SetupProvider>

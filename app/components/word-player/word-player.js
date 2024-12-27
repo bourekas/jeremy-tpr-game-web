@@ -8,7 +8,7 @@ import { GameDisplayContext } from "@/app/contexts/game-display";
 import { WordPlaybackContext } from "@/app/contexts/word-playback";
 
 export function createWordPlayerComponent(useWordPlayer) {
-  return function WordPlayer({ content, controls: controlsElement, ...props }) {
+  return function WordPlayer({ children, ...props }) {
     const { onBackToSetup } = useContext(GameDisplayContext);
     const { word, audio, isPlaying, controls } = useWordPlayer(props);
     const { play, pause, stop, previous, next } = controls;
@@ -36,8 +36,7 @@ export function createWordPlayerComponent(useWordPlayer) {
         <Box sx={{ mb: { xs: 0.5, sm: 1 } }}>
           <BackToSetupButton onClick={handleBackToSetup} />
         </Box>
-        {content}
-        <Box sx={{ mb: 1 }}>{controlsElement}</Box>
+        {children}
       </WordPlaybackContext.Provider>
     );
   };
