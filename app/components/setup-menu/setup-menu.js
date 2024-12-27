@@ -1,5 +1,6 @@
 "use client";
 
+import { useContext } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Slider from "@mui/material/Slider";
@@ -7,10 +8,13 @@ import Button from "@mui/material/Button";
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { useSetup, useSetupChange } from "@/app/contexts/setup/setup";
+import { GameDisplayContext } from "@/app/contexts/game-display";
 
-export default function SetupMenu({ headingLevel = 1, onStart }) {
+export default function SetupMenu({ headingLevel = 1 }) {
   const setup = useSetup();
   const onSetupChange = useSetupChange();
+  const { onStart } = useContext(GameDisplayContext);
+
   const setupChange = (key) => (val) => onSetupChange({ ...setup, [key]: val });
   const handleDisplayTimeChange = setupChange("displayTime");
   const handleAutoPlayAudioChange = setupChange("isAutoPlayAudio");

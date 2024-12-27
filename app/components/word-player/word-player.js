@@ -1,15 +1,18 @@
 "use client";
 
+import { useContext } from "react";
 import Box from "@mui/material/Box";
 import ActionButton from "../action-button/action-button";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { GameDisplayContext } from "@/app/contexts/game-display";
 
 export function createWordPlayerComponent(
   useWordPlayer,
   WordContent,
   WordControls,
 ) {
-  return function WordPlayer({ onBackToSetup, ...props }) {
+  return function WordPlayer(props) {
+    const { onBackToSetup } = useContext(GameDisplayContext);
     const { word, audio, isPlaying, controls } = useWordPlayer(props);
     const { play, pause, stop, previous, next } = controls;
 

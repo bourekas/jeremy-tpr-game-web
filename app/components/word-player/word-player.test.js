@@ -2,6 +2,7 @@ import { act } from "react";
 import { render, screen } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import { createWordPlayerComponent } from "./word-player";
+import { GameDisplayContext } from "@/app/contexts/game-display";
 
 const words = [
   { word: "a", imageSrc: "a.webp", audioSrc: "a.mp3" },
@@ -200,7 +201,11 @@ function renderWordPlayer(props = {}) {
     WordControls,
   );
 
-  render(<WordPlayer words={words} onBackToSetup={onBackToSetup} {...props} />);
+  render(
+    <GameDisplayContext.Provider value={{ onBackToSetup }}>
+      <WordPlayer words={words} {...props} />
+    </GameDisplayContext.Provider>,
+  );
 
   return {
     useWordPlayer,

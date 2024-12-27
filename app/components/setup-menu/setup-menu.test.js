@@ -6,6 +6,7 @@ import {
   SetupChangeContext,
   defaultSetup,
 } from "@/app/contexts/setup/setup";
+import { GameDisplayContext } from "@/app/contexts/game-display";
 
 describe("TPR Game Setup heading", () => {
   const getGameSetupHeading = (level) =>
@@ -142,7 +143,9 @@ function renderSetupMenu(props = {}) {
   render(
     <SetupContext.Provider value={props.setup || defaultSetup}>
       <SetupChangeContext.Provider value={onSetupChange}>
-        <SetupMenu onStart={onStart} {...props} />
+        <GameDisplayContext.Provider value={{ onStart }}>
+          <SetupMenu {...props} />
+        </GameDisplayContext.Provider>
       </SetupChangeContext.Provider>
     </SetupContext.Provider>,
   );
