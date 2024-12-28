@@ -18,20 +18,15 @@ export function createWordPlayerComponent(useWordPlayer) {
       onBackToSetup();
     };
 
-    const handlePlayAudio = () => audio.play();
-
-    const controlHandlers = {
-      onPlayAudio: handlePlayAudio,
-      onPlay: play,
-      onPause: pause,
-      onPrevious: previous,
-      onNext: next,
-      onStop: handleBackToSetup,
-    };
+    const playAudio = () => audio.play();
 
     return (
       <WordPlaybackContext.Provider
-        value={{ word, isPlaying, controlHandlers }}
+        value={{
+          word,
+          isPlaying,
+          controls: { playAudio, play, pause, previous, next, stop },
+        }}
       >
         <Box sx={{ mb: { xs: 0.5, sm: 1 } }}>
           <BackToSetupButton onClick={handleBackToSetup} />

@@ -12,18 +12,17 @@ import ActionButton from "../action-button/action-button";
 import { WordPlaybackContext } from "@/app/contexts/word-playback";
 
 export default function WordControls() {
-  const { isPlaying, controlHandlers } = useContext(WordPlaybackContext);
-  const { onPlayAudio, onPrevious, onPlay, onPause, onNext, onStop } =
-    controlHandlers;
-  const handleTogglePlay = isPlaying ? onPause : onPlay;
+  const { isPlaying, controls } = useContext(WordPlaybackContext);
+  const { playAudio, play, pause, previous, next, stop } = controls;
+  const handleTogglePlay = isPlaying ? pause : play;
 
   return (
     <Box sx={{ display: "flex", justifyContent: "center" }}>
-      <PlayAudioButton onClick={onPlayAudio} />
-      <PreviousWordButton onClick={onPrevious} />
+      <PlayAudioButton onClick={playAudio} />
+      <PreviousWordButton onClick={previous} />
       <PlayPauseButton isPlaying={isPlaying} onClick={handleTogglePlay} />
-      <NextWordButton onClick={onNext} />
-      <StopButton onClick={onStop} />
+      <NextWordButton onClick={next} />
+      <StopButton onClick={stop} />
     </Box>
   );
 }

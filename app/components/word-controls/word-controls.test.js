@@ -6,46 +6,46 @@ import { WordPlaybackContext } from "@/app/contexts/word-playback";
 const playButtonName = "Play";
 const pauseButtonName = "Pause";
 
-it("calls onPlayAudio when clicking play audio button", async () => {
-  const { clickButton, onPlayAudio } = renderWordControls();
+it("calls playAudio when clicking play audio button", async () => {
+  const { clickButton, playAudio } = renderWordControls();
 
   await clickButton("Play audio");
-  expect(onPlayAudio).toHaveBeenCalledTimes(1);
+  expect(playAudio).toHaveBeenCalledTimes(1);
 });
 
-it("calls onPlay when clicking play button", async () => {
-  const { clickButton, onPlay } = renderWordControls({ isPlaying: false });
+it("calls play when clicking play button", async () => {
+  const { clickButton, play } = renderWordControls({ isPlaying: false });
 
   await clickButton(playButtonName);
-  expect(onPlay).toHaveBeenCalledTimes(1);
+  expect(play).toHaveBeenCalledTimes(1);
 });
 
-it("calls onPause when clicking pause button", async () => {
-  const { clickButton, onPause } = renderWordControls({ isPlaying: true });
+it("calls pause when clicking pause button", async () => {
+  const { clickButton, pause } = renderWordControls({ isPlaying: true });
 
   await clickButton(pauseButtonName);
-  expect(onPause).toHaveBeenCalledTimes(1);
+  expect(pause).toHaveBeenCalledTimes(1);
 });
 
-it("calls onPrevious when clicking previous button", async () => {
-  const { clickButton, onPrevious } = renderWordControls();
+it("calls previous when clicking previous button", async () => {
+  const { clickButton, previous } = renderWordControls();
 
   await clickButton("Go to previous word");
-  expect(onPrevious).toHaveBeenCalledTimes(1);
+  expect(previous).toHaveBeenCalledTimes(1);
 });
 
-it("calls onNext when clicking next button", async () => {
-  const { clickButton, onNext } = renderWordControls();
+it("calls next when clicking next button", async () => {
+  const { clickButton, next } = renderWordControls();
 
   await clickButton("Go to next word");
-  expect(onNext).toHaveBeenCalledTimes(1);
+  expect(next).toHaveBeenCalledTimes(1);
 });
 
-it("calls onStop when clicking stop button", async () => {
-  const { clickButton, onStop } = renderWordControls();
+it("calls stop when clicking stop button", async () => {
+  const { clickButton, stop } = renderWordControls();
 
   await clickButton("Stop game");
-  expect(onStop).toHaveBeenCalledTimes(1);
+  expect(stop).toHaveBeenCalledTimes(1);
 });
 
 it("renders play button but not pause button when isPlaying is false", () => {
@@ -82,9 +82,19 @@ function renderWordControls({ isPlaying } = {}) {
     onNext: jest.fn(),
     onStop: jest.fn(),
   };
+  const controls = {
+    playAudio: jest.fn(),
+    play: jest.fn(),
+    pause: jest.fn(),
+    previous: jest.fn(),
+    next: jest.fn(),
+    stop: jest.fn(),
+  };
 
   render(
-    <WordPlaybackContext.Provider value={{ controlHandlers, isPlaying }}>
+    <WordPlaybackContext.Provider
+      value={{ controls, controlHandlers, isPlaying }}
+    >
       <WordControls />
     </WordPlaybackContext.Provider>,
   );
@@ -92,5 +102,5 @@ function renderWordControls({ isPlaying } = {}) {
   const clickButton = (name) =>
     user.click(screen.getByRole("button", { name }));
 
-  return { clickButton, ...controlHandlers };
+  return { clickButton, ...controlHandlers, ...controls };
 }

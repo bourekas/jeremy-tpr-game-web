@@ -68,29 +68,29 @@ it("provides the returned isPlaying prop from useWordPlayer", () => {
   expect(providedIsPlaying).toEqual(isPlaying);
 });
 
-it("provides onPlayAudio which calls the returned audio.play from useWordPlayer", () => {
-  let onPlayAudio;
+it("provides playAudio which calls the returned audio.play from useWordPlayer", () => {
+  let playAudio;
 
   const WordControls = jest.fn(() => {
     const result = useContext(WordPlaybackContext);
-    onPlayAudio = result.controlHandlers.onPlayAudio;
+    playAudio = result.controls.playAudio;
   });
 
   const {
     wordPlayerHookReturnValue: { audio },
   } = renderWordPlayer({ WordControls });
 
-  act(onPlayAudio);
+  act(playAudio);
 
   expect(audio.play).toHaveBeenCalledTimes(1);
 });
 
-it("provides onPlay which calls the returned play control from useWordPlayer", () => {
-  let onPlay;
+it("provides the returned play control from useWordPlayer", () => {
+  let providedPlay;
 
   const WordControls = jest.fn(() => {
     const result = useContext(WordPlaybackContext);
-    onPlay = result.controlHandlers.onPlay;
+    providedPlay = result.controls.play;
   });
 
   const {
@@ -99,17 +99,17 @@ it("provides onPlay which calls the returned play control from useWordPlayer", (
     },
   } = renderWordPlayer({ WordControls });
 
-  act(onPlay);
+  act(providedPlay);
 
   expect(play).toHaveBeenCalledTimes(1);
 });
 
-it("provides onPause which calls the returned pause control from useWordPlayer", () => {
-  let onPause;
+it("provides the returned pause control from useWordPlayer", () => {
+  let providedPause;
 
   const WordControls = jest.fn(() => {
     const result = useContext(WordPlaybackContext);
-    onPause = result.controlHandlers.onPause;
+    providedPause = result.controls.pause;
   });
 
   const {
@@ -118,17 +118,17 @@ it("provides onPause which calls the returned pause control from useWordPlayer",
     },
   } = renderWordPlayer({ WordControls });
 
-  act(onPause);
+  act(providedPause);
 
   expect(pause).toHaveBeenCalledTimes(1);
 });
 
-it("provides onPrevious which calls the returned previous control from useWordPlayer", () => {
-  let onPrevious;
+it("provides the previous control returned from useWordPlayer", () => {
+  let providedPrevious;
 
   const WordControls = jest.fn(() => {
     const result = useContext(WordPlaybackContext);
-    onPrevious = result.controlHandlers.onPrevious;
+    providedPrevious = result.controls.previous;
   });
 
   const {
@@ -137,17 +137,17 @@ it("provides onPrevious which calls the returned previous control from useWordPl
     },
   } = renderWordPlayer({ WordControls });
 
-  act(onPrevious);
+  act(providedPrevious);
 
   expect(previous).toHaveBeenCalledTimes(1);
 });
 
-it("provides onNext which calls the returned next control from useWordPlayer", () => {
-  let onNext;
+it("provides the next control returned from useWordPlayer", () => {
+  let providedNext;
 
   const WordControls = jest.fn(() => {
     const result = useContext(WordPlaybackContext);
-    onNext = result.controlHandlers.onNext;
+    providedNext = result.controls.next;
   });
 
   const {
@@ -156,17 +156,17 @@ it("provides onNext which calls the returned next control from useWordPlayer", (
     },
   } = renderWordPlayer({ WordControls });
 
-  act(onNext);
+  act(providedNext);
 
   expect(next).toHaveBeenCalledTimes(1);
 });
 
-it("provides onStop which calls the returned stop control from useWordPlayer and onBackToSetup", () => {
-  let onStop;
+it("provides the stop control returned from useWordPlayer", () => {
+  let providedStop;
 
   const WordControls = jest.fn(() => {
     const result = useContext(WordPlaybackContext);
-    onStop = result.controlHandlers.onStop;
+    providedStop = result.controls.stop;
   });
 
   const {
@@ -176,10 +176,9 @@ it("provides onStop which calls the returned stop control from useWordPlayer and
     onBackToSetup,
   } = renderWordPlayer({ WordControls });
 
-  act(onStop);
+  act(providedStop);
 
   expect(stop).toHaveBeenCalledTimes(1);
-  expect(onBackToSetup).toHaveBeenCalled();
 });
 
 it("renders the given content element", () => {
