@@ -1,4 +1,4 @@
-import { SetupProvider } from "@/app/contexts/setup/setup";
+import { SetupProvider } from "@/app/contexts/setup";
 import SetupMenu from "./setup-menu";
 
 const meta = {

@@ -5,7 +5,7 @@ import WordControls from "./components/word-controls/word-controls";
 import { WordPlayer } from "./composition";
 import SetupMenu from "./components/setup-menu/setup-menu";
 import GameDisplay from "./components/game-display/game-display";
-import { SetupProvider } from "./contexts/setup/setup";
+import { SetupProvider } from "./contexts/setup";
 
 const words = [
   "לָגַעַת",

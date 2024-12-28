@@ -7,7 +7,7 @@ import Slider from "@mui/material/Slider";
 import Button from "@mui/material/Button";
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import { useSetup, useSetupChange } from "@/app/contexts/setup/setup";
+import { useSetup, useSetupChange } from "@/app/contexts/setup";
 import { GameDisplayContext } from "@/app/contexts/game-display";
 
 export default function SetupMenu({ headingLevel = 1 }) {

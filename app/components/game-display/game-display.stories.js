@@ -1,4 +1,4 @@
-import { SetupProvider } from "@/app/contexts/setup/setup";
+import { SetupProvider } from "@/app/contexts/setup";
 import SetupMenuComponent from "@/app/components/setup-menu/setup-menu";
 import { createWordPlayerComponent } from "@/app/components/word-player/word-player";
 import { createGameDisplayComponent } from "./game-display";

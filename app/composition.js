@@ -1,7 +1,7 @@
 "use client";
 
 import { shuffle } from "lodash";
-import { useSetup } from "./contexts/setup/setup";
+import { useSetup } from "./contexts/setup";
 import useIndexPlayer from "./hooks/use-index-player/use-index-player";
 import useAudio from "./hooks/use-audio/use-audio";
 import { createValuePlayerHook } from "./hooks/use-value-player/use-value-player";

@@ -5,7 +5,7 @@ import {
   SetupContext,
   SetupChangeContext,
   defaultSetup,
-} from "@/app/contexts/setup/setup";
+} from "@/app/contexts/setup";
 import { GameDisplayContext } from "@/app/contexts/game-display";
 
 describe("TPR Game Setup heading", () => {
