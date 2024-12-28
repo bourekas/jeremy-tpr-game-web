@@ -24,9 +24,3 @@ it("returns the given initial setup when provided", () => {
 
   expect(result.current).toEqual(initialSetup);
 });
-
-it("throws an error when using useSetupChange without a setup provider", () => {
-  expect(() => renderHook(() => useSetupChange())).toThrow(
-    "Used useSetupChange without a SetupProvider",
-  );
-});

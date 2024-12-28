@@ -26,13 +26,3 @@ export function SetupProvider({ initialSetup = defaultSetup, children }) {
 export function useSetup() {
   return useContext(SetupContext);
 }
-
-export function useSetupChange() {
-  const onSetupChange = useContext(SetupChangeContext);
-
-  if (!onSetupChange) {
-    throw new Error("Used useSetupChange without a SetupProvider");
-  }
-
-  return onSetupChange;
-}
