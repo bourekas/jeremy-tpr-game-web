@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useState } from "react";
 
 export const defaultSetup = { displayTime: 5, isAutoPlayAudio: true };
 export const SetupContext = createContext({ setup: defaultSetup });
