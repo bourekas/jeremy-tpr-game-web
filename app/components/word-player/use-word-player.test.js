@@ -2,6 +2,7 @@ import { renderHook } from "@testing-library/react";
 import { createWordPlayerHook } from "./use-word-player";
 import { GameDisplayContext } from "@/app/contexts/game-display";
 import { act } from "react";
+import { SetupContext } from "@/app/contexts/setup";
 
 const words = [
   { word: "a", imageSrc: "a.webp", audioSrc: "a.mp3" },
@@ -118,17 +119,17 @@ it("calls the provided onBackToSetup when calling the stop control", () => {
 function renderWordPlayerHook(props = {}) {
   const onBackToSetup = jest.fn();
   const wrapper = ({ children }) => (
-    <GameDisplayContext.Provider value={{ onBackToSetup }}>
-      {children}
-    </GameDisplayContext.Provider>
+    <SetupContext.Provider value={{ setup: setup }}>
+      <GameDisplayContext.Provider value={{ onBackToSetup }}>
+        {children}
+      </GameDisplayContext.Provider>
+    </SetupContext.Provider>
   );
-  const useSetup = jest.fn().mockReturnValue(setup);
   const useValuePlayer = jest
     .fn()
     .mockReturnValue({ value: words[0], ...props.valuePlayerHookReturnValue });
   const useAudio = jest.fn().mockReturnValue(props.audioReturnValue);
   const useWordPlayer = createWordPlayerHook({
-    useSetup,
     useValuePlayer,
     useAudio,
   });

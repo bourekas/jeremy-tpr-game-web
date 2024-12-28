@@ -3,7 +3,7 @@
 import { createContext, useContext, useState } from "react";
 
 export const defaultSetup = { displayTime: 5, isAutoPlayAudio: true };
-export const SetupContext = createContext(defaultSetup);
+export const SetupContext = createContext({ setup: defaultSetup });
 export const SetupChangeContext = createContext(null);
 
 export function SetupProvider({ initialSetup = defaultSetup, children }) {
@@ -13,7 +13,7 @@ export function SetupProvider({ initialSetup = defaultSetup, children }) {
   const setIsAutoPlayAudio = setupChange("isAutoPlayAudio");
 
   return (
-    <SetupContext.Provider value={setup}>
+    <SetupContext.Provider value={{ setup }}>
       <SetupChangeContext.Provider
         value={{ setDisplayTime, setIsAutoPlayAudio }}
       >
@@ -21,8 +21,4 @@ export function SetupProvider({ initialSetup = defaultSetup, children }) {
       </SetupChangeContext.Provider>
     </SetupContext.Provider>
   );
-}
-
-export function useSetup() {
-  return useContext(SetupContext);
 }

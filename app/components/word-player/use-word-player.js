@@ -1,13 +1,14 @@
 import { GameDisplayContext } from "@/app/contexts/game-display";
+import { SetupContext } from "@/app/contexts/setup";
 import { useContext } from "react";
 
-export function createWordPlayerHook({ useSetup, useValuePlayer, useAudio }) {
+export function createWordPlayerHook({ useValuePlayer, useAudio }) {
   return function useWordPlayer({
     words,
     initialIsPlaying = true,
     initialWordIndex,
   }) {
-    const setup = useSetup();
+    const { setup } = useContext(SetupContext);
 
     const {
       value: word,

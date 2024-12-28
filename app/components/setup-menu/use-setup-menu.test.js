@@ -38,7 +38,7 @@ function renderSetupMenuHook({
   start,
 }) {
   const wrapper = ({ children }) => (
-    <SetupContext.Provider value={setup}>
+    <SetupContext.Provider value={{ setup }}>
       <SetupChangeContext.Provider
         value={{ setDisplayTime, setIsAutoPlayAudio }}
       >

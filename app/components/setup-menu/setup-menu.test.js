@@ -139,11 +139,10 @@ function renderSetupMenu(props = {}) {
   const user = userEvent.setup();
   const setDisplayTime = jest.fn();
   const setIsAutoPlayAudio = jest.fn();
-  const onSetupChange = jest.fn();
   const onStart = jest.fn();
 
   render(
-    <SetupContext.Provider value={props.setup || defaultSetup}>
+    <SetupContext.Provider value={{ setup: props.setup || defaultSetup }}>
       <SetupChangeContext.Provider
         value={{ setDisplayTime, setIsAutoPlayAudio }}
       >
