@@ -74,14 +74,6 @@ it("renders pause button but not play button when isPlaying is true", () => {
 
 function renderWordControls({ isPlaying } = {}) {
   const user = userEvent.setup();
-  const controlHandlers = {
-    onPlayAudio: jest.fn(),
-    onPlay: jest.fn(),
-    onPause: jest.fn(),
-    onPrevious: jest.fn(),
-    onNext: jest.fn(),
-    onStop: jest.fn(),
-  };
   const controls = {
     playAudio: jest.fn(),
     play: jest.fn(),
@@ -92,9 +84,7 @@ function renderWordControls({ isPlaying } = {}) {
   };
 
   render(
-    <WordPlaybackContext.Provider
-      value={{ controls, controlHandlers, isPlaying }}
-    >
+    <WordPlaybackContext.Provider value={{ controls, isPlaying }}>
       <WordControls />
     </WordPlaybackContext.Provider>,
   );
@@ -102,5 +92,5 @@ function renderWordControls({ isPlaying } = {}) {
   const clickButton = (name) =>
     user.click(screen.getByRole("button", { name }));
 
-  return { clickButton, ...controlHandlers, ...controls };
+  return { clickButton, ...controls };
 }
