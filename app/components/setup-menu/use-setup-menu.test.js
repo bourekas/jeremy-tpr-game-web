@@ -1,6 +1,6 @@
 import { renderHook } from "@testing-library/react";
 import useSetupMenu from "./use-setup-menu";
-import { SetupChangeContext, SetupContext } from "@/app/contexts/setup";
+import { SetupContext } from "@/app/contexts/setup";
 import { GameDisplayContext } from "@/app/contexts/game-display";
 
 it("returns the provided setup state", () => {
@@ -38,14 +38,12 @@ function renderSetupMenuHook({
   start,
 }) {
   const wrapper = ({ children }) => (
-    <SetupContext.Provider value={{ setup }}>
-      <SetupChangeContext.Provider
-        value={{ setDisplayTime, setIsAutoPlayAudio }}
-      >
-        <GameDisplayContext.Provider value={{ onStart: start }}>
-          {children}
-        </GameDisplayContext.Provider>
-      </SetupChangeContext.Provider>
+    <SetupContext.Provider
+      value={{ setup, setDisplayTime, setIsAutoPlayAudio }}
+    >
+      <GameDisplayContext.Provider value={{ onStart: start }}>
+        {children}
+      </GameDisplayContext.Provider>
     </SetupContext.Provider>
   );
 

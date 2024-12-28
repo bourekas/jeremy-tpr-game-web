@@ -1,11 +1,7 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import SetupMenu from "./setup-menu";
-import {
-  SetupContext,
-  SetupChangeContext,
-  defaultSetup,
-} from "@/app/contexts/setup";
+import { SetupContext, defaultSetup } from "@/app/contexts/setup";
 import { GameDisplayContext } from "@/app/contexts/game-display";
 
 describe("TPR Game Setup heading", () => {
@@ -142,14 +138,16 @@ function renderSetupMenu(props = {}) {
   const onStart = jest.fn();
 
   render(
-    <SetupContext.Provider value={{ setup: props.setup || defaultSetup }}>
-      <SetupChangeContext.Provider
-        value={{ setDisplayTime, setIsAutoPlayAudio }}
-      >
-        <GameDisplayContext.Provider value={{ onStart }}>
-          <SetupMenu {...props} />
-        </GameDisplayContext.Provider>
-      </SetupChangeContext.Provider>
+    <SetupContext.Provider
+      value={{
+        setup: props.setup || defaultSetup,
+        setDisplayTime,
+        setIsAutoPlayAudio,
+      }}
+    >
+      <GameDisplayContext.Provider value={{ onStart }}>
+        <SetupMenu {...props} />
+      </GameDisplayContext.Provider>
     </SetupContext.Provider>,
   );
 
