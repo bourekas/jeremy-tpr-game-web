@@ -1,3 +1,6 @@
+import { GameDisplayContext } from "@/app/contexts/game-display";
+import { useContext } from "react";
+
 export function createWordPlayerHook({ useSetup, useValuePlayer, useAudio }) {
   return function useWordPlayer({
     words,
@@ -19,6 +22,13 @@ export function createWordPlayerHook({ useSetup, useValuePlayer, useAudio }) {
 
     const audio = useAudio(word.audioSrc, setup.isAutoPlayAudio);
 
-    return { word, audio, isPlaying, controls };
+    const { onBackToSetup } = useContext(GameDisplayContext);
+
+    const stop = () => {
+      controls.stop();
+      onBackToSetup();
+    };
+
+    return { word, audio, isPlaying, controls: { ...controls, stop } };
   };
 }

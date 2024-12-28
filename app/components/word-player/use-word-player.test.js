@@ -1,5 +1,7 @@
 import { renderHook } from "@testing-library/react";
 import { createWordPlayerHook } from "./use-word-player";
+import { GameDisplayContext } from "@/app/contexts/game-display";
+import { act } from "react";
 
 const words = [
   { word: "a", imageSrc: "a.webp", audioSrc: "a.mp3" },
@@ -66,10 +68,13 @@ it("returns the controls prop returned from useValuePlayer", () => {
     valuePlayerHookReturnValue: { controls },
   });
 
-  expect(result.current).toHaveProperty("controls", controls);
+  expect(result.current).toHaveProperty(
+    "controls",
+    expect.objectContaining(controls),
+  );
 });
 
-it("returnsthe isPlaying prop returned from useValuePlayer", () => {
+it("returns the isPlaying prop returned from useValuePlayer", () => {
   const isPlaying = true;
   const { result } = renderWordPlayerHook({
     valuePlayerHookReturnValue: { isPlaying },
@@ -97,7 +102,24 @@ it("returns the audio returned from useAudio", () => {
   expect(result.current.audio).toBe(audioReturnValue);
 });
 
+it("calls the provided onBackToSetup when calling the stop control", () => {
+  const { onBackToSetup, result } = renderWordPlayerHook({
+    valuePlayerHookReturnValue: { controls: { stop: () => {} } },
+  });
+
+  const stop = result.current.controls.stop;
+  act(stop);
+
+  expect(onBackToSetup).toHaveBeenCalled();
+});
+
 function renderWordPlayerHook(props = {}) {
+  const onBackToSetup = jest.fn();
+  const wrapper = ({ children }) => (
+    <GameDisplayContext.Provider value={{ onBackToSetup }}>
+      {children}
+    </GameDisplayContext.Provider>
+  );
   const useSetup = jest.fn().mockReturnValue(setup);
   const useValuePlayer = jest
     .fn()
@@ -109,7 +131,9 @@ function renderWordPlayerHook(props = {}) {
     useAudio,
   });
 
-  const renderResult = renderHook(() => useWordPlayer({ words, ...props }));
+  const renderResult = renderHook(() => useWordPlayer({ words, ...props }), {
+    wrapper,
+  });
 
-  return { useValuePlayer, useAudio, ...renderResult };
+  return { useValuePlayer, useAudio, onBackToSetup, ...renderResult };
 }

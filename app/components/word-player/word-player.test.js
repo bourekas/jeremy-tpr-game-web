@@ -10,11 +10,14 @@ const words = [
   { word: "b", imageSrc: "b.webp", audioSrc: "b.mp3" },
 ];
 
-it("calls onBackToSetup when clicking back to setup button", async () => {
-  const { onBackToSetup, clickBackToSetupButton } = renderWordPlayer();
+it("calls stop when clicking back to setup button", async () => {
+  const {
+    controls: { stop },
+    clickBackToSetupButton,
+  } = renderWordPlayer();
 
   await clickBackToSetupButton();
-  expect(onBackToSetup).toHaveBeenCalled();
+  expect(stop).toHaveBeenCalled();
 });
 
 it("calls stop control when clicking back to setup button", async () => {
