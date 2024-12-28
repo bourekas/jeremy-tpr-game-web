@@ -1,23 +1,15 @@
 "use client";
 
-import { useContext } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Slider from "@mui/material/Slider";
 import Button from "@mui/material/Button";
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import { useSetup, useSetupChange } from "@/app/contexts/setup";
-import { GameDisplayContext } from "@/app/contexts/game-display";
+import useSetupMenu from "./use-setup-menu";
 
 export default function SetupMenu({ headingLevel = 1 }) {
-  const setup = useSetup();
-  const onSetupChange = useSetupChange();
-  const { onStart } = useContext(GameDisplayContext);
-
-  const setupChange = (key) => (val) => onSetupChange({ ...setup, [key]: val });
-  const handleDisplayTimeChange = setupChange("displayTime");
-  const handleAutoPlayAudioChange = setupChange("isAutoPlayAudio");
+  const { setup, setDisplayTime, setIsAutoPlayAudio, start } = useSetupMenu();
 
   return (
     <Box sx={{ padding: 3 }}>
@@ -27,17 +19,17 @@ export default function SetupMenu({ headingLevel = 1 }) {
       <Box sx={{ mb: 2 }}>
         <DisplayTimeOption
           displayTime={setup.displayTime}
-          onDisplayTimeChange={handleDisplayTimeChange}
+          onDisplayTimeChange={setDisplayTime}
         />
       </Box>
       <Box sx={{ mb: 2 }}>
         <AutoPlayAudioOption
           isEnabled={setup.isAutoPlayAudio}
-          onChange={handleAutoPlayAudioChange}
+          onChange={setIsAutoPlayAudio}
         />
       </Box>
       <Box sx={{ display: "flex", justifyContent: "center" }}>
-        <StartButton onStart={onStart} />
+        <StartButton onStart={start} />
       </Box>
     </Box>
   );

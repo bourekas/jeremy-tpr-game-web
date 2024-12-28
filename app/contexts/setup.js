@@ -8,10 +8,15 @@ export const SetupChangeContext = createContext(null);
 
 export function SetupProvider({ initialSetup = defaultSetup, children }) {
   const [setup, setSetup] = useState(initialSetup);
+  const setupChange = (key) => (val) => setSetup((s) => ({ ...s, [key]: val }));
+  const setDisplayTime = setupChange("displayTime");
+  const setIsAutoPlayAudio = setupChange("isAutoPlayAudio");
 
   return (
     <SetupContext.Provider value={setup}>
-      <SetupChangeContext.Provider value={setSetup}>
+      <SetupChangeContext.Provider
+        value={{ setDisplayTime, setIsAutoPlayAudio }}
+      >
         {children}
       </SetupChangeContext.Provider>
     </SetupContext.Provider>

@@ -50,7 +50,7 @@ describe("display time option", () => {
   });
 
   it("renders the latest display time value text", async () => {
-    const { onSetupChange } = renderSetupMenu({
+    const { setDisplayTime } = renderSetupMenu({
       setup: { displayTime: 5 },
     });
 
@@ -59,7 +59,7 @@ describe("display time option", () => {
     ).toBeInTheDocument();
 
     incrementDisplayTimeSlider();
-    expect(onSetupChange).toHaveBeenCalledWith({ displayTime: 6 });
+    expect(setDisplayTime).toHaveBeenCalledWith(6);
   });
 });
 
@@ -85,26 +85,26 @@ describe("auto-play audio option", () => {
     expect(checkbox).not.toBeChecked();
   });
 
-  it("calls onSetupChange with isAutoPlayAudio false when disabling auto audio", async () => {
-    const { user, onSetupChange } = renderSetupMenu({
+  it("calls setIsAutoPlayAudio with isAutoPlayAudio false when disabling auto audio", async () => {
+    const { user, setIsAutoPlayAudio } = renderSetupMenu({
       setup: { isAutoPlayAudio: true },
     });
 
     const checkbox = screen.getByRole("checkbox", { name: "Auto-Play Audio" });
     await user.click(checkbox);
 
-    expect(onSetupChange).toHaveBeenCalledWith({ isAutoPlayAudio: false });
+    expect(setIsAutoPlayAudio).toHaveBeenCalledWith(false);
   });
 
-  it("calls onSetupChange with isAutoPlayAudio true when enabling auto audio", async () => {
-    const { user, onSetupChange } = renderSetupMenu({
+  it("calls setIsAutoPlayAudio with true when enabling auto audio", async () => {
+    const { user, setIsAutoPlayAudio } = renderSetupMenu({
       setup: { isAutoPlayAudio: false },
     });
 
     const checkbox = screen.getByRole("checkbox", { name: "Auto-Play Audio" });
     await user.click(checkbox);
 
-    expect(onSetupChange).toHaveBeenCalledWith({ isAutoPlayAudio: true });
+    expect(setIsAutoPlayAudio).toHaveBeenCalledWith(true);
   });
 });
 
@@ -137,12 +137,16 @@ function getDisplayTimeSlider() {
 
 function renderSetupMenu(props = {}) {
   const user = userEvent.setup();
+  const setDisplayTime = jest.fn();
+  const setIsAutoPlayAudio = jest.fn();
   const onSetupChange = jest.fn();
   const onStart = jest.fn();
 
   render(
     <SetupContext.Provider value={props.setup || defaultSetup}>
-      <SetupChangeContext.Provider value={onSetupChange}>
+      <SetupChangeContext.Provider
+        value={{ setDisplayTime, setIsAutoPlayAudio }}
+      >
         <GameDisplayContext.Provider value={{ onStart }}>
           <SetupMenu {...props} />
         </GameDisplayContext.Provider>
@@ -150,5 +154,5 @@ function renderSetupMenu(props = {}) {
     </SetupContext.Provider>,
   );
 
-  return { user, onSetupChange, onStart };
+  return { user, setDisplayTime, setIsAutoPlayAudio, onStart };
 }

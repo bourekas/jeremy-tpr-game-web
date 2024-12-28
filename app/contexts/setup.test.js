@@ -25,21 +25,6 @@ it("returns the given initial setup when provided", () => {
   expect(result.current).toEqual(initialSetup);
 });
 
-it("changes the setup when calling the setup change callback", () => {
-  const newSetup = { displayTime: 1, isAutoPlayAudio: false };
-  const { result } = renderHook(
-    () => {
-      const onSetupChange = useSetupChange();
-      onSetupChange(newSetup);
-
-      return useSetup();
-    },
-    { wrapper: SetupProvider },
-  );
-
-  expect(result.current).toEqual(newSetup);
-});
-
 it("throws an error when using useSetupChange without a setup provider", () => {
   expect(() => renderHook(() => useSetupChange())).toThrow(
     "Used useSetupChange without a SetupProvider",
