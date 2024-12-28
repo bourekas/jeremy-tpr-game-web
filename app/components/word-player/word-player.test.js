@@ -71,21 +71,23 @@ it("provides the returned isPlaying prop from useWordPlayer", () => {
   expect(providedIsPlaying).toEqual(isPlaying);
 });
 
-it("provides playAudio which calls the returned audio.play from useWordPlayer", () => {
-  let playAudio;
+it("provides the returned playAudio control from useWordPlayer", () => {
+  let providedPlayAudio;
 
   const WordControls = jest.fn(() => {
     const result = useContext(WordPlaybackContext);
-    playAudio = result.controls.playAudio;
+    providedPlayAudio = result.controls.playAudio;
   });
 
   const {
-    wordPlayerHookReturnValue: { audio },
+    wordPlayerHookReturnValue: {
+      controls: { playAudio },
+    },
   } = renderWordPlayer({ WordControls });
 
-  act(playAudio);
+  act(providedPlayAudio);
 
-  expect(audio.play).toHaveBeenCalledTimes(1);
+  expect(playAudio).toHaveBeenCalledTimes(1);
 });
 
 it("provides the returned play control from useWordPlayer", () => {
@@ -204,6 +206,7 @@ function renderWordPlayer(props = {}) {
     user.click(screen.getByRole("button", "Back to setup menu"));
 
   const controls = {
+    playAudio: jest.fn(),
     play: jest.fn(),
     pause: jest.fn(),
     previous: jest.fn(),
@@ -213,7 +216,6 @@ function renderWordPlayer(props = {}) {
 
   const wordPlayerHookReturnValue = {
     word: words[0],
-    audio: { play: jest.fn() },
     isPlaying: true,
     controls,
   };

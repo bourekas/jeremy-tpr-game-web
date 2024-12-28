@@ -94,12 +94,14 @@ it("forwards the word audio source returned from useValuePlayer to useAudio", ()
   expect(useAudio).toHaveBeenCalledWith(audioSrc, expect.anything());
 });
 
-it("returns the audio returned from useAudio", () => {
-  const audioReturnValue = new Audio("a.mp3");
+it("calls audio.play when calling playAudio control", () => {
+  const audioReturnValue = { play: jest.fn() };
 
   const { result } = renderWordPlayerHook({ audioReturnValue });
+  const playAudio = result.current.controls.playAudio;
+  act(playAudio);
 
-  expect(result.current.audio).toBe(audioReturnValue);
+  expect(audioReturnValue.play).toHaveBeenCalledTimes(1);
 });
 
 it("calls the provided onBackToSetup when calling the stop control", () => {

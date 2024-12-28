@@ -29,6 +29,13 @@ export function createWordPlayerHook({ useSetup, useValuePlayer, useAudio }) {
       onBackToSetup();
     };
 
-    return { word, audio, isPlaying, controls: { ...controls, stop } };
+    const playAudio = () => audio.play();
+
+    return {
+      word,
+      audio,
+      isPlaying,
+      controls: { ...controls, playAudio, stop },
+    };
   };
 }

@@ -7,21 +7,12 @@ import { WordPlaybackContext } from "@/app/contexts/word-playback";
 
 export function createWordPlayerComponent(useWordPlayer) {
   return function WordPlayer({ children, ...props }) {
-    const { word, audio, isPlaying, controls } = useWordPlayer(props);
-    const { play, pause, stop, previous, next } = controls;
-
-    const playAudio = () => audio.play();
+    const { word, isPlaying, controls } = useWordPlayer(props);
 
     return (
-      <WordPlaybackContext.Provider
-        value={{
-          word,
-          isPlaying,
-          controls: { playAudio, play, pause, previous, next, stop },
-        }}
-      >
+      <WordPlaybackContext.Provider value={{ word, isPlaying, controls }}>
         <Box sx={{ mb: { xs: 0.5, sm: 1 } }}>
-          <BackToSetupButton onClick={stop} />
+          <BackToSetupButton onClick={controls.stop} />
         </Box>
         {children}
       </WordPlaybackContext.Provider>
