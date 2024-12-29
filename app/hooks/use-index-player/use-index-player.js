@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useRef, useEffect, useReducer } from "react";
 
 export default function useIndexPlayer({
   length = 0,
@@ -6,52 +6,79 @@ export default function useIndexPlayer({
   initialIndex = 0,
   initialIsPlaying = false,
 }) {
-  const [index, setIndex] = useState(initialIndex);
-  const [isPlaying, setIsPlaying] = useState(initialIsPlaying);
+  const reducer = (state, action) => {
+    const { index: i } = state;
+    let newState = null;
+
+    switch (action.type) {
+      case "play": {
+        newState = { isPlaying: true };
+        break;
+      }
+      case "pause": {
+        newState = { isPlaying: false };
+        break;
+      }
+      case "previous": {
+        newState = { index: i ? i - 1 : length - 1 };
+        break;
+      }
+      case "next": {
+        newState = { index: (i + 1) % length };
+        break;
+      }
+      case "stop": {
+        newState = { index: 0, isPlaying: false };
+        break;
+      }
+    }
+
+    return { ...state, ...newState };
+  };
+  const initialState = {
+    index: initialIndex,
+    isPlaying: initialIsPlaying,
+  };
+  const [{ index, isPlaying }, dispatch] = useReducer(reducer, initialState);
   const timeoutIdRef = useRef();
 
   useEffect(() => {
     if (!isPlaying) return;
 
     timeoutIdRef.current = setTimeout(
-      () => setIndex((index + 1) % length),
+      () => dispatch({ type: "next" }),
       displayTime * 1000,
     );
 
     return cancelNextWord;
-  }, [index, length, isPlaying, displayTime]);
+  }, [index, isPlaying, displayTime]);
 
   const play = () => {
     cancelNextWord();
-    setIsPlaying(true);
+    dispatch({ type: "play" });
   };
 
   const pause = () => {
     cancelNextWord();
-    setIsPlaying(false);
+    dispatch({ type: "pause" });
   };
 
   const stop = () => {
     cancelNextWord();
-    setIsPlaying(false);
-    setIndex(0);
+    dispatch({ type: "stop" });
   };
 
   const next = () => {
     cancelNextWord();
-    setNextWordIndex();
+    dispatch({ type: "next" });
   };
 
   const previous = () => {
-    setIndex((i) => (i === 0 ? length - 1 : i - 1));
+    dispatch({ type: "previous" });
   };
 
   const cancelNextWord = () => {
     clearTimeout(timeoutIdRef.current);
-  };
-
-  const setNextWordIndex = () => {
-    setIndex((i) => (i + 1) % length);
   };
 
   return {
