@@ -1,15 +1,12 @@
 "use client";
 
-import { useContext } from "react";
 import Box from "@mui/material/Box";
 import Image from "next/image";
 import Typogrophy from "@mui/material/Typography";
-import { WordPlaybackContext } from "@/app/contexts/word-playback";
+import useWordContent from "./use-word-content";
 
 export default function WordContent() {
-  const {
-    word: { word, imageSrc },
-  } = useContext(WordPlaybackContext);
+  const { word, imageSrc } = useWordContent();
 
   return (
     <div key={word}>

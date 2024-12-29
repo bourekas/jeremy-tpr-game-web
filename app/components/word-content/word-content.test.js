@@ -23,7 +23,13 @@ it("renders the word text as level 1 heading", () => {
 function renderWordContent() {
   render(
     <WordPlaybackContext.Provider
-      value={{ word: { word: "לגעת", imageSrc: "/word/to-touch.jpg" } }}
+      value={{
+        word: {
+          word: "לגעת",
+          imageSrc: "/word/to-touch.jpg",
+          audio: new Audio("/word/to-touch.mp3"),
+        },
+      }}
     >
       <WordContent />
     </WordPlaybackContext.Provider>,

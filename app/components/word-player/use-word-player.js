@@ -1,8 +1,8 @@
 import { GameDisplayContext } from "@/app/contexts/game-display";
 import { SetupContext } from "@/app/contexts/setup";
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 
-export function createWordPlayerHook({ useValuePlayer, useAudio }) {
+export function createWordPlayerHook({ useValuePlayer }) {
   return function useWordPlayer({
     words,
     initialIsPlaying = true,
@@ -20,8 +20,7 @@ export function createWordPlayerHook({ useValuePlayer, useAudio }) {
       initialIsPlaying,
       initialValueIndex: initialWordIndex,
     });
-
-    const audio = useAudio(word.audioSrc, setup.isAutoPlayAudio);
+    const audio = useMemo(() => new Audio(word.audioSrc), [word.audioSrc]);
 
     const { onBackToSetup } = useContext(GameDisplayContext);
 
@@ -33,8 +32,7 @@ export function createWordPlayerHook({ useValuePlayer, useAudio }) {
     const playAudio = () => audio.play();
 
     return {
-      word,
-      audio,
+      word: { ...word, audio },
       isPlaying,
       controls: { ...controls, playAudio, stop },
     };

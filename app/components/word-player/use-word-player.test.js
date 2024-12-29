@@ -18,15 +18,6 @@ it("forwards the displayTime returned from useSetup to useValuePlayer", () => {
   );
 });
 
-it("forwards the isAutoPlayAudio returned from useSetup to useAudio", () => {
-  const { useAudio } = renderWordPlayerHook();
-
-  expect(useAudio).toHaveBeenCalledWith(
-    expect.anything(),
-    setup.isAutoPlayAudio,
-  );
-});
-
 it("forwards words prop as values prop to useValuePlayer", () => {
   const { useValuePlayer } = renderWordPlayerHook({ words });
 
@@ -59,7 +50,7 @@ it("returns the value prop returned from useValuePlayer as word prop", () => {
 
   const { result } = renderWordPlayerHook({ valuePlayerHookReturnValue });
 
-  expect(result.current.word).toBe(value);
+  expect(result.current.word).toEqual(expect.objectContaining(value));
 });
 
 it("returns the controls prop returned from useValuePlayer", () => {
@@ -82,27 +73,6 @@ it("returns the isPlaying prop returned from useValuePlayer", () => {
   });
 
   expect(result.current.isPlaying).toBe(isPlaying);
-});
-
-it("forwards the word audio source returned from useValuePlayer to useAudio", () => {
-  const audioSrc = "d.mp3";
-  const valuePlayerHookReturnValue = {
-    value: { word: "d", imageSrc: "d.webp", audioSrc },
-  };
-
-  const { useAudio } = renderWordPlayerHook({ valuePlayerHookReturnValue });
-
-  expect(useAudio).toHaveBeenCalledWith(audioSrc, expect.anything());
-});
-
-it("calls audio.play when calling playAudio control", () => {
-  const audioReturnValue = { play: jest.fn() };
-
-  const { result } = renderWordPlayerHook({ audioReturnValue });
-  const playAudio = result.current.controls.playAudio;
-  act(playAudio);
-
-  expect(audioReturnValue.play).toHaveBeenCalledTimes(1);
 });
 
 it("calls the provided onBackToSetup when calling the stop control", () => {

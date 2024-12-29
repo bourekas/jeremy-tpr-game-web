@@ -1,12 +1,11 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef, useContext } from "react";
+import { SetupContext } from "@/app/contexts/setup";
 
-export default function useAudio(
-  audioSrc,
-  isAutoPlay = true,
-  Audio = window.Audio,
-) {
-  const audio = useMemo(() => new Audio(audioSrc), [audioSrc, Audio]);
+export default function useAudio(audio) {
   const lastEndedAudioRef = useRef(null);
+  const {
+    setup: { isAutoPlayAudio: isAutoPlay },
+  } = useContext(SetupContext);
 
   useEffect(() => {
     if (!isAutoPlay || audio === lastEndedAudioRef.current) return;
@@ -16,6 +15,4 @@ export default function useAudio(
 
     return () => audio.pause();
   }, [audio, isAutoPlay]);
-
-  return audio;
 }
