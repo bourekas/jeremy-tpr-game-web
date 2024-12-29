@@ -5,12 +5,15 @@ import useAutoPlayAudio from "./use-auto-play-audio";
 import useScheduleNextWord from "./use-schedule-next-word";
 
 export default function useWordContent() {
-  const { word, scheduleNextWord, cancelNextWord } =
-    useContext(WordPlaybackContext);
+  const {
+    word,
+    isPlaying,
+    controls: { next },
+  } = useContext(WordPlaybackContext);
   const { setup } = useContext(SetupContext);
 
   useAutoPlayAudio(word.audio, setup.isAutoPlayAudio);
-  useScheduleNextWord(scheduleNextWord, cancelNextWord);
+  useScheduleNextWord({ next, isPlaying, displayTime: setup.displayTime });
 
   return word;
 }

@@ -31,6 +31,7 @@ function renderWordContent() {
         },
         scheduleNextWord: jest.fn(),
         cancelNextWord: jest.fn(),
+        controls: { next: jest.fn() },
       }}
     >
       <WordContent />

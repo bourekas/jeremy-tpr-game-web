@@ -1,6 +1,10 @@
 import { useReducer } from "react";
 
-export default function useIndex({ length, initialIndex, initialIsPlaying }) {
+export default function useIndexPlayer({
+  length = 0,
+  initialIndex = 0,
+  initialIsPlaying = true,
+}) {
   const reducer = (state, action) => {
     const { index: i } = state;
     let newState = null;
@@ -30,11 +34,14 @@ export default function useIndex({ length, initialIndex, initialIsPlaying }) {
 
     return { ...state, ...newState };
   };
+
   const initialState = {
     index: initialIndex,
     isPlaying: initialIsPlaying,
   };
+
   const [{ index, isPlaying }, dispatch] = useReducer(reducer, initialState);
+
   const action = (type) => () => dispatch({ type });
   const play = action("play");
   const pause = action("pause");
@@ -42,5 +49,5 @@ export default function useIndex({ length, initialIndex, initialIsPlaying }) {
   const next = action("next");
   const stop = action("stop");
 
-  return { index, isPlaying, play, pause, previous, next, stop };
+  return { index, isPlaying, controls: { play, pause, previous, next, stop } };
 }

@@ -18,12 +18,12 @@ it("initializes with the specified index when an initial index is provided", () 
   expect(result.current.index).toBe(1);
 });
 
-it("returns false for isPlay by default when initializes", () => {
+it("returns true for isPlay by default when initializes", () => {
   const { result } = renderHook(() =>
     useIndexPlayer({ length: 2, displayTime: 3 }),
   );
 
-  expect(result.current.isPlaying).toBe(false);
+  expect(result.current.isPlaying).toBe(true);
 });
 
 it("switches to the next index when calling next callback", () => {
@@ -86,27 +86,6 @@ it("stops and goes back to the start when calling stop", () => {
   // working as expected from the initial state
   act(() => result.current.controls.next());
   expect(result.current.index).toBe(1);
-});
-
-it("reschedules the next index when calling next callback", () => {
-  const { result } = renderHook(() =>
-    useIndexPlayer({ length: 2, displayTime: 3 }),
-  );
-
-  act(() => result.current.controls.play());
-  act(() => jest.advanceTimersByTime(2999));
-
-  // manually going to the next index just before scheduling is due
-  act(() => result.current.controls.next());
-  expect(result.current.index).toBe(1);
-
-  // still at the same index due to canceling of the previous scheduling
-  act(() => jest.advanceTimersByTime(2999));
-  expect(result.current.index).toBe(1);
-
-  // the new scheduling switches to the next index
-  act(() => jest.advanceTimersByTime(1));
-  expect(result.current.index).toBe(0);
 });
 
 it("unschedules the next index when calling stop", () => {

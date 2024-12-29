@@ -1,44 +1,26 @@
 import { GameDisplayContext } from "@/app/contexts/game-display";
-import { SetupContext } from "@/app/contexts/setup";
 import { useContext, useMemo } from "react";
+import useIndexPlayer from "./use-index-player";
 
-export function createWordPlayerHook({ useValuePlayer }) {
-  return function useWordPlayer({
-    words,
-    initialIsPlaying = true,
-    initialWordIndex,
-  }) {
-    const { setup } = useContext(SetupContext);
+export default function useWordPlayer({ words }) {
+  const { onBackToSetup } = useContext(GameDisplayContext);
 
-    const {
-      value: word,
-      isPlaying,
-      controls,
-      scheduleNextWord,
-      cancelNextWord,
-    } = useValuePlayer({
-      values: words,
-      displayTime: setup.displayTime,
-      initialIsPlaying,
-      initialValueIndex: initialWordIndex,
-    });
-    const audio = useMemo(() => new Audio(word.audioSrc), [word.audioSrc]);
+  const { index, isPlaying, controls } = useIndexPlayer({
+    length: words.length,
+  });
+  const word = words[index];
 
-    const { onBackToSetup } = useContext(GameDisplayContext);
+  const audio = useMemo(() => new Audio(word.audioSrc), [word.audioSrc]);
+  const playAudio = () => audio.play();
 
-    const stop = () => {
-      controls.stop();
-      onBackToSetup();
-    };
+  const stop = () => {
+    controls.stop();
+    onBackToSetup();
+  };
 
-    const playAudio = () => audio.play();
-
-    return {
-      word: { ...word, audio },
-      isPlaying,
-      controls: { ...controls, playAudio, stop },
-      scheduleNextWord,
-      cancelNextWord,
-    };
+  return {
+    word: { ...word, audio },
+    isPlaying,
+    controls: { ...controls, playAudio, stop },
   };
 }

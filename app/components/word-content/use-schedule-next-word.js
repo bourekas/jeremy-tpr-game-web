@@ -1,9 +1,13 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
-export default function useScheduleNextWord(scheduleNextWord, cancelNextWord) {
+export default function useScheduleNextWord({ next, isPlaying, displayTime }) {
+  const timeoutIdRef = useRef();
+
   useEffect(() => {
-    scheduleNextWord();
+    if (!isPlaying) return;
 
-    return cancelNextWord;
-  }, [scheduleNextWord, cancelNextWord]);
+    timeoutIdRef.current = setTimeout(next, displayTime * 1000);
+
+    return () => clearTimeout(timeoutIdRef.current);
+  }, [next, isPlaying, displayTime]);
 }
