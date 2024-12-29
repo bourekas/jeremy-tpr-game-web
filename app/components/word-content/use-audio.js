@@ -1,11 +1,6 @@
-import { useEffect, useContext } from "react";
-import { SetupContext } from "@/app/contexts/setup";
+import { useEffect } from "react";
 
-export default function useAudio(audio) {
-  const {
-    setup: { isAutoPlayAudio: isAutoPlay },
-  } = useContext(SetupContext);
-
+export default function useAudio(audio, isAutoPlay) {
   useEffect(() => {
     if (!isAutoPlay) return;
 
