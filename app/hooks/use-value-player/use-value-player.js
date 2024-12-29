@@ -5,14 +5,15 @@ export function createValuePlayerHook(useIndexPlayer) {
     initialIsPlaying,
     initialValueIndex,
   }) {
-    const { index, isPlaying, controls } = useIndexPlayer({
-      length: values.length,
-      displayTime,
-      initialIsPlaying,
-      initialIndex: initialValueIndex,
-    });
+    const { index, isPlaying, controls, scheduleNextWord, cancelNextWord } =
+      useIndexPlayer({
+        length: values.length,
+        displayTime,
+        initialIsPlaying,
+        initialIndex: initialValueIndex,
+      });
     const value = values[index];
 
-    return { value, isPlaying, controls };
+    return { value, isPlaying, controls, scheduleNextWord, cancelNextWord };
   };
 }

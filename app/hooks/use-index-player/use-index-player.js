@@ -1,4 +1,4 @@
-import { useRef, useEffect, useCallback } from "react";
+import { useRef, useCallback } from "react";
 import useIndex from "./use-index";
 
 export default function useIndexPlayer({
@@ -22,20 +22,18 @@ export default function useIndexPlayer({
   });
   const timeoutIdRef = useRef();
 
-  const scheduleNext = useCallback(() => {
+  const cancelNextWord = useCallback(() => {
+    clearTimeout(timeoutIdRef.current);
+  }, []);
+
+  const scheduleNextWord = useCallback(() => {
     if (!isPlaying) return;
 
     timeoutIdRef.current = setTimeout(() => {
       dispatchNext();
-      scheduleNext();
+      scheduleNextWord();
     }, displayTime * 1000);
   }, [isPlaying, displayTime, dispatchNext]);
-
-  useEffect(() => {
-    scheduleNext();
-
-    return cancelNextWord;
-  }, [scheduleNext]);
 
   const play = () => {
     cancelNextWord();
@@ -55,22 +53,20 @@ export default function useIndexPlayer({
   const next = () => {
     cancelNextWord();
     dispatchNext();
-    scheduleNext();
+    scheduleNextWord();
   };
 
   const previous = () => {
     cancelNextWord();
     dispatchPrevious();
-    scheduleNext();
-  };
-
-  const cancelNextWord = () => {
-    clearTimeout(timeoutIdRef.current);
+    scheduleNextWord();
   };
 
   return {
     index,
     isPlaying,
     controls: { play, pause, previous, next, stop },
+    scheduleNextWord,
+    cancelNextWord,
   };
 }

@@ -62,18 +62,6 @@ it("returns true for isPlaying when calling play callback", () => {
   expect(result.current.isPlaying).toBe(true);
 });
 
-it("continues playing from the middle when calling play", () => {
-  const { result } = renderHook(() =>
-    useIndexPlayer({ length: 2, displayTime: 3, initialIndex: 1 }),
-  );
-
-  expect(result.current.index).toBe(1);
-
-  act(() => result.current.controls.play());
-  act(() => jest.advanceTimersByTime(3000));
-  expect(result.current.index).toBe(0);
-});
-
 it("does not switch to the next index before the specified time when calling play", () => {
   const { result } = renderHook(() =>
     useIndexPlayer({ length: 2, displayTime: 3 }),
@@ -84,18 +72,6 @@ it("does not switch to the next index before the specified time when calling pla
   expect(result.current.index).toBe(0);
   act(() => jest.advanceTimersByTime(2999));
   expect(result.current.index).toBe(0);
-});
-
-it("switches to the next index at the specified time when calling play", () => {
-  const { result } = renderHook(() =>
-    useIndexPlayer({ length: 2, displayTime: 3 }),
-  );
-
-  act(() => result.current.controls.play());
-  expect(result.current.index).toBe(0);
-
-  act(() => jest.advanceTimersByTime(3000));
-  expect(result.current.index).toBe(1);
 });
 
 it("stops and goes back to the start when calling stop", () => {

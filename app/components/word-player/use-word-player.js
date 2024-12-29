@@ -14,6 +14,8 @@ export function createWordPlayerHook({ useValuePlayer }) {
       value: word,
       isPlaying,
       controls,
+      scheduleNextWord,
+      cancelNextWord,
     } = useValuePlayer({
       values: words,
       displayTime: setup.displayTime,
@@ -35,6 +37,8 @@ export function createWordPlayerHook({ useValuePlayer }) {
       word: { ...word, audio },
       isPlaying,
       controls: { ...controls, playAudio, stop },
+      scheduleNextWord,
+      cancelNextWord,
     };
   };
 }

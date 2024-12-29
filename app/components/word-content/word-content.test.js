@@ -29,6 +29,8 @@ function renderWordContent() {
           imageSrc: "/word/to-touch.jpg",
           audio: new Audio("/word/to-touch.mp3"),
         },
+        scheduleNextWord: jest.fn(),
+        cancelNextWord: jest.fn(),
       }}
     >
       <WordContent />
