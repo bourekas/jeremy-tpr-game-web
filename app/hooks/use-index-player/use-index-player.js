@@ -1,4 +1,5 @@
-import { useRef, useEffect, useReducer, useCallback } from "react";
+import { useRef, useEffect, useCallback } from "react";
+import useIndex from "./use-index";
 
 export default function useIndexPlayer({
   length = 0,
@@ -6,40 +7,20 @@ export default function useIndexPlayer({
   initialIndex = 0,
   initialIsPlaying = false,
 }) {
-  const reducer = (state, action) => {
-    const { index: i } = state;
-    let newState = null;
-
-    switch (action.type) {
-      case "play": {
-        newState = { isPlaying: true };
-        break;
-      }
-      case "pause": {
-        newState = { isPlaying: false };
-        break;
-      }
-      case "previous": {
-        newState = { index: i ? i - 1 : length - 1 };
-        break;
-      }
-      case "next": {
-        newState = { index: (i + 1) % length };
-        break;
-      }
-      case "stop": {
-        newState = { index: 0, isPlaying: false };
-        break;
-      }
-    }
-
-    return { ...state, ...newState };
-  };
-  const initialState = {
-    index: initialIndex,
-    isPlaying: initialIsPlaying,
-  };
-  const [{ index, isPlaying }, dispatch] = useReducer(reducer, initialState);
+  const {
+    index,
+    isPlaying,
+    play: dispatchPlay,
+    pause: dispatchPause,
+    previous: dispatchPrevious,
+    next: dispatchNext,
+    stop: dispatchStop,
+    dispatch,
+  } = useIndex({
+    length,
+    initialIndex,
+    initialIsPlaying,
+  });
   const timeoutIdRef = useRef();
 
   const scheduleNext = useCallback(() => {
@@ -49,7 +30,7 @@ export default function useIndexPlayer({
       dispatch({ type: "next" });
       scheduleNext();
     }, displayTime * 1000);
-  }, [isPlaying, displayTime]);
+  }, [isPlaying, displayTime, dispatch]);
 
   useEffect(() => {
     scheduleNext();
@@ -59,28 +40,28 @@ export default function useIndexPlayer({
 
   const play = () => {
     cancelNextWord();
-    dispatch({ type: "play" });
+    dispatchPlay();
   };
 
   const pause = () => {
     cancelNextWord();
-    dispatch({ type: "pause" });
+    dispatchPause();
   };
 
   const stop = () => {
     cancelNextWord();
-    dispatch({ type: "stop" });
+    dispatchStop();
   };
 
   const next = () => {
     cancelNextWord();
-    dispatch({ type: "next" });
+    dispatchNext();
     scheduleNext();
   };
 
   const previous = () => {
     cancelNextWord();
-    dispatch({ type: "previous" });
+    dispatchPrevious();
     scheduleNext();
   };
 
