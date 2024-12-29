@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-export default function useAudio(audio, isAutoPlay) {
+export default function useAutoPlayAudio(audio, isAutoPlay) {
   useEffect(() => {
     if (!isAutoPlay) return;
 
