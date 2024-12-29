@@ -15,7 +15,6 @@ export default function useIndexPlayer({
     previous: dispatchPrevious,
     next: dispatchNext,
     stop: dispatchStop,
-    dispatch,
   } = useIndex({
     length,
     initialIndex,
@@ -27,10 +26,10 @@ export default function useIndexPlayer({
     if (!isPlaying) return;
 
     timeoutIdRef.current = setTimeout(() => {
-      dispatch({ type: "next" });
+      dispatchNext();
       scheduleNext();
     }, displayTime * 1000);
-  }, [isPlaying, displayTime, dispatch]);
+  }, [isPlaying, displayTime, dispatchNext]);
 
   useEffect(() => {
     scheduleNext();

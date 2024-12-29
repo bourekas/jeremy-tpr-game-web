@@ -35,12 +35,12 @@ export default function useIndex({ length, initialIndex, initialIsPlaying }) {
     isPlaying: initialIsPlaying,
   };
   const [{ index, isPlaying }, dispatch] = useReducer(reducer, initialState);
-  const dispatchType = (type) => () => dispatch({ type });
-  const play = dispatchType("play");
-  const pause = dispatchType("pause");
-  const previous = dispatchType("previous");
-  const next = dispatchType("next");
-  const stop = dispatchType("stop");
+  const action = (type) => () => dispatch({ type });
+  const play = action("play");
+  const pause = action("pause");
+  const previous = action("previous");
+  const next = action("next");
+  const stop = action("stop");
 
-  return { index, isPlaying, play, pause, previous, next, stop, dispatch };
+  return { index, isPlaying, play, pause, previous, next, stop };
 }
