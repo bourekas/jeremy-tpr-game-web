@@ -79,7 +79,9 @@ export default function useIndexPlayer({
   };
 
   const previous = () => {
+    cancelNextWord();
     dispatch({ type: "previous" });
+    scheduleNext();
   };
 
   const cancelNextWord = () => {
