@@ -1,4 +1,4 @@
-import { useRef, useEffect, useReducer } from "react";
+import { useRef, useEffect, useReducer, useCallback } from "react";
 
 export default function useIndexPlayer({
   length = 0,
@@ -42,16 +42,20 @@ export default function useIndexPlayer({
   const [{ index, isPlaying }, dispatch] = useReducer(reducer, initialState);
   const timeoutIdRef = useRef();
 
-  useEffect(() => {
+  const scheduleNext = useCallback(() => {
     if (!isPlaying) return;
 
-    timeoutIdRef.current = setTimeout(
-      () => dispatch({ type: "next" }),
-      displayTime * 1000,
-    );
+    timeoutIdRef.current = setTimeout(() => {
+      dispatch({ type: "next" });
+      scheduleNext();
+    }, displayTime * 1000);
+  }, [isPlaying, displayTime]);
+
+  useEffect(() => {
+    scheduleNext();
 
     return cancelNextWord;
-  }, [index, isPlaying, displayTime]);
+  }, [scheduleNext]);
 
   const play = () => {
     cancelNextWord();
@@ -71,6 +75,7 @@ export default function useIndexPlayer({
   const next = () => {
     cancelNextWord();
     dispatch({ type: "next" });
+    scheduleNext();
   };
 
   const previous = () => {
