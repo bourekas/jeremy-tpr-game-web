@@ -1,8 +1,10 @@
 import { GameDisplayContext } from "@/app/contexts/game-display";
 import { useContext, useMemo } from "react";
 import useIndexPlayer from "./use-index-player";
+import { WordsContext } from "@/app/contexts/words";
 
-export default function useWordPlayer({ words }) {
+export default function useWordPlayer() {
+  const words = useContext(WordsContext);
   const { onBackToSetup } = useContext(GameDisplayContext);
 
   const { index, isPlaying, controls } = useIndexPlayer({
