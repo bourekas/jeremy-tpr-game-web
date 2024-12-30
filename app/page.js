@@ -2,7 +2,7 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import WordContent from "./components/word-content/word-content";
 import WordControls from "./components/word-controls/word-controls";
-import { WordPlayer } from "./composition";
+import WordPlayer from "./components/word-player/word-player";
 import SetupMenu from "./components/setup-menu/setup-menu";
 import GameDisplay from "./components/game-display/game-display";
 import { SetupProvider } from "./contexts/setup";

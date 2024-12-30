@@ -1,9 +1,12 @@
 import { act, useContext } from "react";
 import { render, screen } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
-import { createWordPlayerComponent } from "./word-player";
+import WordPlayer from "./word-player";
 import { GameDisplayContext } from "@/app/contexts/game-display";
 import { WordPlaybackContext } from "@/app/contexts/word-playback";
+import useWordPlayer from "./use-word-player";
+
+jest.mock("./use-word-player");
 
 const words = [
   { word: "a", imageSrc: "a.webp", audioSrc: "a.mp3" },
@@ -219,7 +222,7 @@ function renderWordPlayer(props = {}) {
     isPlaying: true,
     controls,
   };
-  const useWordPlayer = jest.fn().mockReturnValue(wordPlayerHookReturnValue);
+  useWordPlayer.mockReturnValue(wordPlayerHookReturnValue);
 
   const WordContent =
     props.WordContent ||
@@ -227,8 +230,6 @@ function renderWordPlayer(props = {}) {
   const WordControls =
     props.WordControls ||
     jest.fn().mockReturnValue(<div data-testid="controls" />);
-
-  const WordPlayer = createWordPlayerComponent(useWordPlayer);
 
   render(
     <GameDisplayContext.Provider value={{ onBackToSetup }}>
