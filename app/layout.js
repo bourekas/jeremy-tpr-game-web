@@ -3,6 +3,7 @@ import { ThemeProvider } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import { theme } from "./theme";
 import "./globals.css";
+import StoreProvider from "./store-provider";
 
 export const metadata = {
   title: "TPR Game",
@@ -15,7 +16,9 @@ export default function RootLayout({ children }) {
       <body>
         <CssBaseline />
         <AppRouterCacheProvider>
-          <ThemeProvider theme={theme}>{children}</ThemeProvider>
+          <ThemeProvider theme={theme}>
+            <StoreProvider>{children}</StoreProvider>
+          </ThemeProvider>
         </AppRouterCacheProvider>
       </body>
     </html>
