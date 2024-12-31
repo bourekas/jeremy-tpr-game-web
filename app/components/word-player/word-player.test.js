@@ -2,9 +2,9 @@ import { act, useContext } from "react";
 import { render, screen } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import WordPlayer from "./word-player";
-import { GameDisplayContext } from "@/app/contexts/game-display";
 import { WordPlaybackContext } from "@/app/contexts/word-playback";
 import useWordPlayer from "./use-word-player";
+import StoreProvider from "@/app/store-provider";
 
 jest.mock("./use-word-player");
 
@@ -232,12 +232,12 @@ function renderWordPlayer(props = {}) {
     jest.fn().mockReturnValue(<div data-testid="controls" />);
 
   render(
-    <GameDisplayContext.Provider value={{ onBackToSetup }}>
+    <StoreProvider>
       <WordPlayer words={words} {...props}>
         <WordContent />
         <WordControls />
       </WordPlayer>
-    </GameDisplayContext.Provider>,
+    </StoreProvider>,
   );
 
   return {

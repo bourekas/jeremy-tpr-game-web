@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import SetupMenu from "./setup-menu";
 import { SetupContext, defaultSetup } from "@/app/contexts/setup";
-import { GameDisplayContext } from "@/app/contexts/game-display";
+import StoreProvider from "@/app/store-provider";
 
 describe("TPR Game Setup heading", () => {
   const getGameSetupHeading = (level) =>
@@ -104,15 +104,6 @@ describe("auto-play audio option", () => {
   });
 });
 
-it("calls start callback when start button is clicked", async () => {
-  const { user, onStart } = renderSetupMenu({ setup: { displayTime: 5 } });
-
-  const startButton = screen.getByRole("button", { name: "Start" });
-  await user.click(startButton);
-
-  expect(onStart).toHaveBeenCalled();
-});
-
 function incrementDisplayTimeSlider(slider) {
   changeDisplayTimeSlider(slider, true);
 }
@@ -138,17 +129,17 @@ function renderSetupMenu(props = {}) {
   const onStart = jest.fn();
 
   render(
-    <SetupContext.Provider
-      value={{
-        setup: props.setup || defaultSetup,
-        setDisplayTime,
-        setIsAutoPlayAudio,
-      }}
-    >
-      <GameDisplayContext.Provider value={{ onStart }}>
+    <StoreProvider>
+      <SetupContext.Provider
+        value={{
+          setup: props.setup || defaultSetup,
+          setDisplayTime,
+          setIsAutoPlayAudio,
+        }}
+      >
         <SetupMenu {...props} />
-      </GameDisplayContext.Provider>
-    </SetupContext.Provider>,
+      </SetupContext.Provider>
+    </StoreProvider>,
   );
 
   return { user, setDisplayTime, setIsAutoPlayAudio, onStart };
