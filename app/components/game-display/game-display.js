@@ -1,9 +1,9 @@
 "use client";
 
-import { useSelector } from "@/lib/hooks";
+import { useIsGameStarted } from "@/lib/hooks";
 
 export default function GameDisplay({ setup, words }) {
-  const isGameStarted = useSelector((state) => state.game.isGameStarted);
+  const isGameStarted = useIsGameStarted();
 
   return isGameStarted ? words : setup;
 }
