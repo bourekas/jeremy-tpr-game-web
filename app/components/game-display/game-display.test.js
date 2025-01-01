@@ -2,30 +2,27 @@ import { render, screen } from "@testing-library/react";
 import GameDisplay from "./game-display";
 import StoreProvider from "@/app/store-provider";
 
-it("initially renders setup by default", () => {
-  renderGameDisplay();
+it("renders setup element when game has not started", () => {
+  renderGameDisplay({ isGameStarted: false });
 
   expect(screen.getByTestId("setup")).toBeInTheDocument();
 });
 
-it("renders setup when initialIsGameStarted is false", () => {
-  renderGameDisplay({ initialIsGameStarted: false });
+it("renders word element when game has started", () => {
+  renderGameDisplay({ isGameStarted: true });
 
-  expect(screen.getByTestId("setup")).toBeInTheDocument();
+  expect(screen.getByTestId("words")).toBeInTheDocument();
 });
 
-// render with mocked dependencies
-function renderGameDisplay(props = {}) {
-  const Setup =
-    props.Setup || jest.fn().mockReturnValue(<div data-testid="setup" />);
-  const Words =
-    props.Words || jest.fn().mockReturnValue(<div data-testid="words" />);
+function renderGameDisplay({ isGameStarted }) {
+  const setup = <div data-testid="setup" />;
+  const words = <div data-testid="words" />;
 
-  render(
-    <StoreProvider>
-      <GameDisplay setup={<Setup />} words={<Words />} {...props} />
-    </StoreProvider>,
+  const wrapper = ({ children }) => (
+    <StoreProvider initialState={{ game: { isGameStarted } }}>
+      {children}
+    </StoreProvider>
   );
 
-  return { Setup, Words };
+  return render(<GameDisplay setup={setup} words={words} />, { wrapper });
 }
