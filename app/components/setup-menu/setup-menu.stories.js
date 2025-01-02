@@ -1,13 +1,15 @@
-import { SetupProvider } from "@/app/contexts/setup";
+import { GameSetupContext, GameStatusContext } from "@/app/contexts";
 import SetupMenu from "./setup-menu";
 
 const meta = {
   component: SetupMenu,
   decorators: [
-    (Story) => (
-      <SetupProvider>
-        <Story />
-      </SetupProvider>
+    (Story, { args: { displayTime, isAutoPlayAudio } }) => (
+      <GameSetupContext.Provider value={{ displayTime, isAutoPlayAudio }}>
+        <GameStatusContext.Provider value={{}}>
+          <Story />
+        </GameStatusContext.Provider>
+      </GameSetupContext.Provider>
     ),
   ],
 };
@@ -15,6 +17,7 @@ export default meta;
 
 export const Default = {
   args: {
-    onStart: () => console.log("Start called"),
+    displayTime: 5,
+    isAutoPlayAudio: false,
   },
 };

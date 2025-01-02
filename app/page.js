@@ -5,7 +5,6 @@ import WordControls from "./components/word-controls/word-controls";
 import WordPlayer from "./components/word-player/word-player";
 import SetupMenu from "./components/setup-menu/setup-menu";
 import GameDisplay from "./components/game-display/game-display";
-import { SetupProvider } from "./contexts/setup";
 import { WordsProvider } from "./contexts/words";
 import ShuffleWordPlayer from "./components/shuffle-word-player/shuffle-word-player";
 
@@ -31,19 +30,17 @@ export default function Home() {
     <PageWrapper>
       <GamePanel>
         <WordsProvider words={words}>
-          <SetupProvider>
-            <GameDisplay
-              setup={<SetupMenu />}
-              words={
-                <ShuffleWordPlayer>
-                  <WordPlayer>
-                    <WordContent />
-                    <WordControls />
-                  </WordPlayer>
-                </ShuffleWordPlayer>
-              }
-            />
-          </SetupProvider>
+          <GameDisplay
+            setup={<SetupMenu />}
+            words={
+              <ShuffleWordPlayer>
+                <WordPlayer>
+                  <WordContent />
+                  <WordControls />
+                </WordPlayer>
+              </ShuffleWordPlayer>
+            }
+          />
         </WordsProvider>
       </GamePanel>
     </PageWrapper>

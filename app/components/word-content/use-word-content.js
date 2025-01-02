@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { WordPlaybackContext } from "@/app/contexts/word-playback";
-import { SetupContext } from "@/app/contexts/setup";
+import { GameSetupContext } from "@/app/contexts";
 import useAutoPlayAudio from "./use-auto-play-audio";
 import useScheduleNextWord from "./use-schedule-next-word";
 
@@ -10,10 +10,10 @@ export default function useWordContent() {
     isPlaying,
     controls: { next },
   } = useContext(WordPlaybackContext);
-  const { setup } = useContext(SetupContext);
+  const { displayTime, isAutoPlayAudio } = useContext(GameSetupContext);
 
-  useAutoPlayAudio(word.audio, setup.isAutoPlayAudio);
-  useScheduleNextWord({ next, isPlaying, displayTime: setup.displayTime });
+  useAutoPlayAudio(word.audio, isAutoPlayAudio);
+  useScheduleNextWord({ next, isPlaying, displayTime });
 
   return word;
 }
