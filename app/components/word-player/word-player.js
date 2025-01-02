@@ -6,8 +6,8 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { WordPlaybackContext } from "@/app/contexts/word-playback";
 import useWordPlayer from "./use-word-player";
 
-export default function WordPlayer({ children, ...props }) {
-  const { word, isPlaying, controls } = useWordPlayer(props);
+export default function WordPlayer({ children }) {
+  const { word, isPlaying, controls } = useWordPlayer();
 
   return (
     <WordPlaybackContext.Provider value={{ word, isPlaying, controls }}>

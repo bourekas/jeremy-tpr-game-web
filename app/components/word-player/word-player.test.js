@@ -33,17 +33,6 @@ it("calls stop control when clicking back to setup button", async () => {
   expect(stop).toHaveBeenCalled();
 });
 
-it("forwards all props except onBackToSetup to useWordPlayer", () => {
-  const propsExceptOnBackToSetup = {
-    words,
-    initialIsPlaying: true,
-    initialWordIndex: 1,
-  };
-  const { useWordPlayer } = renderWordPlayer(propsExceptOnBackToSetup);
-
-  expect(useWordPlayer).toHaveBeenCalledWith(propsExceptOnBackToSetup);
-});
-
 it("provides the returned word prop from useWordPlayer", () => {
   let providedWord;
 
