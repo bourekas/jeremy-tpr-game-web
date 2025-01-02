@@ -1,8 +1,9 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import SetupMenu from "./setup-menu";
-import { SetupContext, defaultSetup } from "@/app/contexts/setup";
-import StoreProvider from "@/app/store-provider";
+import { GameStatusContext, GameSetupContext } from "@/app/contexts";
+
+const setup = { displayTime: 4, isAutoPlayAudio: false };
 
 describe("TPR Game Setup heading", () => {
   const getGameSetupHeading = (level) =>
@@ -126,21 +127,21 @@ function renderSetupMenu(props = {}) {
   const user = userEvent.setup();
   const setDisplayTime = jest.fn();
   const setIsAutoPlayAudio = jest.fn();
-  const onStart = jest.fn();
+  const startGame = jest.fn();
 
   render(
-    <StoreProvider>
-      <SetupContext.Provider
-        value={{
-          setup: props.setup || defaultSetup,
-          setDisplayTime,
-          setIsAutoPlayAudio,
-        }}
-      >
+    <GameSetupContext.Provider
+      value={{
+        ...(props.setup || setup),
+        setDisplayTime,
+        setIsAutoPlayAudio,
+      }}
+    >
+      <GameStatusContext.Provider value={{ startGame }}>
         <SetupMenu {...props} />
-      </SetupContext.Provider>
-    </StoreProvider>,
+      </GameStatusContext.Provider>
+    </GameSetupContext.Provider>,
   );
 
-  return { user, setDisplayTime, setIsAutoPlayAudio, onStart };
+  return { user, setDisplayTime, setIsAutoPlayAudio, onStart: startGame };
 }

@@ -4,7 +4,7 @@ import { userEvent } from "@testing-library/user-event";
 import WordPlayer from "./word-player";
 import { WordPlaybackContext } from "@/app/contexts/word-playback";
 import useWordPlayer from "./use-word-player";
-import StoreProvider from "@/app/store-provider";
+import StoreProvider from "@/app/store/store-provider/store-provider";
 
 jest.mock("./use-word-player");
 

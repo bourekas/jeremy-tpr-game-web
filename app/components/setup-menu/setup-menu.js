@@ -9,7 +9,13 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import useSetupMenu from "./use-setup-menu";
 
 export default function SetupMenu({ headingLevel = 1 }) {
-  const { setup, setDisplayTime, setIsAutoPlayAudio, start } = useSetupMenu();
+  const {
+    displayTime,
+    isAutoPlayAudio,
+    setDisplayTime,
+    setIsAutoPlayAudio,
+    startGame,
+  } = useSetupMenu();
 
   return (
     <Box sx={{ padding: 3 }}>
@@ -18,18 +24,18 @@ export default function SetupMenu({ headingLevel = 1 }) {
       </Box>
       <Box sx={{ mb: 2 }}>
         <DisplayTimeOption
-          displayTime={setup.displayTime}
+          displayTime={displayTime}
           onDisplayTimeChange={setDisplayTime}
         />
       </Box>
       <Box sx={{ mb: 2 }}>
         <AutoPlayAudioOption
-          isEnabled={setup.isAutoPlayAudio}
+          isEnabled={isAutoPlayAudio}
           onChange={setIsAutoPlayAudio}
         />
       </Box>
       <Box sx={{ display: "flex", justifyContent: "center" }}>
-        <StartButton onStart={start} />
+        <StartButton onStart={startGame} />
       </Box>
     </Box>
   );

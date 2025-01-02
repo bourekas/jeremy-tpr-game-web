@@ -1,15 +1,9 @@
 import { useContext } from "react";
-import { SetupContext } from "@/app/contexts/setup";
-import { useDispatch } from "@/lib/hooks";
-import { startGame } from "@/lib/game-slice";
+import { GameSetupContext, GameStatusContext } from "@/app/contexts";
 
 export default function useSetupMenu() {
-  const setup = useContext(SetupContext);
-  const dispatch = useDispatch();
+  const setup = useContext(GameSetupContext);
+  const { startGame } = useContext(GameStatusContext);
 
-  const start = () => {
-    dispatch(startGame());
-  };
-
-  return { ...setup, start };
+  return { ...setup, startGame };
 }
