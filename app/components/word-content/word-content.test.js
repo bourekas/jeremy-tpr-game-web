@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import WordContent from "./word-content";
-import { WordPlaybackContext } from "@/app/contexts/word-playback";
+import { GamePlaybackContext } from "@/app/contexts";
 import { GameSetupContext } from "@/app/contexts";
 
 it("renders the TPR image", () => {
@@ -24,7 +24,7 @@ it("renders the word text as level 1 heading", () => {
 function renderWordContent() {
   render(
     <GameSetupContext.Provider value={{}}>
-      <WordPlaybackContext.Provider
+      <GamePlaybackContext.Provider
         value={{
           word: {
             word: "לגעת",
@@ -37,7 +37,7 @@ function renderWordContent() {
         }}
       >
         <WordContent />
-      </WordPlaybackContext.Provider>
+      </GamePlaybackContext.Provider>
       ,
     </GameSetupContext.Provider>,
   );

@@ -9,10 +9,10 @@ import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 import StopIcon from "@mui/icons-material/Stop";
 import ActionButton from "../action-button/action-button";
-import { WordPlaybackContext } from "@/app/contexts/word-playback";
+import { GamePlaybackContext } from "@/app/contexts";
 
 export default function WordControls() {
-  const { isPlaying, controls } = useContext(WordPlaybackContext);
+  const { isPlaying, controls } = useContext(GamePlaybackContext);
   const { playAudio, play, pause, previous, next, stop } = controls;
   const handleTogglePlay = isPlaying ? pause : play;
 

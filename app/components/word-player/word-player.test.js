@@ -2,7 +2,7 @@ import { act, useContext } from "react";
 import { render, screen } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import WordPlayer from "./word-player";
-import { WordPlaybackContext } from "@/app/contexts/word-playback";
+import { GamePlaybackContext } from "@/app/contexts";
 import useWordPlayer from "./use-word-player";
 import StoreProvider from "@/app/store/store-provider/store-provider";
 
@@ -37,7 +37,7 @@ it("provides the returned word prop from useWordPlayer", () => {
   let providedWord;
 
   const WordContent = jest.fn(() => {
-    const result = useContext(WordPlaybackContext);
+    const result = useContext(GamePlaybackContext);
     providedWord = result.word;
   });
 
@@ -52,7 +52,7 @@ it("provides the returned isPlaying prop from useWordPlayer", () => {
   let providedIsPlaying;
 
   const WordControls = jest.fn(() => {
-    const result = useContext(WordPlaybackContext);
+    const result = useContext(GamePlaybackContext);
     providedIsPlaying = result.isPlaying;
   });
 
@@ -67,7 +67,7 @@ it("provides the returned playAudio control from useWordPlayer", () => {
   let providedPlayAudio;
 
   const WordControls = jest.fn(() => {
-    const result = useContext(WordPlaybackContext);
+    const result = useContext(GamePlaybackContext);
     providedPlayAudio = result.controls.playAudio;
   });
 
@@ -86,7 +86,7 @@ it("provides the returned play control from useWordPlayer", () => {
   let providedPlay;
 
   const WordControls = jest.fn(() => {
-    const result = useContext(WordPlaybackContext);
+    const result = useContext(GamePlaybackContext);
     providedPlay = result.controls.play;
   });
 
@@ -105,7 +105,7 @@ it("provides the returned pause control from useWordPlayer", () => {
   let providedPause;
 
   const WordControls = jest.fn(() => {
-    const result = useContext(WordPlaybackContext);
+    const result = useContext(GamePlaybackContext);
     providedPause = result.controls.pause;
   });
 
@@ -124,7 +124,7 @@ it("provides the previous control returned from useWordPlayer", () => {
   let providedPrevious;
 
   const WordControls = jest.fn(() => {
-    const result = useContext(WordPlaybackContext);
+    const result = useContext(GamePlaybackContext);
     providedPrevious = result.controls.previous;
   });
 
@@ -143,7 +143,7 @@ it("provides the next control returned from useWordPlayer", () => {
   let providedNext;
 
   const WordControls = jest.fn(() => {
-    const result = useContext(WordPlaybackContext);
+    const result = useContext(GamePlaybackContext);
     providedNext = result.controls.next;
   });
 
@@ -162,7 +162,7 @@ it("provides the stop control returned from useWordPlayer", () => {
   let providedStop;
 
   const WordControls = jest.fn(() => {
-    const result = useContext(WordPlaybackContext);
+    const result = useContext(GamePlaybackContext);
     providedStop = result.controls.stop;
   });
 

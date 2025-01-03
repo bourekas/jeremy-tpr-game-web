@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import WordControls from "./word-controls";
-import { WordPlaybackContext } from "@/app/contexts/word-playback";
+import { GamePlaybackContext } from "@/app/contexts";
 
 const playButtonName = "Play";
 const pauseButtonName = "Pause";
@@ -84,9 +84,9 @@ function renderWordControls({ isPlaying } = {}) {
   };
 
   render(
-    <WordPlaybackContext.Provider value={{ controls, isPlaying }}>
+    <GamePlaybackContext.Provider value={{ controls, isPlaying }}>
       <WordControls />
-    </WordPlaybackContext.Provider>,
+    </GamePlaybackContext.Provider>,
   );
 
   const clickButton = (name) =>
