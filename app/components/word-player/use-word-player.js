@@ -1,12 +1,11 @@
 import { useContext, useMemo } from "react";
+import { GameStatusContext } from "@/app/contexts";
 import useIndexPlayer from "./use-index-player";
 import { WordsContext } from "@/app/contexts/words";
-import { useDispatch } from "@/lib/hooks";
-import { backToSetup } from "@/lib/game-slice";
 
 export default function useWordPlayer() {
   const words = useContext(WordsContext);
-  const dispatch = useDispatch();
+  const { stopGame } = useContext(GameStatusContext);
 
   const { index, isPlaying, controls } = useIndexPlayer({
     length: words.length,
@@ -18,7 +17,7 @@ export default function useWordPlayer() {
 
   const stop = () => {
     controls.stop();
-    dispatch(backToSetup());
+    stopGame();
   };
 
   return {
