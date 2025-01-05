@@ -4,7 +4,6 @@ import { userEvent } from "@testing-library/user-event";
 import WordPlayer from "./word-player";
 import { GamePlaybackContext } from "@/app/contexts";
 import useWordPlayer from "./use-word-player";
-import StoreProvider from "@/app/store/store-provider/store-provider";
 
 jest.mock("./use-word-player");
 
@@ -221,12 +220,10 @@ function renderWordPlayer(props = {}) {
     jest.fn().mockReturnValue(<div data-testid="controls" />);
 
   render(
-    <StoreProvider>
-      <WordPlayer words={words} {...props}>
-        <WordContent />
-        <WordControls />
-      </WordPlayer>
-    </StoreProvider>,
+    <WordPlayer words={words} {...props}>
+      <WordContent />
+      <WordControls />
+    </WordPlayer>,
   );
 
   return {

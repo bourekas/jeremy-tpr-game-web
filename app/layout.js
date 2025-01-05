@@ -3,9 +3,6 @@ import { ThemeProvider } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import { theme } from "./theme";
 import "./globals.css";
-import StoreProvider from "./store/store-provider/store-provider";
-import StoreGameStatusProvider from "./store/store-game-status-provider/store-game-status-provider";
-import StoreGameSetupProvider from "./store/store-game-setup-provider/store-game-setup-provider";
 
 export const metadata = {
   title: "TPR Game",
@@ -17,9 +14,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <CssBaseline />
-        <MuiProviders>
-          <StoreProviders>{children}</StoreProviders>
-        </MuiProviders>
+        <MuiProviders>{children}</MuiProviders>
       </body>
     </html>
   );
@@ -30,15 +25,5 @@ function MuiProviders({ children }) {
     <AppRouterCacheProvider>
       <ThemeProvider theme={theme}>{children}</ThemeProvider>
     </AppRouterCacheProvider>
-  );
-}
-
-function StoreProviders({ children }) {
-  return (
-    <StoreProvider>
-      <StoreGameSetupProvider>
-        <StoreGameStatusProvider>{children}</StoreGameStatusProvider>
-      </StoreGameSetupProvider>
-    </StoreProvider>
   );
 }

@@ -7,6 +7,10 @@ import SetupMenu from "./components/setup-menu/setup-menu";
 import GameDisplay from "./components/game-display/game-display";
 import { WordsProvider } from "./contexts/words";
 import ShuffleWordPlayer from "./components/shuffle-word-player/shuffle-word-player";
+import StoreProvider from "./store/store-provider/store-provider";
+import StoreGamePlaybackProvider from "./store/store-game-playback-provider/store-game-playback-provider";
+import StoreGameStatusProvider from "./store/store-game-status-provider/store-game-status-provider";
+import StoreGameSetupProvider from "./store/store-game-setup-provider/store-game-setup-provider";
 
 const words = [
   "לָגַעַת",
@@ -29,21 +33,35 @@ export default function Home() {
   return (
     <PageWrapper>
       <GamePanel>
-        <WordsProvider words={words}>
-          <GameDisplay
-            setup={<SetupMenu />}
-            words={
-              <ShuffleWordPlayer>
-                <WordPlayer>
-                  <WordContent />
-                  <WordControls />
-                </WordPlayer>
-              </ShuffleWordPlayer>
-            }
-          />
-        </WordsProvider>
+        <GameProvider>
+          <WordsProvider words={words}>
+            <GameDisplay
+              setup={<SetupMenu />}
+              words={
+                <ShuffleWordPlayer>
+                  <WordPlayer>
+                    <WordContent />
+                    <WordControls />
+                  </WordPlayer>
+                </ShuffleWordPlayer>
+              }
+            />
+          </WordsProvider>
+        </GameProvider>
       </GamePanel>
     </PageWrapper>
+  );
+}
+
+function GameProvider({ children }) {
+  return (
+    <StoreProvider>
+      <StoreGameSetupProvider>
+        <StoreGameStatusProvider>
+          <StoreGamePlaybackProvider>{children}</StoreGamePlaybackProvider>
+        </StoreGameStatusProvider>
+      </StoreGameSetupProvider>
+    </StoreProvider>
   );
 }
 

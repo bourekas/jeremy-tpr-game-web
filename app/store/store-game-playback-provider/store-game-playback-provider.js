@@ -1,3 +1,5 @@
+"use client";
+
 import { GamePlaybackContext } from "@/app/contexts";
 import { gameSlice } from "@/lib/game-slice";
 import { useDispatch, useSelector } from "@/lib/hooks";
