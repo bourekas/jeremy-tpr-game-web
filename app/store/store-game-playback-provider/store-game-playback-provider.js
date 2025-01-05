@@ -1,10 +1,12 @@
 "use client";
 
+import { useMemo } from "react";
 import { GamePlaybackContext } from "@/app/contexts";
 import { gameSlice } from "@/lib/game-slice";
 import { useDispatch, useSelector } from "@/lib/hooks";
 
 export default function StoreGamePlaybackProvider({ children }) {
+  const words = useSelector((state) => state.game.words);
   const index = useSelector((state) => state.game.playback.index);
   const isPlaying = useSelector((state) => state.game.playback.isPlaying);
   const dispatch = useDispatch();
@@ -14,9 +16,20 @@ export default function StoreGamePlaybackProvider({ children }) {
       () => dispatch(action()),
     ]),
   );
+  const word = words[index];
+  const audioSrc = word?.audioSrc;
+  const audio = useMemo(() => audioSrc && new Audio(audioSrc), [audioSrc]);
+  const playAudio = () => audio?.play();
 
   return (
-    <GamePlaybackContext.Provider value={{ index, isPlaying, controls }}>
+    <GamePlaybackContext.Provider
+      value={{
+        word: { ...word, audio },
+        index,
+        isPlaying,
+        controls: { ...controls, playAudio },
+      }}
+    >
       {children}
     </GamePlaybackContext.Provider>
   );

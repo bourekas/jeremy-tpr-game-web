@@ -4,18 +4,18 @@ import Box from "@mui/material/Box";
 import ActionButton from "../action-button/action-button";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { GamePlaybackContext } from "@/app/contexts";
-import useWordPlayer from "./use-word-player";
+import { useContext } from "react";
 
 export default function WordPlayer({ children }) {
-  const { word, isPlaying, controls } = useWordPlayer();
+  const { controls } = useContext(GamePlaybackContext);
 
   return (
-    <GamePlaybackContext.Provider value={{ word, isPlaying, controls }}>
+    <>
       <Box sx={{ mb: { xs: 0.5, sm: 1 } }}>
         <BackToSetupButton onClick={controls.stop} />
       </Box>
       {children}
-    </GamePlaybackContext.Provider>
+    </>
   );
 }
 

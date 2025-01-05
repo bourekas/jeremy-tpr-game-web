@@ -6,7 +6,16 @@ import StoreGamePlaybackProvider from "./store-game-playback-provider";
 import { makeStore } from "@/lib/store";
 import { gameSlice } from "@/lib/game-slice";
 
-it.each([0, 4])(
+const words = [
+  { word: "a", imageSrc: "a.webp", audioSrc: "a.mp3" },
+  { word: "b", imageSrc: "b.webp", audioSrc: "b.mp3" },
+];
+const playback = {
+  index: 0,
+  isPlaying: false,
+};
+
+it.each([0, 1])(
   "provides the playback index from the store for index = %d",
   (index) => {
     const { result } = renderStoreGamePlaybackProvider({ playback: { index } });
@@ -81,8 +90,10 @@ it("provides 'stop' callback that dispatches the stop action", () => {
   );
 });
 
-function renderStoreGamePlaybackProvider({ playback = {} } = {}) {
-  const initialState = { game: { playback } };
+function renderStoreGamePlaybackProvider(props = {}) {
+  const initialState = {
+    game: { words, playback: { ...playback, ...props.playback } },
+  };
   const reducer = jest.fn((state) => state);
   const store = makeStore({ initialState, reducer });
 
