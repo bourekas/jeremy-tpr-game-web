@@ -1,24 +1,18 @@
 import { useContext, useMemo } from "react";
-import { GamePlaybackContext, GameStatusContext } from "@/app/contexts";
+import { GamePlaybackContext } from "@/app/contexts";
 import { WordsContext } from "@/app/contexts/words";
 
 export default function useWordPlayer() {
   const words = useContext(WordsContext);
-  const { stopGame } = useContext(GameStatusContext);
   const { index, isPlaying, controls } = useContext(GamePlaybackContext);
-  const word = words[index];
 
+  const word = words[index];
   const audio = useMemo(() => new Audio(word.audioSrc), [word.audioSrc]);
   const playAudio = () => audio.play();
-
-  const stop = () => {
-    controls.stop();
-    stopGame();
-  };
 
   return {
     word: { ...word, audio },
     isPlaying,
-    controls: { ...controls, playAudio, stop },
+    controls: { ...controls, playAudio },
   };
 }
