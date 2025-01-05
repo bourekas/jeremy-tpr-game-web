@@ -5,7 +5,7 @@ import { setWords } from "@/lib/game-slice";
 import { useEffect } from "react";
 import { GameWordsContext } from "@/app/contexts";
 
-export function WordsProvider({ words, children }) {
+export function StoreGameWordsProvider({ words, children }) {
   const dispatch = useDispatch();
 
   useEffect(() => {

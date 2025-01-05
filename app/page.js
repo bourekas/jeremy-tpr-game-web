@@ -5,7 +5,7 @@ import WordControls from "./components/word-controls/word-controls";
 import WordPlayer from "./components/word-player/word-player";
 import SetupMenu from "./components/setup-menu/setup-menu";
 import GameDisplay from "./components/game-display/game-display";
-import { WordsProvider } from "./contexts/words";
+import { StoreGameWordsProvider } from "./store/store-game-words-provider";
 import ShuffleWordPlayer from "./components/shuffle-word-player/shuffle-word-player";
 import StoreProvider from "./store/store-provider/store-provider";
 import StoreGamePlaybackProvider from "./store/store-game-playback-provider/store-game-playback-provider";
@@ -52,7 +52,7 @@ export default function Home() {
 function GameProvider({ children, words }) {
   return (
     <StoreProvider>
-      <WordsProvider words={words}>
+      <StoreGameWordsProvider words={words}>
         <ShuffleWordPlayer>
           <StoreGameSetupProvider>
             <StoreGameStatusProvider>
@@ -60,7 +60,7 @@ function GameProvider({ children, words }) {
             </StoreGameStatusProvider>
           </StoreGameSetupProvider>
         </ShuffleWordPlayer>
-      </WordsProvider>
+      </StoreGameWordsProvider>
     </StoreProvider>
   );
 }
