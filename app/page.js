@@ -33,34 +33,34 @@ export default function Home() {
   return (
     <PageWrapper>
       <GamePanel>
-        <GameProvider>
-          <WordsProvider words={words}>
-            <GameDisplay
-              setup={<SetupMenu />}
-              words={
-                <ShuffleWordPlayer>
-                  <WordPlayer>
-                    <WordContent />
-                    <WordControls />
-                  </WordPlayer>
-                </ShuffleWordPlayer>
-              }
-            />
-          </WordsProvider>
+        <GameProvider words={words}>
+          <GameDisplay
+            setup={<SetupMenu />}
+            words={
+              <WordPlayer>
+                <WordContent />
+                <WordControls />
+              </WordPlayer>
+            }
+          />
         </GameProvider>
       </GamePanel>
     </PageWrapper>
   );
 }
 
-function GameProvider({ children }) {
+function GameProvider({ children, words }) {
   return (
     <StoreProvider>
-      <StoreGameSetupProvider>
-        <StoreGameStatusProvider>
-          <StoreGamePlaybackProvider>{children}</StoreGamePlaybackProvider>
-        </StoreGameStatusProvider>
-      </StoreGameSetupProvider>
+      <WordsProvider words={words}>
+        <ShuffleWordPlayer>
+          <StoreGameSetupProvider>
+            <StoreGameStatusProvider>
+              <StoreGamePlaybackProvider>{children}</StoreGamePlaybackProvider>
+            </StoreGameStatusProvider>
+          </StoreGameSetupProvider>
+        </ShuffleWordPlayer>
+      </WordsProvider>
     </StoreProvider>
   );
 }

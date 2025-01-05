@@ -1,15 +1,11 @@
 import { useContext, useMemo } from "react";
-import { GameStatusContext } from "@/app/contexts";
-import useIndexPlayer from "./use-index-player";
+import { GamePlaybackContext, GameStatusContext } from "@/app/contexts";
 import { WordsContext } from "@/app/contexts/words";
 
 export default function useWordPlayer() {
   const words = useContext(WordsContext);
   const { stopGame } = useContext(GameStatusContext);
-
-  const { index, isPlaying, controls } = useIndexPlayer({
-    length: words.length,
-  });
+  const { index, isPlaying, controls } = useContext(GamePlaybackContext);
   const word = words[index];
 
   const audio = useMemo(() => new Audio(word.audioSrc), [word.audioSrc]);
