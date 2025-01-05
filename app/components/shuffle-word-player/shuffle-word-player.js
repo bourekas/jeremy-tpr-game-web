@@ -2,18 +2,18 @@
 
 import { useContext, useMemo } from "react";
 import { shuffle as lodashShuffle } from "lodash";
-import { WordsContext } from "@/app/contexts/words";
+import { GameWordsContext } from "@/app/contexts";
 
 export default function ShuffleWordPlayer({
   shuffle = lodashShuffle,
   children,
 }) {
-  const words = useContext(WordsContext);
+  const words = useContext(GameWordsContext);
   const shuffledWords = useMemo(() => shuffle(words), [shuffle, words]);
 
   return (
-    <WordsContext.Provider value={shuffledWords}>
+    <GameWordsContext.Provider value={shuffledWords}>
       {children}
-    </WordsContext.Provider>
+    </GameWordsContext.Provider>
   );
 }

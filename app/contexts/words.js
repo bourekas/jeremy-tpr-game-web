@@ -2,9 +2,8 @@
 
 import { useDispatch } from "@/lib/hooks";
 import { setWords } from "@/lib/game-slice";
-import { createContext, useEffect } from "react";
-
-export const WordsContext = createContext();
+import { useEffect } from "react";
+import { GameWordsContext } from "@/app/contexts";
 
 export function WordsProvider({ words, children }) {
   const dispatch = useDispatch();
@@ -14,6 +13,8 @@ export function WordsProvider({ words, children }) {
   }, [words, dispatch]);
 
   return (
-    <WordsContext.Provider value={words}>{children}</WordsContext.Provider>
+    <GameWordsContext.Provider value={words}>
+      {children}
+    </GameWordsContext.Provider>
   );
 }

@@ -1,9 +1,8 @@
 import { useContext, useMemo } from "react";
-import { GamePlaybackContext } from "@/app/contexts";
-import { WordsContext } from "@/app/contexts/words";
+import { GamePlaybackContext, GameWordsContext } from "@/app/contexts";
 
 export default function useWordPlayer() {
-  const words = useContext(WordsContext);
+  const words = useContext(GameWordsContext);
   const { index, isPlaying, controls } = useContext(GamePlaybackContext);
 
   const word = words[index];

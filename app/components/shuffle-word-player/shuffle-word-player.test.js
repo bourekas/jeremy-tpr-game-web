@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import { WordsContext, WordsProvider } from "@/app/contexts/words";
+import { GameWordsContext } from "@/app/contexts";
 import ShuffleWordPlayer from "./shuffle-word-player";
 import { useContext } from "react";
 
@@ -17,9 +17,9 @@ it("forwards the provided words to the shuffle function", () => {
   const shuffle = jest.fn();
 
   render(
-    <WordsProvider words={words}>
+    <GameWordsContext.Provider value={words}>
       <ShuffleWordPlayer shuffle={shuffle} />
-    </WordsProvider>,
+    </GameWordsContext.Provider>,
   );
 
   expect(shuffle).toHaveBeenCalledWith(words);
@@ -31,7 +31,7 @@ it("provides the shuffled words instead of the original words", () => {
   let providedWords = null;
 
   const WordsConsumer = () => {
-    providedWords = useContext(WordsContext);
+    providedWords = useContext(GameWordsContext);
 
     return <div />;
   };
