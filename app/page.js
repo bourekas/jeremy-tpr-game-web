@@ -2,7 +2,6 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import WordContent from "./components/word-content/word-content";
 import WordControls from "./components/word-controls/word-controls";
-import WordPlayer from "./components/word-player/word-player";
 import SetupMenu from "./components/setup-menu/setup-menu";
 import GameDisplay from "./components/game-display/game-display";
 import { StoreGameWordsProvider } from "./store/store-game-words-provider";
@@ -11,6 +10,7 @@ import StoreProvider from "./store/store-provider/store-provider";
 import StoreGamePlaybackProvider from "./store/store-game-playback-provider/store-game-playback-provider";
 import StoreGameStatusProvider from "./store/store-game-status-provider/store-game-status-provider";
 import StoreGameSetupProvider from "./store/store-game-setup-provider/store-game-setup-provider";
+import BackToSetupButton from "./components/back-to-setup-button/back-to-setup-button";
 
 const words = [
   "לָגַעַת",
@@ -37,10 +37,11 @@ export default function Home() {
           <GameDisplay
             setup={<SetupMenu />}
             words={
-              <WordPlayer>
+              <>
+                <BackToSetupButton />
                 <WordContent />
                 <WordControls />
-              </WordPlayer>
+              </>
             }
           />
         </GameProvider>
