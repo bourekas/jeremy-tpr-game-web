@@ -38,11 +38,13 @@ export default function Game() {
         <GameDisplay
           setup={<SetupMenu />}
           words={
-            <>
-              <BackToSetupButton />
-              <WordContent />
-              <WordControls />
-            </>
+            <ShuffleWordPlayer>
+              <StoreGamePlaybackProvider>
+                <BackToSetupButton />
+                <WordContent />
+                <WordControls />
+              </StoreGamePlaybackProvider>
+            </ShuffleWordPlayer>
           }
         />
       </GamePanel>
@@ -54,13 +56,9 @@ function GameProvider({ children, words }) {
   return (
     <StoreProvider>
       <StoreGameWordsProvider words={words}>
-        <ShuffleWordPlayer>
-          <StoreGameSetupProvider>
-            <StoreGameStatusProvider>
-              <StoreGamePlaybackProvider>{children}</StoreGamePlaybackProvider>
-            </StoreGameStatusProvider>
-          </StoreGameSetupProvider>
-        </ShuffleWordPlayer>
+        <StoreGameSetupProvider>
+          <StoreGameStatusProvider>{children}</StoreGameStatusProvider>
+        </StoreGameSetupProvider>
       </StoreGameWordsProvider>
     </StoreProvider>
   );

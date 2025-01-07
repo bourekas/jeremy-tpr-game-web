@@ -1,6 +1,6 @@
 import { act, useContext } from "react";
 import { renderHook } from "@testing-library/react";
-import { GamePlaybackContext } from "@/app/contexts";
+import { GamePlaybackContext, GameWordsContext } from "@/app/contexts";
 import StoreProvider from "../store-provider/store-provider";
 import StoreGamePlaybackProvider from "./store-game-playback-provider";
 import { makeStore } from "@/lib/store";
@@ -98,9 +98,11 @@ function renderStoreGamePlaybackProvider(props = {}) {
   const store = makeStore({ initialState, reducer });
 
   const wrapper = ({ children }) => (
-    <StoreProvider store={store}>
-      <StoreGamePlaybackProvider>{children}</StoreGamePlaybackProvider>
-    </StoreProvider>
+    <GameWordsContext.Provider value={words}>
+      <StoreProvider store={store}>
+        <StoreGamePlaybackProvider>{children}</StoreGamePlaybackProvider>
+      </StoreProvider>
+    </GameWordsContext.Provider>
   );
 
   const renderResult = renderHook(() => useContext(GamePlaybackContext), {

@@ -1,12 +1,12 @@
 "use client";
 
-import { useMemo } from "react";
-import { GamePlaybackContext } from "@/app/contexts";
+import { useContext, useMemo } from "react";
+import { GamePlaybackContext, GameWordsContext } from "@/app/contexts";
 import { gameSlice } from "@/lib/game-slice";
 import { useDispatch, useSelector } from "@/lib/hooks";
 
 export default function StoreGamePlaybackProvider({ children }) {
-  const words = useSelector((state) => state.game.words);
+  const words = useContext(GameWordsContext);
   const index = useSelector((state) => state.game.playback.index);
   const isPlaying = useSelector((state) => state.game.playback.isPlaying);
   const dispatch = useDispatch();
